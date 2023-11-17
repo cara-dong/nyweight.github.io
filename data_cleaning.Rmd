@@ -1,15 +1,22 @@
 ---
-title: "Data Cleaning"
+title: "Data Sources & Cleaning"
 output: 
   html_document:
     toc: true
     toc_float: true
 ---
+## Data Sourcess
+
+* **[Student Weight Status](https://health.data.ny.gov/Health/Student-Weight-Status-Category-Reporting-Results-B/es3k-2aus)**: The source is official health.data.ny.gov (NY state government). The data provides information about weight status category data (underweight, healthy weight, overweight or obese) and estimates of the percent of students overweight, obese and overweight or obese for all reportable grades within the county and/or region and by grade groups (elementary and middle/high).
+
+* **[IMDB](https://pad.human.cornell.edu/schools/datadownload.cfm)**: The source is Cornell University's data library. The data provides
+
 ```{r message=FALSE, echo=FALSE}
 library(tidyverse)
 library(readr)
 ```
 
+## Data Cleaning
 ### Student Weight Data
 ```{r message=FALSE}
 Student_Weight = read_csv("data/Student Weight.csv")
@@ -65,16 +72,50 @@ Demographics_all =
 Demographics_all
 ```
 
-### Join Demographics with Student Weight
+Join Demographics with Student Weight
 ```{r message=FALSE}
 result = merge(Student_Weight, Demographics_all, by = "district")|>
-  select(-num_free_lunch, -num_reduced_lunch, -num_ell) |>
+  select(-num_free_lunch, -num_reduced_lunch, -num_ell, -year_reported) |>
   drop_na()
 
 head(result)
 ```
 
+```{r}
+length(unique(result$county))
+```
 
+
+```{r message=FALSE, warning=FALSE}
+result_prop =  
+  result |>
+  group_by(county, sex) |>
+  summarise(median_overweight_percent = median(c(percent_overweight))) |>
+  select(county, sex, median_overweight_percent)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(plotly)
+
+gg = 
+  ggplot(result_prop, aes(x = reorder(county, -median_overweight_percent), y = median_overweight_percent, fill = sex)) +
+  geom_bar(stat = 'identity', position = position_dodge()) +
+  labs(title = 'Proportion of Overweight by County and Sex',
+       x = 'County',
+       y = 'Proportion Overweight') +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Convert ggplot2 object to plotly object
+p = 
+  ggplotly(gg, width = 1000, tooltip = "text") |> 
+  layout(margin = list(l = 60, r = 60, b = 150, t = 50, pad = 4))
+
+p
+```
+
+
+Export to csv for use
 ```{r}
 write.csv(result, file = "result_2019.csv", row.names = FALSE)
 ```
