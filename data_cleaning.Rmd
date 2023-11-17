@@ -86,35 +86,6 @@ length(unique(result$county))
 ```
 
 
-```{r message=FALSE, warning=FALSE}
-result_prop =  
-  result |>
-  group_by(county, sex) |>
-  summarise(median_overweight_percent = median(c(percent_overweight))) |>
-  select(county, sex, median_overweight_percent)
-```
-
-```{r message=FALSE, warning=FALSE}
-library(plotly)
-
-gg = 
-  ggplot(result_prop, aes(x = reorder(county, -median_overweight_percent), y = median_overweight_percent, fill = sex)) +
-  geom_bar(stat = 'identity', position = position_dodge()) +
-  labs(title = 'Proportion of Overweight by County and Sex',
-       x = 'County',
-       y = 'Proportion Overweight') +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-# Convert ggplot2 object to plotly object
-p = 
-  ggplotly(gg, width = 1000, tooltip = "text") |> 
-  layout(margin = list(l = 60, r = 60, b = 150, t = 50, pad = 4))
-
-p
-```
-
-
 Export to csv for use
 ```{r}
 write.csv(result, file = "result_2019.csv", row.names = FALSE)
