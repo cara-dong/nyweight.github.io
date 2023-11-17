@@ -37,14 +37,11 @@ Student_Weight = Student_Weight |> filter(year_reported==2019 & county!='STATEWI
 ```
 
 ```{r}
-Student_Weight |> group_by(county)
-```
-
-```{r}
 show_student_weight = 
   Student_Weight |>
-  head(5) |>
-  knitr::kable(digits = 3)
+  knitr::kable(digits = 3) |>
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) |> 
+  kableExtra::scroll_box(width = "100%", height = "300px")
 ```
 
 ```{r}
