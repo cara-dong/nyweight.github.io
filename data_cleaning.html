@@ -37,13 +37,6 @@
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<script src="site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
-<script src="site_libs/plotly-binding-4.10.3/plotly.js"></script>
-<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
-<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
-<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
-<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
-<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -56280,21 +56273,6 @@ head(result)</code></pre>
 ## 6       164     338      1175</code></pre>
 <pre class="r"><code>length(unique(result$county))</code></pre>
 <pre><code>## [1] 50</code></pre>
-<pre class="r"><code>result_prop =  
-  result |&gt;
-  group_by(county, sex) |&gt;
-  summarise(median_overweight_percent = median(c(percent_overweight))) |&gt;
-  select(county, sex, median_overweight_percent)</code></pre>
-<pre class="r"><code>library(plotly)
-
-plot_ly(data = result_prop, x = ~county, y = ~median_overweight_percent, type = &#39;bar&#39;, color = ~sex, colors = c(&#39;#FA8072&#39;, &#39;#87CEFA&#39;)) |&gt; 
-  layout(title = &#39;Proportion of Overweight by County and Sex&#39;,
-         xaxis = list(title = &#39;County&#39;, tickangle = -45),
-         yaxis = list(title = &#39;Proportion Overweight&#39;),
-         barmode = &#39;group&#39;, 
-         width = 1000)</code></pre>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-1891c9477fbed559cb94" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-1891c9477fbed559cb94">{"x":{"visdat":{"6af1736d5117":["function () ","plotlyVisDat"]},"cur_data":"6af1736d5117","attrs":{"6af1736d5117":{"x":{},"y":{},"color":{},"colors":["#FA8072","#87CEFA"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"width":1000,"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Proportion of Overweight by County and Sex","xaxis":{"domain":[0,1],"automargin":true,"title":"County","tickangle":-45,"type":"category","categoryorder":"array","categoryarray":["ALBANY","ALLEGANY","BROOME","CATTARAUGUS","CAYUGA","CHAUTAUQUA","CHEMUNG","CHENANGO","CLINTON","COLUMBIA","DUTCHESS","ERIE","FRANKLIN","FULTON","GENESEE","GREENE","JEFFERSON","LIVINGSTON","MADISON","MONROE","MONTGOMERY","NASSAU","NIAGARA","ONEIDA","ONONDAGA","ONTARIO","ORANGE","ORLEANS","OSWEGO","OTSEGO","PUTNAM","RENSSELAER","ROCKLAND","SARATOGA","SCHENECTADY","SCHUYLER","SENECA","ST. LAWRENCE","STEUBEN","SUFFOLK","SULLIVAN","TIOGA","TOMPKINS","ULSTER","WARREN","WASHINGTON","WAYNE","WESTCHESTER","WYOMING","YATES"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Proportion Overweight"},"barmode":"group","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["ALBANY","ALLEGANY","BROOME","CATTARAUGUS","CAYUGA","CHAUTAUQUA","CHEMUNG","CHENANGO","CLINTON","COLUMBIA","DUTCHESS","ERIE","FRANKLIN","FULTON","GENESEE","GREENE","JEFFERSON","LIVINGSTON","MADISON","MONROE","MONTGOMERY","NASSAU","NIAGARA","ONEIDA","ONONDAGA","ONTARIO","ORANGE","ORLEANS","OSWEGO","OTSEGO","PUTNAM","RENSSELAER","ROCKLAND","SARATOGA","SCHENECTADY","SCHUYLER","SENECA","ST. LAWRENCE","STEUBEN","SUFFOLK","SULLIVAN","TIOGA","TOMPKINS","ULSTER","WARREN","WASHINGTON","WAYNE","WESTCHESTER","WYOMING","YATES"],"y":[17.899999999999999,20.350000000000001,15.800000000000001,21.100000000000001,17.699999999999999,18.399999999999999,22.299999999999997,17.699999999999999,17.950000000000003,17.399999999999999,17.649999999999999,16.5,19.350000000000001,24.75,20.25,19.700000000000003,17.449999999999999,18.25,19.050000000000001,17.549999999999997,18.149999999999999,15.75,20.699999999999999,14.5,17.600000000000001,19.850000000000001,16.550000000000001,17.75,18.699999999999999,15.4,17.399999999999999,20.949999999999999,15.649999999999999,19,15.899999999999999,14,23.400000000000002,19.800000000000001,18.100000000000001,17,16.299999999999997,14.5,14.75,17.399999999999999,18.399999999999999,18.649999999999999,20.399999999999999,15.699999999999999,17.850000000000001,17.100000000000001],"type":"bar","name":"FEMALE","marker":{"color":"rgba(250,128,114,1)","line":{"color":"rgba(250,128,114,1)"}},"textfont":{"color":"rgba(250,128,114,1)"},"error_y":{"color":"rgba(250,128,114,1)"},"error_x":{"color":"rgba(250,128,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ALBANY","ALLEGANY","BROOME","CATTARAUGUS","CAYUGA","CHAUTAUQUA","CHEMUNG","CHENANGO","CLINTON","COLUMBIA","DUTCHESS","ERIE","FRANKLIN","FULTON","GENESEE","GREENE","JEFFERSON","LIVINGSTON","MADISON","MONROE","MONTGOMERY","NASSAU","NIAGARA","ONEIDA","ONONDAGA","ONTARIO","ORANGE","ORLEANS","OSWEGO","OTSEGO","PUTNAM","RENSSELAER","ROCKLAND","SARATOGA","SCHENECTADY","SCHUYLER","SENECA","ST. LAWRENCE","STEUBEN","SUFFOLK","SULLIVAN","TIOGA","TOMPKINS","ULSTER","WARREN","WASHINGTON","WAYNE","WESTCHESTER","WYOMING","YATES"],"y":[16.600000000000001,16.699999999999999,16.450000000000003,16.100000000000001,17.049999999999997,16.800000000000001,20.5,15.950000000000001,14.1,13.6,12.85,15.149999999999999,18,12.85,16,19.550000000000001,16.399999999999999,13.199999999999999,18.049999999999997,16.550000000000001,16.25,15.300000000000001,13.4,13.9,13.5,18.399999999999999,16.350000000000001,15.699999999999999,18.199999999999999,12.600000000000001,16.899999999999999,15.899999999999999,16.899999999999999,13.25,14.449999999999999,16.300000000000001,19.5,13.800000000000001,19,16.5,14.699999999999999,16,15.199999999999999,16.949999999999999,15.450000000000001,19.649999999999999,13.35,14.199999999999999,18.550000000000001,18.100000000000001],"type":"bar","name":"MALE","marker":{"color":"rgba(135,206,250,1)","line":{"color":"rgba(135,206,250,1)"}},"textfont":{"color":"rgba(135,206,250,1)"},"error_y":{"color":"rgba(135,206,250,1)"},"error_x":{"color":"rgba(135,206,250,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>Export to csv for use</p>
 <pre class="r"><code>write.csv(result, file = &quot;result_2019.csv&quot;, row.names = FALSE)</code></pre>
 </div>

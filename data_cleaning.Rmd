@@ -90,5 +90,3 @@ Export to csv for use
 ```{r}
 write.csv(result, file = "result_2019.csv", row.names = FALSE)
 ```
-
-
