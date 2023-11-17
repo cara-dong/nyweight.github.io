@@ -7,8 +7,10 @@ navbar:
       href: about.html
     - text: "Data Cleaning"
       href: data_cleaning.html  
+    - text: "Project Report"
+      href: Project_report.html  
     - icon: fa-github fa-lg
       href: https://github.com/cara-dong/nyweight.github.io
 output:
   html_document:
-    theme: journal
+    theme: cosmo
