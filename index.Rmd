@@ -1,12 +1,9 @@
 ---
-title: "My awesome website"
+title: "Unlocking the Mystery: Are NYC Students' Weights Telling a Hidden Story"
 output: 
   html_document:
-    toc: true
-    toc_float: true
+    toc: false
+    toc_float: false
+    theme: journal
 ---
-
-# This is Jeff's awesome website
-
-![](https://media.giphy.com/media/drXGoW1iudhKw/giphy.gif)
 
