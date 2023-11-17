@@ -4,6 +4,8 @@ output:
   html_document:
     toc: false
     toc_float: false
-    theme: journal
 ---
 
+## Motivations
+
+xxxxxx

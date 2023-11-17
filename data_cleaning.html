@@ -11,12 +11,12 @@
 
 
 
-<title>Data-Cleaning</title>
+<title>Data Cleaning</title>
 
-<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/simplex.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -29,9 +29,14 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -219,6 +224,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -226,6 +294,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -249,10 +327,7 @@ $(document).ready(function () {
   <a href="about.html">About</a>
 </li>
 <li>
-  <a href="mailto:&lt;you@youremail.com&gt;">
-    <span class="fa fa-envelope fa-lg"></span>
-     
-  </a>
+  <a href="data_cleaning.html">Data Cleaning</a>
 </li>
 <li>
   <a href="https://github.com/cara-dong/nyweight.github.io">
@@ -269,15 +344,11 @@ $(document).ready(function () {
 
 
 
+<h1 class="title toc-ignore">Data Cleaning</h1>
 
 </div>
 
 
-<div id="data-cleaning" class="section level1">
-<h1>Data Cleaning</h1>
-<p>Final Project Group 2023-11-16</p>
-<pre class="r"><code>library(tidyverse)
-library(readr)</code></pre>
 <div id="student-weight-data" class="section level3">
 <h3>Student Weight Data</h3>
 <pre class="r"><code>Student_Weight = read_csv(&quot;data/Student Weight.csv&quot;)</code></pre>
@@ -317,6 +388,118 @@ Student_Weight =
   Student_Weight |&gt;
   head(5) |&gt;
   knitr::kable(digits = 3)</code></pre>
+<pre class="r"><code>show_student_weight</code></pre>
+<table>
+<colgroup>
+<col width="4%" />
+<col width="3%" />
+<col width="6%" />
+<col width="8%" />
+<col width="8%" />
+<col width="6%" />
+<col width="6%" />
+<col width="12%" />
+<col width="13%" />
+<col width="5%" />
+<col width="10%" />
+<col width="10%" />
+<col width="3%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">district</th>
+<th align="left">county</th>
+<th align="right">year_reported</th>
+<th align="right">number_overweight</th>
+<th align="right">percent_overweight</th>
+<th align="right">number_obese</th>
+<th align="right">percent_obese</th>
+<th align="right">number_overweight_or_obese</th>
+<th align="right">percent_overweight_or_obese</th>
+<th align="left">grade_level</th>
+<th align="right">number_healthy_weight</th>
+<th align="right">percent_healthy_weight</th>
+<th align="left">sex</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">10402</td>
+<td align="left">ALBANY</td>
+<td align="right">2019</td>
+<td align="right">28</td>
+<td align="right">11.4</td>
+<td align="right">28</td>
+<td align="right">11.4</td>
+<td align="right">56</td>
+<td align="right">22.8</td>
+<td align="left">ELEMENTARY</td>
+<td align="right">181</td>
+<td align="right">0.736</td>
+<td align="left">FEMALE</td>
+</tr>
+<tr class="even">
+<td align="right">10402</td>
+<td align="left">ALBANY</td>
+<td align="right">2019</td>
+<td align="right">35</td>
+<td align="right">13.9</td>
+<td align="right">42</td>
+<td align="right">16.7</td>
+<td align="right">77</td>
+<td align="right">30.6</td>
+<td align="left">ELEMENTARY</td>
+<td align="right">159</td>
+<td align="right">0.631</td>
+<td align="left">MALE</td>
+</tr>
+<tr class="odd">
+<td align="right">10402</td>
+<td align="left">ALBANY</td>
+<td align="right">2019</td>
+<td align="right">21</td>
+<td align="right">23.6</td>
+<td align="right">17</td>
+<td align="right">19.1</td>
+<td align="right">38</td>
+<td align="right">42.7</td>
+<td align="left">MIDDLE/HIGH</td>
+<td align="right">51</td>
+<td align="right">0.573</td>
+<td align="left">FEMALE</td>
+</tr>
+<tr class="even">
+<td align="right">10402</td>
+<td align="left">ALBANY</td>
+<td align="right">2019</td>
+<td align="right">9</td>
+<td align="right">9.9</td>
+<td align="right">28</td>
+<td align="right">30.8</td>
+<td align="right">37</td>
+<td align="right">40.7</td>
+<td align="left">MIDDLE/HIGH</td>
+<td align="right">54</td>
+<td align="right">0.593</td>
+<td align="left">MALE</td>
+</tr>
+<tr class="odd">
+<td align="right">10500</td>
+<td align="left">ALBANY</td>
+<td align="right">2019</td>
+<td align="right">36</td>
+<td align="right">20.0</td>
+<td align="right">38</td>
+<td align="right">21.1</td>
+<td align="right">74</td>
+<td align="right">41.1</td>
+<td align="left">ELEMENTARY</td>
+<td align="right">96</td>
+<td align="right">0.533</td>
+<td align="left">FEMALE</td>
+</tr>
+</tbody>
+</table>
 <p>Description and what we did: xxxxx</p>
 </div>
 <div id="demographics-data" class="section level3">
@@ -389,59 +572,13 @@ head(result)</code></pre>
 ## 4      1504        909      934      13        98     320       786
 ## 5      1429       1008     1007      25       164     338      1175
 ## 6      1429       1008     1007      25       164     338      1175</code></pre>
-<pre class="r"><code>result  = result |&gt;
-  group_by(county, grade_level, sex) |&gt;
-  summarise(total_overweight = sum(number_overweight), 
-            total_obese = sum(number_overweight),
-            total_overweight_or_obese = sum(number_overweight_or_obese),
-            total_healthy = sum(number_healthy_weight),
-            num_asian = num_asian,
-            num_black = num_black,
-            num_hisp = num_hisp,
-            num_am_ind = num_am_ind, 
-            num_white = num_white,
-            num_female = num_female, 
-            num_male = num_male, 
-            num_lep = num_lep,
-            num_multi = num_multi,
-            num_swd = num_swd,
-            num_ecdis = num_ecdis
-)</code></pre>
-<pre><code>## Warning: Returning more (or less) than 1 row per `summarise()` group was deprecated in dplyr 1.1.0.
-## ℹ Please use `reframe()` instead.
-## ℹ When switching from `summarise()` to `reframe()`, remember that `reframe()` always returns an
-##   ungrouped data frame and adjust accordingly.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.
-
-## `summarise()` has grouped output by &#39;county&#39;, &#39;grade_level&#39;, &#39;sex&#39;. You can override using the
-## `.groups` argument.</code></pre>
-<pre class="r"><code>result</code></pre>
-<pre><code>## # A tibble: 831 × 18
-## # Groups:   county, grade_level, sex [198]
-##    county grade_level sex    total_overweight total_obese total_overweight_or_…¹
-##    &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;             &lt;dbl&gt;       &lt;dbl&gt;                  &lt;dbl&gt;
-##  1 ALBANY ELEMENTARY  FEMALE              297         297                    590
-##  2 ALBANY ELEMENTARY  FEMALE              297         297                    590
-##  3 ALBANY ELEMENTARY  FEMALE              297         297                    590
-##  4 ALBANY ELEMENTARY  FEMALE              297         297                    590
-##  5 ALBANY ELEMENTARY  FEMALE              297         297                    590
-##  6 ALBANY ELEMENTARY  MALE                316         316                    635
-##  7 ALBANY ELEMENTARY  MALE                316         316                    635
-##  8 ALBANY ELEMENTARY  MALE                316         316                    635
-##  9 ALBANY ELEMENTARY  MALE                316         316                    635
-## 10 ALBANY ELEMENTARY  MALE                316         316                    635
-## # ℹ 821 more rows
-## # ℹ abbreviated name: ¹​total_overweight_or_obese
-## # ℹ 12 more variables: total_healthy &lt;dbl&gt;, num_asian &lt;dbl&gt;, num_black &lt;dbl&gt;,
-## #   num_hisp &lt;dbl&gt;, num_am_ind &lt;dbl&gt;, num_white &lt;dbl&gt;, num_female &lt;dbl&gt;,
-## #   num_male &lt;dbl&gt;, num_lep &lt;dbl&gt;, num_multi &lt;dbl&gt;, num_swd &lt;dbl&gt;,
-## #   num_ecdis &lt;dbl&gt;</code></pre>
 <pre class="r"><code>write.csv(result, file = &quot;result_2019.csv&quot;, row.names = FALSE)</code></pre>
 </div>
+
+
+
 </div>
-
-
-
+</div>
 
 </div>
 
@@ -474,6 +611,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

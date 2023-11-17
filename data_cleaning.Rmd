@@ -1,10 +1,11 @@
 ---
 title: "Data Cleaning"
-author: "Final Project Group"
-date: "2023-11-16"
-output: github_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
-```{r message=FALSE}
+```{r message=FALSE, echo=FALSE}
 library(tidyverse)
 library(readr)
 ```
@@ -22,7 +23,6 @@ Student_Weight  =
   filter(year_reported %in% c("2014-2015", "2015-2016", "2016-2017", "2017-2018", "2018-2019"))
 ```
 
-
 ```{r}
 Student_Weight$year_reported = sub(".*-", "", Student_Weight$year_reported)
 
@@ -32,7 +32,6 @@ Student_Weight =
   filter(grade_level!="DISTRICT TOTAL" & sex!="ALL")
 ```
 
-
 ```{r message=FALSE}
 Student_Weight = Student_Weight |> filter(year_reported==2019 & county!='STATEWIDE (EXCLUDING NYC)') |> select(-region, -area_name)
 ```
@@ -41,12 +40,15 @@ Student_Weight = Student_Weight |> filter(year_reported==2019 & county!='STATEWI
 Student_Weight |> group_by(county)
 ```
 
-
 ```{r}
 show_student_weight = 
   Student_Weight |>
   head(5) |>
   knitr::kable(digits = 3)
+```
+
+```{r}
+show_student_weight
 ```
 
 Description and what we did: xxxxx
@@ -75,28 +77,6 @@ result = merge(Student_Weight, Demographics_all, by = "district")|>
 head(result)
 ```
 
-```{r}
-result  = result |>
-  group_by(county, grade_level, sex) |>
-  summarise(total_overweight = sum(number_overweight), 
-            total_obese = sum(number_overweight),
-            total_overweight_or_obese = sum(number_overweight_or_obese),
-            total_healthy = sum(number_healthy_weight),
-            num_asian = num_asian,
-            num_black = num_black,
-            num_hisp = num_hisp,
-            num_am_ind = num_am_ind, 
-            num_white = num_white,
-            num_female = num_female, 
-            num_male = num_male, 
-            num_lep = num_lep,
-            num_multi = num_multi,
-            num_swd = num_swd,
-            num_ecdis = num_ecdis
-)
-
-result
-```
 
 ```{r}
 write.csv(result, file = "result_2019.csv", row.names = FALSE)
