@@ -6,6 +6,16 @@ output:
     toc_float: true
 ---
 
-## Who we are
+## Motivation 
 
-xxxxxx
+## Related Work
+
+## Initial Questions
+
+## About Data
+
+## Exploratory Analysis
+
+## Additional Analysis
+
+## Discussion
