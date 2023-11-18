@@ -9,6 +9,10 @@ navbar:
       href: data_cleaning.html  
     - text: "Project Report"
       href: Project_report.html  
+    - text: "Visualization"
+      href: visualization.html
+    - text: "Regression"
+      href: regression.html 
     - icon: fa-github fa-lg
       href: https://github.com/cara-dong/nyweight.github.io
 output:
