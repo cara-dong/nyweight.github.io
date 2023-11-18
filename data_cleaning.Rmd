@@ -4,12 +4,13 @@ output:
   html_document:
     toc: true
     toc_float: true
+    code_folding: "hide"
 ---
 ## Data Sourcess
 
 * **[Student Weight Status](https://health.data.ny.gov/Health/Student-Weight-Status-Category-Reporting-Results-B/es3k-2aus)**: The source is official health.data.ny.gov (NY state government). The data provides information about weight status category data (underweight, healthy weight, overweight or obese) and estimates of the percent of students overweight, obese and overweight or obese for all reportable grades within the county and/or region and by grade groups (elementary and middle/high).
 
-* **[IMDB](https://pad.human.cornell.edu/schools/datadownload.cfm)**: The source is Cornell University's data library. The data provides
+* **[Student Enrolled Demographics Data](https://pad.human.cornell.edu/schools/datadownload.cfm)**: The source is Cornell University's data library. The data provides
 
 ```{r message=FALSE, echo=FALSE}
 library(tidyverse)
@@ -18,6 +19,12 @@ library(readr)
 
 ## Data Cleaning
 ### Student Weight Data
+
+What we did: 
+
+* xxxxx
+* xxxxx
+
 ```{r message=FALSE}
 Student_Weight = read_csv("data/Student Weight.csv")
 ```
@@ -36,28 +43,29 @@ Student_Weight$year_reported = sub(".*-", "", Student_Weight$year_reported)
 Student_Weight = 
   Student_Weight |>
   mutate(year_reported = as.numeric(Student_Weight$year_reported)) |>
-  filter(grade_level!="DISTRICT TOTAL" & sex!="ALL")
-```
-
-```{r message=FALSE}
-Student_Weight = Student_Weight |> filter(year_reported==2019 & county!='STATEWIDE (EXCLUDING NYC)') |> select(-region, -area_name)
+  filter(grade_level!="DISTRICT TOTAL" & sex!="ALL" & county!='STATEWIDE (EXCLUDING NYC)') |> 
+  select(-region, -area_name)
 ```
 
 ```{r}
 show_student_weight = 
   Student_Weight |>
+  head(7) |>
   knitr::kable(digits = 3) |>
   kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) |> 
   kableExtra::scroll_box(width = "100%", height = "300px")
-```
 
-```{r}
 show_student_weight
 ```
 
-Description and what we did: xxxxx
 
 ### Demographics Data
+
+What we did: 
+
+* xxxxx
+* xxxxx
+
 ```{r message=FALSE}
 Demographics_all = read_csv("data/Demographics_all.csv")
 ```
@@ -66,27 +74,118 @@ Demographics_all = read_csv("data/Demographics_all.csv")
 Demographics_all = 
   Demographics_all |> 
   janitor::clean_names() |>
-  mutate(district = as.numeric(district)) |>
-  filter(year==2019)
-
-Demographics_all
+  mutate(district = as.numeric(district))
 ```
 
-Join Demographics with Student Weight
 ```{r message=FALSE}
-result = merge(Student_Weight, Demographics_all, by = "district")|>
+show_demographics = 
+  Demographics_all |>
+  head(7) |>
+  knitr::kable() |>
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) |> 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+
+show_demographics
+```
+
+
+### Join Demographics with Student Weight for Years 2015-2019
+```{r message=FALSE}
+Student_Weight_2015 = 
+  Student_Weight |> 
+  filter(year_reported==2015)
+
+Demographics_all_2015 = 
+  Demographics_all |>
+  filter(year==2015)
+
+result_2015 = merge(Student_Weight_2015, Demographics_all_2015, by = "district")|>
   select(-num_free_lunch, -num_reduced_lunch, -num_ell, -year_reported) |>
   drop_na()
-
-head(result)
 ```
 
-```{r}
-length(unique(result$county))
+```{r message=FALSE}
+Student_Weight_2016 = 
+  Student_Weight |> 
+  filter(year_reported==2016)
+
+Demographics_all_2016 = 
+  Demographics_all |>
+  filter(year==2016)
+
+result_2016 = merge(Student_Weight_2016, Demographics_all_2016, by = "district")|>
+  select(-num_free_lunch, -num_reduced_lunch, -num_ell, -year_reported) |>
+  drop_na()
 ```
 
+```{r message=FALSE}
+Student_Weight_2017 = 
+  Student_Weight |> 
+  filter(year_reported==2017)
 
-Export to csv for use
-```{r}
-write.csv(result, file = "result_2019.csv", row.names = FALSE)
+Demographics_all_2017 = 
+  Demographics_all |>
+  filter(year==2017)
+
+result_2017 = merge(Student_Weight_2017, Demographics_all_2017, by = "district")|>
+  select(-num_free_lunch, -num_reduced_lunch, -num_ell, -year_reported) |>
+  drop_na() 
 ```
+
+```{r message=FALSE}
+Student_Weight_2018 = 
+  Student_Weight |> 
+  filter(year_reported==2018)
+
+Demographics_all_2018 = 
+  Demographics_all |>
+  filter(year==2018)
+
+result_2018 = merge(Student_Weight_2018, Demographics_all_2018, by = "district")|>
+  select(-num_free_lunch, -num_reduced_lunch, -num_ell, -year_reported) |>
+  drop_na() 
+```
+
+```{r message=FALSE}
+Student_Weight_2019 = 
+  Student_Weight |> 
+  filter(year_reported==2019)
+
+Demographics_all_2019 = 
+  Demographics_all |>
+  filter(year==2019)
+
+result_2019 = merge(Student_Weight_2019, Demographics_all_2019, by = "district")|>
+  select(-num_free_lunch, -num_reduced_lunch, -num_ell, -year_reported) |>
+  drop_na()
+```
+
+```{r message=FALSE}
+cleaned_data = bind_rows(result_2015, result_2016, result_2017, result_2018, result_2019)
+
+cleaned_data = 
+  cleaned_data |>
+  select(district, county, year, sex, grade_level, 
+         number_overweight, percent_overweight, number_obese, percent_obese, 
+         number_overweight_or_obese, percent_overweight_or_obese, 
+         number_healthy_weight, percent_healthy_weight, 
+         num_asian, num_black, num_hisp, num_am_ind, num_white, num_female, num_male, num_lep, num_multi, num_swd, num_ecdis)
+```
+
+```{r message=FALSE}
+show_cleaned_data = 
+  cleaned_data |>
+  head(7) |>
+  knitr::kable(digits=3) |>
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) |> 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+
+show_cleaned_data
+```
+
+### Export to .csv for Use
+```{r message=FALSE}
+write.csv(cleaned_data, file = "cleaned_data.csv", row.names = FALSE)
+```
+
+Here is the dataset we will use for further analysis: [Cleaned Student Weight and Demographics](cleaned_data.csv)
