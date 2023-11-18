@@ -1199,7 +1199,7 @@ Demographics_all_2015 =
   filter(year==2015)
 
 result_2015 = merge(Student_Weight_2015, Demographics_all_2015, by = &quot;district&quot;)|&gt;
-  select(-num_free_lunch, -num_reduced_lunch, -num_ell, -year_reported) |&gt;
+  select(-num_ell, -year_reported) |&gt;
   drop_na()</code></pre>
 <pre class="r"><code>Student_Weight_2016 = 
   Student_Weight |&gt; 
@@ -1210,7 +1210,7 @@ Demographics_all_2016 =
   filter(year==2016)
 
 result_2016 = merge(Student_Weight_2016, Demographics_all_2016, by = &quot;district&quot;)|&gt;
-  select(-num_free_lunch, -num_reduced_lunch, -num_ell, -year_reported) |&gt;
+  select(-num_ell, -year_reported) |&gt;
   drop_na()</code></pre>
 <pre class="r"><code>Student_Weight_2017 = 
   Student_Weight |&gt; 
@@ -1221,8 +1221,8 @@ Demographics_all_2017 =
   filter(year==2017)
 
 result_2017 = merge(Student_Weight_2017, Demographics_all_2017, by = &quot;district&quot;)|&gt;
-  select(-num_free_lunch, -num_reduced_lunch, -num_ell, -year_reported) |&gt;
-  drop_na() </code></pre>
+  select(-num_ell, -year_reported) |&gt;
+  drop_na()</code></pre>
 <pre class="r"><code>Student_Weight_2018 = 
   Student_Weight |&gt; 
   filter(year_reported==2018)
@@ -1232,8 +1232,10 @@ Demographics_all_2018 =
   filter(year==2018)
 
 result_2018 = merge(Student_Weight_2018, Demographics_all_2018, by = &quot;district&quot;)|&gt;
-  select(-num_free_lunch, -num_reduced_lunch, -num_ell, -year_reported) |&gt;
-  drop_na() </code></pre>
+  select(-num_ell, -year_reported) |&gt;
+  mutate(num_free_lunch = ifelse(is.na(num_free_lunch), median(result_2016$num_free_lunch)), 
+         num_reduced_lunch = ifelse(is.na(num_reduced_lunch), median(result_2016$num_reduced_lunch))) |&gt;
+  drop_na()</code></pre>
 <pre class="r"><code>Student_Weight_2019 = 
   Student_Weight |&gt; 
   filter(year_reported==2019)
@@ -1243,7 +1245,9 @@ Demographics_all_2019 =
   filter(year==2019)
 
 result_2019 = merge(Student_Weight_2019, Demographics_all_2019, by = &quot;district&quot;)|&gt;
-  select(-num_free_lunch, -num_reduced_lunch, -num_ell, -year_reported) |&gt;
+  select(-num_ell, -year_reported) |&gt;
+  mutate(num_free_lunch = ifelse(is.na(num_free_lunch), median(result_2017$num_free_lunch)), 
+         num_reduced_lunch = ifelse(is.na(num_reduced_lunch), median(result_2017$num_reduced_lunch))) |&gt;
   drop_na()</code></pre>
 <pre class="r"><code>cleaned_data = bind_rows(result_2015, result_2016, result_2017, result_2018, result_2019)
 
@@ -1253,7 +1257,7 @@ cleaned_data =
          number_overweight, percent_overweight, number_obese, percent_obese, 
          number_overweight_or_obese, percent_overweight_or_obese, 
          number_healthy_weight, percent_healthy_weight, 
-         num_asian, num_black, num_hisp, num_am_ind, num_white, num_female, num_male, num_lep, num_multi, num_swd, num_ecdis)</code></pre>
+         num_asian, num_black, num_hisp, num_am_ind, num_white, num_female, num_male, num_lep, num_multi, num_swd, num_ecdis, num_free_lunch, num_reduced_lunch)</code></pre>
 <pre class="r"><code>show_cleaned_data = 
   cleaned_data |&gt;
   head(7) |&gt;
@@ -1339,6 +1343,12 @@ num_swd
 <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
 num_ecdis
 </th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_free_lunch
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_reduced_lunch
+</th>
 </tr>
 </thead>
 <tbody>
@@ -1415,6 +1425,12 @@ ELEMENTARY
 <td style="text-align:right;">
 784
 </td>
+<td style="text-align:right;">
+650
+</td>
+<td style="text-align:right;">
+74
+</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -1488,6 +1504,12 @@ ELEMENTARY
 </td>
 <td style="text-align:right;">
 784
+</td>
+<td style="text-align:right;">
+650
+</td>
+<td style="text-align:right;">
+74
 </td>
 </tr>
 <tr>
@@ -1563,6 +1585,12 @@ MIDDLE/HIGH
 <td style="text-align:right;">
 784
 </td>
+<td style="text-align:right;">
+650
+</td>
+<td style="text-align:right;">
+74
+</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -1636,6 +1664,12 @@ MIDDLE/HIGH
 </td>
 <td style="text-align:right;">
 784
+</td>
+<td style="text-align:right;">
+650
+</td>
+<td style="text-align:right;">
+74
 </td>
 </tr>
 <tr>
@@ -1711,6 +1745,12 @@ ELEMENTARY
 <td style="text-align:right;">
 1271
 </td>
+<td style="text-align:right;">
+1097
+</td>
+<td style="text-align:right;">
+94
+</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -1785,6 +1825,12 @@ ELEMENTARY
 <td style="text-align:right;">
 1271
 </td>
+<td style="text-align:right;">
+1097
+</td>
+<td style="text-align:right;">
+94
+</td>
 </tr>
 <tr>
 <td style="text-align:right;">
@@ -1858,6 +1904,12 @@ MIDDLE/HIGH
 </td>
 <td style="text-align:right;">
 1271
+</td>
+<td style="text-align:right;">
+1097
+</td>
+<td style="text-align:right;">
+94
 </td>
 </tr>
 </tbody>
