@@ -13,7 +13,7 @@
 
 <title>Data Visualization</title>
 
-<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -358,7 +358,89 @@ div.tocify {
 </div>
 
 
+<p>NEEDS TO HIDE CODE LATER, ONLY DISPLAY INTERPRETATION!</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.3     ✔ readr     2.1.4
+## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+## ✔ ggplot2   3.4.3     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+## ✔ purrr     1.0.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>cleaned_data = read_csv(&quot;cleaned_data.csv&quot;)</code></pre>
+<pre><code>## Rows: 4800 Columns: 26
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (3): county, sex, grade_level
+## dbl (23): district, year, number_overweight, percent_overweight, number_obes...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6, 
+  out.width = &quot;90%&quot;
+)
 
+theme_set (theme_minimal() +theme(legend.position = &quot;bottom&quot;))
+
+options(
+  ggplot2.continuous.colour = &quot;viridis&quot;, 
+  ggplots.continuous.fill = &quot;viridis&quot;
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_disrete = scale_fill_viridis_d</code></pre>
+<div id="overweight-percentage-changes-over-year"
+class="section level2">
+<h2>overweight percentage changes over year</h2>
+<pre class="r"><code># add up each county&#39;s percentage for each year
+county_year_data = 
+  cleaned_data |&gt;
+  group_by (county, year) |&gt;
+  summarize(ave_overweight_percent = mean(percent_overweight)) </code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;county&#39;. You can override using the
+## `.groups` argument.</code></pre>
+<pre class="r"><code>ggplot(county_year_data, aes(x = year, y = ave_overweight_percent, group = county, color = county )) + 
+  geom_line() + 
+  geom_point() +
+  labs(title = &quot;Average Overweight Percentage Over Time&quot;,
+       x = &quot;Year&quot;,
+       y = &quot;Average Overweight Percentage&quot;) +
+  theme_minimal() +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="visualization_files/figure-html/unnamed-chunk-2-1.png" width="90%" />
+<br> interpretation: This plot looks messy, needs to think about it
+later</p>
+</div>
+<div id="county-level-number-of-percent-overweightobesehealthy"
+class="section level2">
+<h2>County level number of percent overweight/obese/healthy</h2>
+<pre class="r"><code># calculate the average percentage of overweight/obsed/healthy for all years
+ggplot(cleaned_data, aes(x = county, y = percent_overweight, fill = county)) +
+  geom_boxplot() +
+  labs(title = &quot;Percentage Overweight by County&quot;,
+       x = &quot;County&quot;,
+       y = &quot;Percentage Overweight&quot;,
+       fill = &quot;County&quot;) +
+  theme_minimal() +
+  theme(legend.position = &quot;none&quot;) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))</code></pre>
+<p><img src="visualization_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
+</div>
+<div id="elementary-and-middle-school-overweight"
+class="section level2">
+<h2>elementary and middle school overweight</h2>
+</div>
+<div id="racial-group-and-overweight" class="section level2">
+<h2>racial group and overweight</h2>
+</div>
+<div id="sex-and-overweight" class="section level2">
+<h2>sex and overweight</h2>
+</div>
 
 
 

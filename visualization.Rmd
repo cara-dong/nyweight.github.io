@@ -6,3 +6,69 @@ output:
     toc_float: true
 ---
 
+NEEDS TO HIDE CODE LATER, ONLY DISPLAY INTERPRETATION!
+```{r}
+library(tidyverse)
+cleaned_data = read_csv("cleaned_data.csv")
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6, 
+  out.width = "90%"
+)
+
+theme_set (theme_minimal() +theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis", 
+  ggplots.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_disrete = scale_fill_viridis_d
+```
+
+
+## overweight percentage changes over year
+```{r}
+# add up each county's percentage for each year
+county_year_data = 
+  cleaned_data |>
+  group_by (county, year) |>
+  summarize(ave_overweight_percent = mean(percent_overweight)) 
+
+ggplot(county_year_data, aes(x = year, y = ave_overweight_percent, group = county, color = county )) + 
+  geom_line() + 
+  geom_point() +
+  labs(title = "Average Overweight Percentage Over Time",
+       x = "Year",
+       y = "Average Overweight Percentage") +
+  theme_minimal() +
+  theme(legend.position = "none")
+  
+```
+<br>
+interpretation: This plot looks messy, needs to think about it later
+
+## County level number of percent overweight/obese/healthy
+```{r}
+# calculate the average percentage of overweight/obsed/healthy for all years
+ggplot(cleaned_data, aes(x = county, y = percent_overweight, fill = county)) +
+  geom_boxplot() +
+  labs(title = "Percentage Overweight by County",
+       x = "County",
+       y = "Percentage Overweight",
+       fill = "County") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+
+
+## elementary and middle school overweight
+
+
+## racial group and overweight
+
+## sex and overweight
+
