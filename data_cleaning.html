@@ -1190,66 +1190,28 @@ NA
 <div id="join-demographics-with-student-weight-for-years-2015-2019"
 class="section level3">
 <h3>Join Demographics with Student Weight for Years 2015-2019</h3>
-<pre class="r"><code>Student_Weight_2015 = 
+<pre class="r"><code>join_demo = function(year) {
+  Student_Weight_year = 
   Student_Weight |&gt; 
-  filter(year_reported==2015)
+  filter(year_reported == year)
 
-Demographics_all_2015 = 
+Demographics_all_year = 
   Demographics_all |&gt;
-  filter(year==2015)
+  filter(year==year)
 
-result_2015 = merge(Student_Weight_2015, Demographics_all_2015, by = &quot;district&quot;)|&gt;
+result_year = merge(Student_Weight_year, Demographics_all_year, by = &quot;district&quot;)|&gt;
   select(-num_ell, -year_reported) |&gt;
-  drop_na()</code></pre>
-<pre class="r"><code>Student_Weight_2016 = 
-  Student_Weight |&gt; 
-  filter(year_reported==2016)
+  drop_na()
 
-Demographics_all_2016 = 
-  Demographics_all |&gt;
-  filter(year==2016)
+return(result_year)
+}</code></pre>
+<pre class="r"><code>year = c(2015, 2016, 2017, 2018, 2019)
+result_list = list(result_2015 = tibble(), result_2016 = tibble(), result_2017 = tibble(), result_2018 = tibble(), result_2019 = tibble())
 
-result_2016 = merge(Student_Weight_2016, Demographics_all_2016, by = &quot;district&quot;)|&gt;
-  select(-num_ell, -year_reported) |&gt;
-  drop_na()</code></pre>
-<pre class="r"><code>Student_Weight_2017 = 
-  Student_Weight |&gt; 
-  filter(year_reported==2017)
-
-Demographics_all_2017 = 
-  Demographics_all |&gt;
-  filter(year==2017)
-
-result_2017 = merge(Student_Weight_2017, Demographics_all_2017, by = &quot;district&quot;)|&gt;
-  select(-num_ell, -year_reported) |&gt;
-  drop_na()</code></pre>
-<pre class="r"><code>Student_Weight_2018 = 
-  Student_Weight |&gt; 
-  filter(year_reported==2018)
-
-Demographics_all_2018 = 
-  Demographics_all |&gt;
-  filter(year==2018)
-
-result_2018 = merge(Student_Weight_2018, Demographics_all_2018, by = &quot;district&quot;)|&gt;
-  select(-num_ell, -year_reported) |&gt;
-  mutate(num_free_lunch = ifelse(is.na(num_free_lunch), median(result_2016$num_free_lunch)), 
-         num_reduced_lunch = ifelse(is.na(num_reduced_lunch), median(result_2016$num_reduced_lunch))) |&gt;
-  drop_na()</code></pre>
-<pre class="r"><code>Student_Weight_2019 = 
-  Student_Weight |&gt; 
-  filter(year_reported==2019)
-
-Demographics_all_2019 = 
-  Demographics_all |&gt;
-  filter(year==2019)
-
-result_2019 = merge(Student_Weight_2019, Demographics_all_2019, by = &quot;district&quot;)|&gt;
-  select(-num_ell, -year_reported) |&gt;
-  mutate(num_free_lunch = ifelse(is.na(num_free_lunch), median(result_2017$num_free_lunch)), 
-         num_reduced_lunch = ifelse(is.na(num_reduced_lunch), median(result_2017$num_reduced_lunch))) |&gt;
-  drop_na()</code></pre>
-<pre class="r"><code>cleaned_data = bind_rows(result_2015, result_2016, result_2017, result_2018, result_2019)
+for (i in 1:length(year)) {
+  result_list[[i]] = join_demo(year[i])
+}</code></pre>
+<pre class="r"><code>cleaned_data = bind_rows(result_list)
 
 cleaned_data = 
   cleaned_data |&gt;
@@ -1360,6 +1322,86 @@ num_reduced_lunch
 ALBANY
 </td>
 <td style="text-align:right;">
+2012
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+11.0
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+21.5
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+32.6
+</td>
+<td style="text-align:right;">
+122
+</td>
+<td style="text-align:right;">
+0.674
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+81
+</td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1677
+</td>
+<td style="text-align:right;">
+930
+</td>
+<td style="text-align:right;">
+1016
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+61
+</td>
+<td style="text-align:right;">
+281
+</td>
+<td style="text-align:right;">
+753
+</td>
+<td style="text-align:right;">
+544
+</td>
+<td style="text-align:right;">
+143
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10402
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
 2015
 </td>
 <td style="text-align:left;">
@@ -1440,7 +1482,327 @@ ELEMENTARY
 ALBANY
 </td>
 <td style="text-align:right;">
-2015
+2016
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+11.0
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+21.5
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+32.6
+</td>
+<td style="text-align:right;">
+122
+</td>
+<td style="text-align:right;">
+0.674
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:right;">
+129
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1459
+</td>
+<td style="text-align:right;">
+862
+</td>
+<td style="text-align:right;">
+905
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+86
+</td>
+<td style="text-align:right;">
+275
+</td>
+<td style="text-align:right;">
+775
+</td>
+<td style="text-align:right;">
+672
+</td>
+<td style="text-align:right;">
+59
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10402
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+11.0
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+21.5
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+32.6
+</td>
+<td style="text-align:right;">
+122
+</td>
+<td style="text-align:right;">
+0.674
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+72
+</td>
+<td style="text-align:right;">
+145
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1528
+</td>
+<td style="text-align:right;">
+914
+</td>
+<td style="text-align:right;">
+948
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+324
+</td>
+<td style="text-align:right;">
+811
+</td>
+<td style="text-align:right;">
+653
+</td>
+<td style="text-align:right;">
+73
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10402
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2013
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+11.0
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+21.5
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+32.6
+</td>
+<td style="text-align:right;">
+122
+</td>
+<td style="text-align:right;">
+0.674
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+73
+</td>
+<td style="text-align:right;">
+119
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1592
+</td>
+<td style="text-align:right;">
+890
+</td>
+<td style="text-align:right;">
+982
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+67
+</td>
+<td style="text-align:right;">
+242
+</td>
+<td style="text-align:right;">
+747
+</td>
+<td style="text-align:right;">
+585
+</td>
+<td style="text-align:right;">
+107
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10402
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2014
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+11.0
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+21.5
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+32.6
+</td>
+<td style="text-align:right;">
+122
+</td>
+<td style="text-align:right;">
+0.674
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:right;">
+114
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1537
+</td>
+<td style="text-align:right;">
+870
+</td>
+<td style="text-align:right;">
+953
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+77
+</td>
+<td style="text-align:right;">
+259
+</td>
+<td style="text-align:right;">
+659
+</td>
+<td style="text-align:right;">
+443
+</td>
+<td style="text-align:right;">
+52
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10402
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2012
 </td>
 <td style="text-align:left;">
 MALE
@@ -1473,443 +1835,43 @@ ELEMENTARY
 0.616
 </td>
 <td style="text-align:right;">
-18
-</td>
-<td style="text-align:right;">
-74
-</td>
-<td style="text-align:right;">
-117
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1493
-</td>
-<td style="text-align:right;">
-868
-</td>
-<td style="text-align:right;">
-919
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
-84
-</td>
-<td style="text-align:right;">
-249
-</td>
-<td style="text-align:right;">
-784
-</td>
-<td style="text-align:right;">
-650
-</td>
-<td style="text-align:right;">
-74
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-10402
-</td>
-<td style="text-align:left;">
-ALBANY
-</td>
-<td style="text-align:right;">
-2015
-</td>
-<td style="text-align:left;">
-FEMALE
-</td>
-<td style="text-align:left;">
-MIDDLE/HIGH
-</td>
-<td style="text-align:right;">
-26
-</td>
-<td style="text-align:right;">
-19.8
-</td>
-<td style="text-align:right;">
-32
-</td>
-<td style="text-align:right;">
-24.4
-</td>
-<td style="text-align:right;">
-58
-</td>
-<td style="text-align:right;">
-44.3
-</td>
-<td style="text-align:right;">
-73
-</td>
-<td style="text-align:right;">
-0.557
-</td>
-<td style="text-align:right;">
-18
-</td>
-<td style="text-align:right;">
-74
-</td>
-<td style="text-align:right;">
-117
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1493
-</td>
-<td style="text-align:right;">
-868
-</td>
-<td style="text-align:right;">
-919
-</td>
-<td style="text-align:right;">
-11
-</td>
-<td style="text-align:right;">
-84
-</td>
-<td style="text-align:right;">
-249
-</td>
-<td style="text-align:right;">
-784
-</td>
-<td style="text-align:right;">
-650
-</td>
-<td style="text-align:right;">
-74
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-10402
-</td>
-<td style="text-align:left;">
-ALBANY
-</td>
-<td style="text-align:right;">
-2015
-</td>
-<td style="text-align:left;">
-MALE
-</td>
-<td style="text-align:left;">
-MIDDLE/HIGH
-</td>
-<td style="text-align:right;">
-19
-</td>
-<td style="text-align:right;">
-14.0
-</td>
-<td style="text-align:right;">
-36
-</td>
-<td style="text-align:right;">
-26.5
-</td>
-<td style="text-align:right;">
-55
-</td>
-<td style="text-align:right;">
-40.4
+16
 </td>
 <td style="text-align:right;">
 81
 </td>
 <td style="text-align:right;">
-0.596
-</td>
-<td style="text-align:right;">
-18
-</td>
-<td style="text-align:right;">
-74
-</td>
-<td style="text-align:right;">
-117
+110
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
-1493
+1677
 </td>
 <td style="text-align:right;">
-868
+930
 </td>
 <td style="text-align:right;">
-919
+1016
 </td>
 <td style="text-align:right;">
-11
+17
 </td>
 <td style="text-align:right;">
-84
+61
 </td>
 <td style="text-align:right;">
-249
+281
 </td>
 <td style="text-align:right;">
-784
+753
 </td>
 <td style="text-align:right;">
-650
+544
 </td>
 <td style="text-align:right;">
-74
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-10500
-</td>
-<td style="text-align:left;">
-ALBANY
-</td>
-<td style="text-align:right;">
-2015
-</td>
-<td style="text-align:left;">
-FEMALE
-</td>
-<td style="text-align:left;">
-ELEMENTARY
-</td>
-<td style="text-align:right;">
-36
-</td>
-<td style="text-align:right;">
-19.4
-</td>
-<td style="text-align:right;">
-37
-</td>
-<td style="text-align:right;">
-19.9
-</td>
-<td style="text-align:right;">
-73
-</td>
-<td style="text-align:right;">
-39.2
-</td>
-<td style="text-align:right;">
-100
-</td>
-<td style="text-align:right;">
-0.538
-</td>
-<td style="text-align:right;">
-19
-</td>
-<td style="text-align:right;">
-164
-</td>
-<td style="text-align:right;">
-133
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-1443
-</td>
-<td style="text-align:right;">
-910
-</td>
-<td style="text-align:right;">
-951
-</td>
-<td style="text-align:right;">
-25
-</td>
-<td style="text-align:right;">
-97
-</td>
-<td style="text-align:right;">
-282
-</td>
-<td style="text-align:right;">
-1271
-</td>
-<td style="text-align:right;">
-1097
-</td>
-<td style="text-align:right;">
-94
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-10500
-</td>
-<td style="text-align:left;">
-ALBANY
-</td>
-<td style="text-align:right;">
-2015
-</td>
-<td style="text-align:left;">
-MALE
-</td>
-<td style="text-align:left;">
-ELEMENTARY
-</td>
-<td style="text-align:right;">
-31
-</td>
-<td style="text-align:right;">
-14.4
-</td>
-<td style="text-align:right;">
-52
-</td>
-<td style="text-align:right;">
-24.2
-</td>
-<td style="text-align:right;">
-83
-</td>
-<td style="text-align:right;">
-38.6
-</td>
-<td style="text-align:right;">
-113
-</td>
-<td style="text-align:right;">
-0.526
-</td>
-<td style="text-align:right;">
-19
-</td>
-<td style="text-align:right;">
-164
-</td>
-<td style="text-align:right;">
-133
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-1443
-</td>
-<td style="text-align:right;">
-910
-</td>
-<td style="text-align:right;">
-951
-</td>
-<td style="text-align:right;">
-25
-</td>
-<td style="text-align:right;">
-97
-</td>
-<td style="text-align:right;">
-282
-</td>
-<td style="text-align:right;">
-1271
-</td>
-<td style="text-align:right;">
-1097
-</td>
-<td style="text-align:right;">
-94
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-10500
-</td>
-<td style="text-align:left;">
-ALBANY
-</td>
-<td style="text-align:right;">
-2015
-</td>
-<td style="text-align:left;">
-FEMALE
-</td>
-<td style="text-align:left;">
-MIDDLE/HIGH
-</td>
-<td style="text-align:right;">
-16
-</td>
-<td style="text-align:right;">
-16.5
-</td>
-<td style="text-align:right;">
-26
-</td>
-<td style="text-align:right;">
-26.8
-</td>
-<td style="text-align:right;">
-42
-</td>
-<td style="text-align:right;">
-43.3
-</td>
-<td style="text-align:right;">
-55
-</td>
-<td style="text-align:right;">
-0.567
-</td>
-<td style="text-align:right;">
-19
-</td>
-<td style="text-align:right;">
-164
-</td>
-<td style="text-align:right;">
-133
-</td>
-<td style="text-align:right;">
-5
-</td>
-<td style="text-align:right;">
-1443
-</td>
-<td style="text-align:right;">
-910
-</td>
-<td style="text-align:right;">
-951
-</td>
-<td style="text-align:right;">
-25
-</td>
-<td style="text-align:right;">
-97
-</td>
-<td style="text-align:right;">
-282
-</td>
-<td style="text-align:right;">
-1271
-</td>
-<td style="text-align:right;">
-1097
-</td>
-<td style="text-align:right;">
-94
+143
 </td>
 </tr>
 </tbody>
