@@ -1,21 +1,28 @@
 ---
-title: "Project Report"
 output: 
   html_document:
     toc: true
     toc_float: true
 ---
 
-## Motivation 
+<h1 style="font-size: 40px; margin-bottom: 30px;">Project Report</h1>
 
-## Related Work
+# Motivation 
 
-## Initial Questions
+The motivation for our project is to conduct a comprehensive analysis to understand the multifactorial dimensions of New York state student health, specifically relating to obesity and overweight prevalence. Our project will seek to establish correlations between access to food availability, demographic variables, and weight status to better understand the impact of social determinants on student health outcomes. Insights gained from this analysis will be instrumental in informing public health interventions, educational policies, and community-based programs to promote healthier lifestyles and address the obesity epidemic in New York state.
 
-## About Data
+# Aim 
 
-## Exploratory Analysis
+Our project will develop a web platform designed for the exploration of intrinsic connections between the weight status of New York state students and their demographic characteristics. A multifaceted correlation analysis will be conducted to comprehensively analyze each demographic variable, including causal inferences, regression analyses, and hypothesis testing. Subsequently, the outcomes will be presented in the form of interactive graphs and tabulated data for enhanced accessibility and clarity. Furthermore, a narrated screencast will provide an intuitive overview of the final product, offering an in-depth understanding of the research findings and their implications.
 
-## Additional Analysis
+# Data Source
 
-## Discussion
+- [New York State Demographic Data](https://pad.human.cornell.edu/schools/datadownload.cfm)
+- [Student Weight Status in New York State](https://health.data.ny.gov/Health/Student-Weight-Status-Category-Reporting-Results-B/es3k-2aus)
+
+
+# Exploratory Analysis
+
+# Additional Analysis
+
+# Discussion

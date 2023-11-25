@@ -1,12 +1,25 @@
 ---
-title: "About"
 output: 
   html_document:
     toc: true
-    toc_float: true
+    toc_float: False
+
 ---
 
-## Who we are
+<h1 style="font-size: 40px; margin-bottom: 30px;">About us</h1>
 
-*Introduction*
+<h2 style="font-size: 28px;">Manye Dong</h2>
+<img src="" alt="Manye Dong" style="width: 200px; height: auto;"/>
+Email: [md4270@cumc.columbia.edu](mailto:md4270@cumc.columbia.edu)
 
+<h2 style="font-size: 28px;">Haotian Tang</h2>
+<img src="" alt="Manye Dong" style="width: 200px; height: auto;"/>
+Email: [ht2630@cumc.columbia.edu](mailto:ht2630@cumc.columbia.edu)
+
+<h2 style="font-size: 28px;">Jingyi Xu</h2>
+<img src="" alt="Manye Dong" style="width: 200px; height: auto;"/>
+Email: [jx2562@cumc.columbia.edu](mailto:jx2562@cumc.columbia.edu)
+
+<h2 style="font-size: 28px;">Longyi Zhao</h2>
+<img src="" alt="Manye Dong" style="width: 200px; height: auto;"/>
+Email: [lz2949@cumc.columbia.edu](mailto:lz2949@cumc.columbia.edu)

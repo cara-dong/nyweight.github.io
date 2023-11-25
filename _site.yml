@@ -3,8 +3,7 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
-    - text: "About"
-      href: about.html
+   
     - text: "Data Cleaning"
       href: data_cleaning.html  
     - text: "Project Report"
@@ -13,6 +12,8 @@ navbar:
       href: visualization.html
     - text: "Regression"
       href: regression.html 
+    - text: "About"
+      href: about.html
     - icon: fa-github fa-lg
       href: https://github.com/cara-dong/nyweight.github.io
 output:
