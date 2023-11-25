@@ -271,3 +271,23 @@ ggplot(county_data, aes(x = county)) +
 
 ```
 interpretation
+
+
+```{r}
+# the plotly version of the previous plot
+plot_ly(county_data) |>
+  add_trace(type = "bar", x = ~county, y = ~percent_asian, name = "Asian", color = "pink") |>
+  add_trace(type = "bar", x = ~county, y = ~percent_white, name = "White", color = "blue") |>
+  add_trace(type = "bar", x = ~county, y = ~percent_black, name = "Black", color = "green") |>
+  add_trace(type = "bar", x = ~county, y = ~percent_am_ind, name = "Indian",color = "orange") |>
+  add_trace(type = "bar", x = ~county, y = ~percent_hisp, name = "Hispanic",color = "purple") |>
+  add_trace(type = "scatter", x = ~county, y = ~percent_overweight*5, mode = "lines", name = "Overweight", line = list(color = "red", width = 3)) |>
+  layout(title = "Racial Distribution and Percentage Overweight of Students by County",
+         xaxis = list(title = "County"),
+         yaxis = list(title = "Percentage of Students", side = "left"),
+         yaxis2 = list(title = "Percentage Overweight", side = "right", overlaying = "y", zeroline = FALSE),
+         barmode = "stack",
+         showlegend = TRUE)
+
+```
+
