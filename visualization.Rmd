@@ -10,6 +10,7 @@ NEEDS TO HIDE CODE LATER, ONLY DISPLAY INTERPRETATION!
 ```{r}
 library(tidyverse)
 library(plotly)
+library(viridis)
 cleaned_data = read_csv("cleaned_data.csv")
 
 knitr::opts_chunk$set(
@@ -210,6 +211,63 @@ plot_2018
 plot_2019
 ```
 
-racial group and overweight
+county level racial group and county level overweight
+```{r}
+county_dis_data = cleaned_data |>
+  group_by(year, county, district) |>
+  summarize (percent_overweight = mean(percent_overweight), 
+             num_white = mean(num_white), 
+             num_asian = mean(num_asian), 
+             num_am_ind = mean(num_am_ind), 
+             num_black = mean(num_black), 
+             num_hisp = mean(num_hisp))
+
+county_year_data = county_dis_data |>
+  group_by(year, county) |>
+  summarize (percent_overweight = mean(percent_overweight), 
+             num_white = sum(num_white), 
+             num_asian = sum(num_asian), 
+             num_am_ind = sum(num_am_ind), 
+             num_black = sum(num_black), 
+             num_hisp = sum(num_hisp))
+
+county_data = county_year_data |>
+  group_by(county) |>
+  summarize (percent_overweight = mean(percent_overweight), 
+             num_white = mean(num_white), 
+             num_asian = mean(num_asian), 
+             num_am_ind = mean(num_am_ind), 
+             num_black = mean(num_black), 
+             num_hisp = mean(num_hisp))
+
+county_data = county_data |>
+  mutate(total_students = num_am_ind+num_white+num_asian+num_black+num_hisp, 
+         percent_asian = num_asian/total_students*100, 
+         percent_white = num_white/total_students*100, 
+         percent_hisp = num_hisp /total_students*100, 
+         percent_am_ind = num_am_ind/total_students*100, 
+         percent_black = num_black/total_students*100)
+```
 
 
+```{r}
+ggplot(county_data, aes(x = county)) +
+  geom_bar(aes(y = percent_asian, fill = "Asian"), stat = "identity", position = "stack") +
+  geom_bar(aes(y = percent_white, fill = "White"), stat = "identity", position = "stack") +
+  geom_bar(aes(y = percent_black, fill = "Black"), stat = "identity", position = "stack") +
+  geom_bar(aes(y = percent_am_ind, fill = "Indian"), stat = "identity", position = "stack") +
+  geom_bar(aes(y = percent_hisp, fill = "Hispanic"), stat = "identity", position = "stack") +
+  geom_line(aes(y = percent_overweight/20, color = "Overweight"), size = 1.5, group = 1) +
+  labs(title = "Racial Distribution and Percentage Overweight of Students by County",
+       x = "County",
+       y = "Percentage of Students",
+       fill = "Race") +
+  scale_fill_manual(values = c("Asian" = "pink", "White" = "blue", "Black" = "green", "Hispanic" = "purple", "Indian" = "orange")) +
+  scale_y_continuous(name = "Percent of different racial students",
+                     sec.axis = sec_axis(~.*20, name = "Percentage Overweight")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 80, hjust = 1))
+
+
+```
+interpretation
