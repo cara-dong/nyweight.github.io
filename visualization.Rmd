@@ -51,6 +51,24 @@ ggplot(county_year_data, aes(x = year, y = ave_overweight_percent, group = count
 <br>
 interpretation: This plot looks messy, needs to think about it later
 
+or only consider average overweight percentage over year?
+```{r}
+# add up each county's percentage for each year
+county_year_data = 
+  cleaned_data |>
+  group_by (year) |>
+  summarize(ave_overweight_percent = mean(percent_overweight)) 
+
+ggplot(county_year_data, aes(x = year, y = ave_overweight_percent)) + 
+  geom_line() + 
+  geom_point() +
+  labs(title = "Average Overweight Percentage Over Time",
+       x = "Year",
+       y = "Average Overweight Percentage") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
 ## County level number of percent overweight/obese/healthy
 ```{r}
 # calculate the average percentage of overweight/obsed/healthy for all years
@@ -132,5 +150,66 @@ ggplot(sex_data, aes(x = year, y = ave_overweight_percent, color = sex)) +
 ```
 
 ## racial group and overweight
+```{r}
+# the distribution of racial group, first group by district zip code
+race_dis_data = cleaned_data |>
+  group_by (year, district) |>
+  summarize (num_white = mean(num_white), 
+             num_asian = mean(num_asian), 
+             num_am_ind = mean(num_am_ind), 
+             num_black = mean(num_black), 
+             num_hisp = mean(num_hisp))
+
+race_year_data = race_dis_data |>
+  group_by (year) |>
+  summarize(asian = sum(num_asian), 
+            white = sum(num_white), 
+            am_ind = sum(num_am_ind), 
+            black = sum(num_black), 
+            hisp = sum(num_hisp))
+
+race_year_data = pivot_longer(race_year_data, cols = -year, names_to = "race", values_to = "number" )
+
+```
+
+```{r}
+race_2015 = race_year_data |>
+  filter(year == "2015")
+
+plot_2015 <- plot_ly(race_2015, labels = ~race, values = ~ number, type = "pie", hole = 0.2, textinfo = 'number', textposition = 'inside', marker = list(colors = c("pink", "orange", "brown", "blue", "green"))) |>
+  layout(title = "Distribution of Races in 2015")
+
+race_2016 = race_year_data |>
+  filter(year == "2016")
+
+plot_2016 = plot_ly(race_2016, labels = ~race, values = ~ number, type = "pie", hole = 0.2, textinfo = 'number', textposition = 'inside', marker = list(colors = c("pink", "orange", "brown", "blue", "green"))) |>
+  layout(title = "Distribution of Races in 2016")
+
+race_2017 = race_year_data |>
+  filter(year == "2017")
+
+plot_2017 = plot_ly(race_2017, labels = ~race, values = ~ number, type = "pie", hole = 0.2, textinfo = 'number', textposition = 'inside', marker = list(colors = c("pink", "orange", "brown", "blue", "green"))) |>
+  layout(title = "Distribution of Races in 2017")
+
+race_2018 = race_year_data |>
+  filter(year == "2018")
+
+plot_2018 = plot_ly(race_2018, labels = ~race, values = ~ number, type = "pie", hole = 0.2, textinfo = 'number', textposition = 'inside', marker = list(colors = c("pink", "orange", "brown", "blue", "green"))) |>
+  layout(title = "Distribution of Races in 2018")
+
+race_2019 = race_year_data |>
+  filter(year == "2019")
+
+plot_2019 = plot_ly(race_2019, labels = ~race, values = ~ number, type = "pie", hole = 0.2, textinfo = 'number', textposition = 'inside', marker = list(colors = c("pink", "orange", "brown", "blue", "green"))) |>
+  layout(title = "Distribution of Races in 2019")
+
+plot_2015
+plot_2016
+plot_2017
+plot_2018
+plot_2019
+```
+
+racial group and overweight
 
 
