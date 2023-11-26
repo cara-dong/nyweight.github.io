@@ -13,7 +13,7 @@
 
 <title>Rregression Based on Data</title>
 
-<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -358,7 +358,111 @@ div.tocify {
 </div>
 
 
+<pre class="r"><code>cleaned_data = read_csv(&quot;cleaned_data.csv&quot;)</code></pre>
+<ul>
+<li>use sex group, grade level, num of healthy… to predict num of
+overweight in a finer level</li>
+</ul>
+<div id="sex-vs-percentage-of-overweight-students"
+class="section level3">
+<h3>Sex vs Percentage of overweight students</h3>
+<pre class="r"><code>train_data  = 
+  cleaned_data |&gt;
+  select(year, sex, grade_level, 
+         number_overweight, percent_overweight,
+         number_obese, percent_obese, 
+         number_overweight_or_obese, percent_overweight_or_obese,
+         number_healthy_weight, percent_healthy_weight) |&gt;
+  mutate(sex = ifelse(sex==&quot;FEMALE&quot;, 0, 1), 
+         grade_level = ifelse(grade_level==&quot;ELEMENTARY&quot;, 0, 1))</code></pre>
+<p>Check for normality of residuals:</p>
+<pre class="r"><code>model &lt;- lm(percent_overweight ~ sex, data = train_data)
+hist(resid(model), breaks = &quot;FD&quot;, main = &quot;Histogram of Residuals&quot;)</code></pre>
+<p><img src="regression_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Check for homocedasticity:</p>
+<pre class="r"><code>plot(fitted(model), resid(model))
+abline(h = 0, col = &quot;red&quot;)</code></pre>
+<p><img src="regression_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+The variance of the residuals is roughly constant across all levels of
+the predictor. Checked.</p>
+<p>Fit the model:</p>
+<pre class="r"><code>sex_slr = lm(percent_overweight ~ sex, data=train_data) |&gt; broom::tidy()
 
+knitr::kable(sex_slr)</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+17.546446
+</td>
+<td style="text-align:right;">
+0.0892055
+</td>
+<td style="text-align:right;">
+196.696951
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sex
+</td>
+<td style="text-align:right;">
+-1.177219
+</td>
+<td style="text-align:right;">
+0.1259459
+</td>
+<td style="text-align:right;">
+-9.347023
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>Based on parameter estimate of -1.177219 with a p value of almost 0,
+being in the group of xxx sex had a negative relationship with the
+percent of overweight.</p>
+<p>Now, try using grade level to predict percent of overweight:</p>
+</div>
+<div
+id="percentage-of-healthy-students-vs-percentage-of-overweight-students"
+class="section level3">
+<h3>Percentage of healthy students vs Percentage of overweight
+students</h3>
+<p>Use anova test to see if we want to use SLR (with only sex or grade
+level) or MLR to predict:</p>
+<ul>
+<li>use num_asian/num_hipanic/num_white…for each county (demographic)
+data to predict num of overweight in a county level</li>
+</ul>
+</div>
 
 
 
