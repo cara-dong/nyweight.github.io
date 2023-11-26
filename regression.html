@@ -13,7 +13,7 @@
 
 <title>Rregression Based on Data</title>
 
-<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -358,7 +358,140 @@ div.tocify {
 </div>
 
 
+<pre class="r"><code>cleaned_data = read_csv(&quot;cleaned_data.csv&quot;)
+cleaned_data</code></pre>
+<pre><code>## # A tibble: 4,800 × 26
+##    district county  year sex    grade_level number_overweight percent_overweight
+##       &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;                   &lt;dbl&gt;              &lt;dbl&gt;
+##  1    10402 ALBANY  2015 FEMALE ELEMENTARY                 20               11  
+##  2    10402 ALBANY  2015 MALE   ELEMENTARY                 41               17.3
+##  3    10402 ALBANY  2015 FEMALE MIDDLE/HIGH                26               19.8
+##  4    10402 ALBANY  2015 MALE   MIDDLE/HIGH                19               14  
+##  5    10500 ALBANY  2015 FEMALE ELEMENTARY                 36               19.4
+##  6    10500 ALBANY  2015 MALE   ELEMENTARY                 31               14.4
+##  7    10500 ALBANY  2015 FEMALE MIDDLE/HIGH                16               16.5
+##  8    10500 ALBANY  2015 MALE   MIDDLE/HIGH                 7                7.1
+##  9    10601 ALBANY  2015 FEMALE ELEMENTARY                 84               19  
+## 10    10601 ALBANY  2015 MALE   ELEMENTARY                 73               16.7
+## # ℹ 4,790 more rows
+## # ℹ 19 more variables: number_obese &lt;dbl&gt;, percent_obese &lt;dbl&gt;,
+## #   number_overweight_or_obese &lt;dbl&gt;, percent_overweight_or_obese &lt;dbl&gt;,
+## #   number_healthy_weight &lt;dbl&gt;, percent_healthy_weight &lt;dbl&gt;, num_asian &lt;dbl&gt;,
+## #   num_black &lt;dbl&gt;, num_hisp &lt;dbl&gt;, num_am_ind &lt;dbl&gt;, num_white &lt;dbl&gt;,
+## #   num_female &lt;dbl&gt;, num_male &lt;dbl&gt;, num_lep &lt;dbl&gt;, num_multi &lt;dbl&gt;,
+## #   num_swd &lt;dbl&gt;, num_ecdis &lt;dbl&gt;, num_free_lunch &lt;dbl&gt;, …</code></pre>
+<ul>
+<li>use sex group, grade level, num of healthy… to predict num of
+overweight in a finer level</li>
+</ul>
+<pre class="r"><code>train_data  = 
+  cleaned_data |&gt;
+  select(year, sex, grade_level, 
+         number_overweight, percent_overweight,
+         number_obese, percent_obese, 
+         number_overweight_or_obese, percent_overweight_or_obese,
+         number_healthy_weight, percent_healthy_weight) |&gt;
+  mutate(sex = ifelse(sex==&quot;FEMALE&quot;, 0, 1), 
+         grade_level = ifelse(grade_level==&quot;ELEMENTARY&quot;, 0, 1))
 
+train_data</code></pre>
+<pre><code>## # A tibble: 4,800 × 11
+##     year   sex grade_level number_overweight percent_overweight number_obese
+##    &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;             &lt;dbl&gt;              &lt;dbl&gt;        &lt;dbl&gt;
+##  1  2015     0           0                20               11             39
+##  2  2015     1           0                41               17.3           45
+##  3  2015     0           1                26               19.8           32
+##  4  2015     1           1                19               14             36
+##  5  2015     0           0                36               19.4           37
+##  6  2015     1           0                31               14.4           52
+##  7  2015     0           1                16               16.5           26
+##  8  2015     1           1                 7                7.1           32
+##  9  2015     0           0                84               19             56
+## 10  2015     1           0                73               16.7           77
+## # ℹ 4,790 more rows
+## # ℹ 5 more variables: percent_obese &lt;dbl&gt;, number_overweight_or_obese &lt;dbl&gt;,
+## #   percent_overweight_or_obese &lt;dbl&gt;, number_healthy_weight &lt;dbl&gt;,
+## #   percent_healthy_weight &lt;dbl&gt;</code></pre>
+<p>Check for normality of residuals:</p>
+<pre class="r"><code>model &lt;- lm(percent_overweight ~ sex, data = train_data)
+hist(resid(model), breaks = &quot;FD&quot;, main = &quot;Histogram of Residuals&quot;)</code></pre>
+<p><img src="regression_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Check for homocedasticity:</p>
+<pre class="r"><code>plot(fitted(model), resid(model))
+abline(h = 0, col = &quot;red&quot;)</code></pre>
+<p><img src="regression_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+The variance of the residuals is roughly constant across all levels of
+the predictor. Checked.</p>
+<p>Fit the model:</p>
+<pre class="r"><code>sex_slr = lm(percent_overweight ~ sex, data=train_data) |&gt; broom::tidy()
+
+knitr::kable(sex_slr)</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+17.546446
+</td>
+<td style="text-align:right;">
+0.0892055
+</td>
+<td style="text-align:right;">
+196.696951
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sex
+</td>
+<td style="text-align:right;">
+-1.177219
+</td>
+<td style="text-align:right;">
+0.1259459
+</td>
+<td style="text-align:right;">
+-9.347023
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>Based on parameter estimate of -1.177219 with a p value of almost 0,
+being in the group of xxx sex had a negative relationship with the
+percent of overweight.</p>
+<p>Use anova test to see if we want to use SLR (with only sex or grade
+level) or MLR to predict:</p>
+<ul>
+<li>use num_asian/num_hipanic/num_white…for each county (demographic)
+data to predict num of overweight in a county level</li>
+</ul>
 
 
 
