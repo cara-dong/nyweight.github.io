@@ -11,10 +11,11 @@ library(tidyverse)
 
 ```{r message=FALSE, warning=FALSE}
 cleaned_data = read_csv("cleaned_data.csv")
-cleaned_data
 ```
 
 * use sex group, grade level, num of healthy… to predict num of overweight in a finer level
+
+### Sex vs Percentage of overweight students
 ```{r message=FALSE, warning=FALSE}
 train_data  = 
   cleaned_data |>
@@ -25,8 +26,6 @@ train_data  =
          number_healthy_weight, percent_healthy_weight) |>
   mutate(sex = ifelse(sex=="FEMALE", 0, 1), 
          grade_level = ifelse(grade_level=="ELEMENTARY", 0, 1))
-
-train_data
 ```
 
 Check for normality of residuals:
@@ -49,6 +48,14 @@ sex_slr = lm(percent_overweight ~ sex, data=train_data) |> broom::tidy()
 knitr::kable(sex_slr)
 ```
 Based on parameter estimate of -1.177219 with a p value of almost 0, being in the group of xxx sex had a negative relationship with the percent of overweight.
+
+Now, try using grade level to predict percent of overweight:
+```{r}
+
+```
+
+
+### Percentage of healthy students vs Percentage of overweight students
 
 Use anova test to see if we want to use SLR (with only sex or grade level) or MLR to predict:
 ```{r}
