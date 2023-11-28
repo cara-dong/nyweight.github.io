@@ -285,7 +285,7 @@ county_data = county_data |>
 ```
 
 
-```{r message = FALSE, echo = FALSE}
+```{r eval = FALSE, message = FALSE, echo = FALSE}
 ggplot(county_data, aes(x = county)) +
   geom_bar(aes(y = percent_asian, fill = "Asian"), stat = "identity", position = "stack") +
   geom_bar(aes(y = percent_white, fill = "White"), stat = "identity", position = "stack") +
