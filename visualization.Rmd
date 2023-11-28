@@ -143,7 +143,7 @@ ggplot(element_middle_data, aes(x = county, y = ave_overweight_percent, fill = g
 ```
 
 Average Overweight Percent by Grade Level over year
-```{r}
+```{r message = FALSE, echo = FALSE}
 grade_level_data = 
   cleaned_data |>
   group_by (grade_level, year) |>
@@ -152,7 +152,7 @@ grade_level_data =
             ave_healthy_percent = mean(percent_healthy_weight)*100)
 ```
 
-```{r}
+```{r message = FALSE, echo = FALSE}
 ggplot(grade_level_data, aes(x = year, y = ave_overweight_percent, color = grade_level)) +
   geom_point() +
   geom_line() +
@@ -328,35 +328,47 @@ plot_ly(county_data) |>
 
 
 ```{r message = FALSE, echo = FALSE}
+library(patchwork)
 # county level different races number vs. percent overweight scatterplots
-ggplot(county_data, aes(x = percent_asian, y = percent_overweight)) +
+plot1 = ggplot(county_data, aes(x = percent_asian, y = percent_overweight)) +
   geom_point() +
-  labs(title = "County-Level Percentage Overweight vs. Percent of Asians",
+  labs(title = "County-Level Percentage Overweight vs. Percent of Each Racial Groups",
        x = "Percent of Asians",
-       y = "Percentage Overweight")
+       y = "Percentage Overweight") +
+  theme(plot.title = element_text(size = 12),
+        axis.title.x = element_text(size = 6),   # Adjust x-axis label size
+        axis.title.y = element_text(size = 6))
 
-ggplot(county_data, aes(x = percent_white, y = percent_overweight)) +
+plot2 = ggplot(county_data, aes(x = percent_white, y = percent_overweight)) +
   geom_point() +
-  labs(title = "County-Level Percentage Overweight vs. Percent of White",
-       x = "Percent of White",
-       y = "Percentage Overweight")
+  labs(x = "Percent of White",
+       y = "Percentage Overweight")+
+  theme(axis.title.x = element_text(size = 6),   # Adjust x-axis label size
+        axis.title.y = element_text(size = 6))
 
-ggplot(county_data, aes(x = percent_black, y = percent_overweight)) +
+plot3 = ggplot(county_data, aes(x = percent_black, y = percent_overweight)) +
   geom_point() +
-  labs(title = "County-Level Percentage Overweight vs. Percent of Black",
-       x = "Percent of Black",
-       y = "Percentage Overweight")
+  labs(x = "Percent of Black",
+       y = "Percentage Overweight") +
+  theme(axis.title.x = element_text(size = 6),   # Adjust x-axis label size
+        axis.title.y = element_text(size = 6))
 
-ggplot(county_data, aes(x = percent_am_ind, y = percent_overweight)) +
+plot4 = ggplot(county_data, aes(x = percent_am_ind, y = percent_overweight)) +
   geom_point() +
-  labs(title = "County-Level Percentage Overweight vs. Percent of American Indian",
-       x = "Percent of American Indian",
-       y = "Percentage Overweight")
+  labs(x = "Percent of American Indian",
+       y = "Percentage Overweight") +
+  theme(axis.title.x = element_text(size = 6),   # Adjust x-axis label size
+        axis.title.y = element_text(size = 6))
 
-ggplot(county_data, aes(x = percent_hisp, y = percent_overweight)) +
+plot5 = ggplot(county_data, aes(x = percent_hisp, y = percent_overweight)) +
   geom_point() +
-  labs(title = "County-Level Percentage Overweight vs. Percent of Hispanic",
-       x = "Percent of hispanic",
-       y = "Percentage Overweight")
+  labs(x = "Percent of hispanic",
+       y = "Percentage Overweight") +
+  theme(axis.title.x = element_text(size = 6),   # Adjust x-axis label size
+        axis.title.y = element_text(size = 6))
+
+combined_plots = plot1+plot2+plot3+plot4+plot5 
+
+combined_plots
 ```
 
