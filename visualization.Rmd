@@ -142,6 +142,27 @@ ggplot(element_middle_data, aes(x = county, y = ave_overweight_percent, fill = g
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
+Average Overweight Percent by Grade Level over year
+```{r}
+grade_level_data = 
+  cleaned_data |>
+  group_by (grade_level, year) |>
+  summarize(ave_overweight_percent = mean(percent_overweight), 
+            ave_obese_percent = mean(percent_obese), 
+            ave_healthy_percent = mean(percent_healthy_weight)*100)
+```
+
+```{r}
+ggplot(grade_level_data, aes(x = year, y = ave_overweight_percent, color = grade_level)) +
+  geom_point() +
+  geom_line() +
+  labs(title = "Average Overweight Percentage Over Years by Grade Level",
+       x = "Year",
+       y = "Average Overweight Percentage",
+       color = "Grade Level") +
+  theme_minimal()
+```
+
 ## sex and overweight
 ```{r message = FALSE, echo = FALSE}
 sex_data = 

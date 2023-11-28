@@ -374,21 +374,23 @@ class="section level3">
          number_overweight_or_obese, percent_overweight_or_obese,
          number_healthy_weight, percent_healthy_weight) |&gt;
   mutate(sex = ifelse(sex==&quot;FEMALE&quot;, 0, 1), 
-         grade_level = ifelse(grade_level==&quot;ELEMENTARY&quot;, 0, 1))</code></pre>
+         grade_level = ifelse(grade_level==&quot;ELEMENTARY&quot;, 0, 1)) |&gt;
+  drop_na()</code></pre>
 <p>Check for normality of residuals:</p>
-<pre class="r"><code>model &lt;- lm(percent_overweight ~ sex, data = train_data)
-hist(resid(model), breaks = &quot;FD&quot;, main = &quot;Histogram of Residuals&quot;)</code></pre>
+<pre class="r"><code>model1 = lm(percent_overweight ~ sex, data = train_data)
+hist(resid(model1), breaks = &quot;FD&quot;, main = &quot;Histogram of Residuals&quot;)</code></pre>
 <p><img src="regression_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>Check for homocedasticity:</p>
-<pre class="r"><code>plot(fitted(model), resid(model))
+<pre class="r"><code>plot(fitted(model1), resid(model1))
 abline(h = 0, col = &quot;red&quot;)</code></pre>
 <p><img src="regression_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 The variance of the residuals is roughly constant across all levels of
 the predictor. Checked.</p>
 <p>Fit the model:</p>
-<pre class="r"><code>sex_slr = lm(percent_overweight ~ sex, data=train_data) |&gt; broom::tidy()
+<pre class="r"><code>sex_slr = lm(percent_overweight ~ sex, data = train_data) 
+sex_slr_df = sex_slr |&gt; broom::tidy()
 
-knitr::kable(sex_slr)</code></pre>
+knitr::kable(sex_slr_df)</code></pre>
 <table>
 <thead>
 <tr>
@@ -450,14 +452,120 @@ sex
 being in the group of xxx sex had a negative relationship with the
 percent of overweight.</p>
 <p>Now, try using grade level to predict percent of overweight:</p>
+<p>Check for normality of residuals:</p>
+<pre class="r"><code>model2 = lm(percent_overweight ~ grade_level, data = train_data)
+hist(resid(model2), breaks = &quot;FD&quot;, main = &quot;Histogram of Residuals&quot;)</code></pre>
+<p><img src="regression_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Check homosdasticity:</p>
+<pre class="r"><code>plot(fitted(model2), resid(model2))
+abline(h = 0, col = &quot;red&quot;)</code></pre>
+<p><img src="regression_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Fit the model:</p>
+<pre class="r"><code>grade_level_slr = lm(percent_overweight ~ grade_level, data = train_data)
+#grade_level_slr_df = grade_level_slr |&gt; broom::tidy()
+
+#knitr::kable(grade_level_slr_df)</code></pre>
+<p>Fit MLR with sex and grade_level:</p>
+<pre class="r"><code>mlr = lm(percent_overweight ~ grade_level + sex, data = train_data) 
+
+mlr_df = mlr |&gt; broom::tidy()
+
+knitr::kable(mlr_df)</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+16.717571
+</td>
+<td style="text-align:right;">
+0.1058518
+</td>
+<td style="text-align:right;">
+157.933676
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+grade_level
+</td>
+<td style="text-align:right;">
+1.718086
+</td>
+<td style="text-align:right;">
+0.1235648
+</td>
+<td style="text-align:right;">
+13.904326
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sex
+</td>
+<td style="text-align:right;">
+-1.179560
+</td>
+<td style="text-align:right;">
+0.1234951
+</td>
+<td style="text-align:right;">
+-9.551469
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>Use anova test to see if we want to use SLR (with only sex or grade
+level) or MLR to predict:</p>
+<pre class="r"><code>anova(sex_slr, grade_level_slr, mlr)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: percent_overweight ~ sex
+## Model 2: percent_overweight ~ grade_level
+## Model 3: percent_overweight ~ grade_level + sex
+##   Res.Df   RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1   4798 91328                                  
+## 2   4798 89460  0    1868.5                     
+## 3   4797 87790  1    1669.6 91.231 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>So, MLR is more preferrable than SLR here.</p>
 </div>
 <div
 id="percentage-of-healthy-students-vs-percentage-of-overweight-students"
 class="section level3">
 <h3>Percentage of healthy students vs Percentage of overweight
 students</h3>
-<p>Use anova test to see if we want to use SLR (with only sex or grade
-level) or MLR to predict:</p>
 <ul>
 <li>use num_asian/num_hipanic/num_white…for each county (demographic)
 data to predict num of overweight in a county level</li>

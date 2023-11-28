@@ -25,42 +25,71 @@ train_data  =
          number_overweight_or_obese, percent_overweight_or_obese,
          number_healthy_weight, percent_healthy_weight) |>
   mutate(sex = ifelse(sex=="FEMALE", 0, 1), 
-         grade_level = ifelse(grade_level=="ELEMENTARY", 0, 1))
+         grade_level = ifelse(grade_level=="ELEMENTARY", 0, 1)) |>
+  drop_na()
 ```
 
 Check for normality of residuals:
-```{r}
-model <- lm(percent_overweight ~ sex, data = train_data)
-hist(resid(model), breaks = "FD", main = "Histogram of Residuals")
+```{r message=FALSE, warning=FALSE}
+model1 = lm(percent_overweight ~ sex, data = train_data)
+hist(resid(model1), breaks = "FD", main = "Histogram of Residuals")
 ```
 
 Check for homocedasticity:
-```{r}
-plot(fitted(model), resid(model))
+```{r message=FALSE, warning=FALSE}
+plot(fitted(model1), resid(model1))
 abline(h = 0, col = "red")
 ```
 The variance of the residuals is roughly constant across all levels of the predictor. Checked.
 
 Fit the model:
-```{r}
-sex_slr = lm(percent_overweight ~ sex, data=train_data) |> broom::tidy()
+```{r message=FALSE, warning=FALSE}
+sex_slr = lm(percent_overweight ~ sex, data = train_data) 
+sex_slr_df = sex_slr |> broom::tidy()
 
-knitr::kable(sex_slr)
+knitr::kable(sex_slr_df)
 ```
 Based on parameter estimate of -1.177219 with a p value of almost 0, being in the group of xxx sex had a negative relationship with the percent of overweight.
 
 Now, try using grade level to predict percent of overweight:
-```{r}
 
+Check for normality of residuals:
+```{r message=FALSE, warning=FALSE}
+model2 = lm(percent_overweight ~ grade_level, data = train_data)
+hist(resid(model2), breaks = "FD", main = "Histogram of Residuals")
 ```
 
+Check homosdasticity:
+```{r message=FALSE, warning=FALSE}
+plot(fitted(model2), resid(model2))
+abline(h = 0, col = "red")
+```
 
-### Percentage of healthy students vs Percentage of overweight students
+Fit the model:
+```{r message=FALSE, warning=FALSE}
+grade_level_slr = lm(percent_overweight ~ grade_level, data = train_data)
+#grade_level_slr_df = grade_level_slr |> broom::tidy()
+
+#knitr::kable(grade_level_slr_df)
+```
+
+Fit MLR with sex and grade_level:
+```{r}
+mlr = lm(percent_overweight ~ grade_level + sex, data = train_data) 
+
+mlr_df = mlr |> broom::tidy()
+
+knitr::kable(mlr_df)
+```
 
 Use anova test to see if we want to use SLR (with only sex or grade level) or MLR to predict:
 ```{r}
+anova(sex_slr, grade_level_slr, mlr)
+```
+So, MLR is more preferrable than SLR here.
+
+### Percentage of healthy students vs Percentage of overweight students
+* use num_asian/num_hipanic/num_white...for each county (demographic) data to predict num of overweight in a county level
+```{r}
 
 ```
-
-
-* use num_asian/num_hipanic/num_white...for each county (demographic) data to predict num of overweight in a county level
