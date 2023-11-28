@@ -1,13 +1,12 @@
-name: "Yay internet!"
 output_dir: "."
 navbar:
   title: "Home"
+  left: 
+    - text: "Project Report"
+      href: Project_report.html
   right:
-   
     - text: "Data Cleaning"
       href: data_cleaning.html  
-    - text: "Project Report"
-      href: Project_report.html  
     - text: "Visualization"
       href: visualization.html
     - text: "Regression"
