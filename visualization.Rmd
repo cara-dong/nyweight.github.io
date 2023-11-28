@@ -305,3 +305,37 @@ plot_ly(county_data) |>
 
 ```
 
+
+```{r message = FALSE, echo = FALSE}
+# county level different races number vs. percent overweight scatterplots
+ggplot(county_data, aes(x = percent_asian, y = percent_overweight)) +
+  geom_point() +
+  labs(title = "County-Level Percentage Overweight vs. Percent of Asians",
+       x = "Percent of Asians",
+       y = "Percentage Overweight")
+
+ggplot(county_data, aes(x = percent_white, y = percent_overweight)) +
+  geom_point() +
+  labs(title = "County-Level Percentage Overweight vs. Percent of White",
+       x = "Percent of White",
+       y = "Percentage Overweight")
+
+ggplot(county_data, aes(x = percent_black, y = percent_overweight)) +
+  geom_point() +
+  labs(title = "County-Level Percentage Overweight vs. Percent of Black",
+       x = "Percent of Black",
+       y = "Percentage Overweight")
+
+ggplot(county_data, aes(x = percent_am_ind, y = percent_overweight)) +
+  geom_point() +
+  labs(title = "County-Level Percentage Overweight vs. Percent of American Indian",
+       x = "Percent of American Indian",
+       y = "Percentage Overweight")
+
+ggplot(county_data, aes(x = percent_hisp, y = percent_overweight)) +
+  geom_point() +
+  labs(title = "County-Level Percentage Overweight vs. Percent of Hispanic",
+       x = "Percent of hispanic",
+       y = "Percentage Overweight")
+```
+
