@@ -7,20 +7,25 @@ output:
 
 <h1 style="text-align: center; font-weight: bold; font-size: 36px; margin-bottom: 40px;">Unlocking the Mystery: Are NYC Students' Weights Telling a Hidden Story</h1>
 
-<h2 style="font-size: 24px; font-family: Times New Roman, sans-serif;">Screencast Introduction</h2>
+<h2 style="font-size: 24px; font-family: Times New Roman, sans-serif; font-weight: bold; margin-bottom: 20px;">Motivation</h2>
+<p style="font-size: 20px; font-family: Times New Roman, sans-serif;">
+The motivation for our project is to conduct a comprehensive analysis to understand the multifactorial dimensions of New York state student health, specifically relating to obesity and overweight prevalence. Our project will seek to establish correlations between access to food availability, demographic variables, and weight status to better understand the impact of social determinants on student health outcomes. Insights gained from this analysis will be instrumental in informing public health interventions, educational policies, and community-based programs to promote healthier lifestyles and address the obesity epidemic in New York state.
+</p>
+
+<h2 style="font-size: 24px; font-family: Times New Roman, sans-serif; font-weight: bold;">Screencast Introduction</h2>
 
 <div style="text-align: center; margin-bottom: 40px;">
 <iframe width="800" height="450" src="https://www.youtube.com/embed/CvjoXdC-WkM?si=eNMVHcOZYjrgpjM4" title="YouTube video player" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
 
-<h2 style="font-size: 24px; font-family: Times New Roman, sans-serif; margin-bottom: 20px;">Findings</h2>
+<h2 style="font-size: 24px; font-family: Times New Roman, sans-serif; font-weight: bold; margin-bottom: 20px;">Findings</h2>
 <ul style="font-size: 20px; font-family: Times New Roman, sans-serif;">
     <li>
     <li>
     <li>
 </ul>
 
-<h2 style="font-size: 24px; font-family: Times New Roman, sans-serif;">Contributors</h2>
+<h2 style="font-size: 24px; font-family: Times New Roman, sans-serif; font-weight: bold;">Contributors</h2>
 <ul style="font-size: 20px; font-family: Times New Roman, sans-serif;">
     <li>Manye Dong md4270@cumc.columbia.edu
     <li>Haotian Tang ht2630@cumc.columbia.edu
