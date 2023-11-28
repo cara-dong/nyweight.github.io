@@ -6,8 +6,11 @@ output:
     toc_float: true
 ---
 
-NEEDS TO HIDE CODE LATER, ONLY DISPLAY INTERPRETATION!
-```{r}
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+```{r message = FALSE, echo = FALSE}
 library(tidyverse)
 library(plotly)
 library(viridis)
@@ -32,7 +35,7 @@ scale_fill_disrete = scale_fill_viridis_d
 
 
 ## overweight percentage changes over year
-```{r}
+```{r message = FALSE, echo = FALSE}
 # add up each county's percentage for each year
 county_year_data = 
   cleaned_data |>
@@ -53,7 +56,7 @@ ggplot(county_year_data, aes(x = year, y = ave_overweight_percent, group = count
 interpretation: This plot looks messy, needs to think about it later
 
 or only consider average overweight percentage over year?
-```{r}
+```{r message = FALSE, echo = FALSE}
 # add up each county's percentage for each year
 county_year_data = 
   cleaned_data |>
@@ -71,7 +74,7 @@ ggplot(county_year_data, aes(x = year, y = ave_overweight_percent)) +
 ```
 
 ## County level number of percent overweight/obese/healthy
-```{r}
+```{r message = FALSE, echo = FALSE}
 # calculate the average percentage of overweight/obsed/healthy for all years
 county_ave_data = 
   cleaned_data |>
@@ -105,7 +108,7 @@ Interpretation:
 
 
 ## elementary and middle school overweight across county
-```{r}
+```{r message = FALSE, echo = FALSE}
 element_middle_data = 
   cleaned_data |>
   group_by (county, grade_level) |>
@@ -116,7 +119,7 @@ element_middle_data =
 ```
 
 
-```{r}
+```{r message = FALSE, echo = FALSE}
 # display and compare elementary and middle/high overweight data  
 ggplot(element_middle_data, aes(x = county, y = ave_overweight_percent, fill = grade_level)) +
   geom_bar(stat = "identity", position = "dodge") +
@@ -129,7 +132,7 @@ ggplot(element_middle_data, aes(x = county, y = ave_overweight_percent, fill = g
 ```
 
 ## sex and overweight
-```{r}
+```{r message = FALSE, echo = FALSE}
 sex_data = 
   cleaned_data |>
   group_by (sex, year) |>
@@ -138,7 +141,7 @@ sex_data =
             ave_healthy_percent = mean(percent_healthy_weight)*100) 
 ```
 
-```{r}
+```{r message = FALSE, echo = FALSE}
 # geom line to compare 
 ggplot(sex_data, aes(x = year, y = ave_overweight_percent, color = sex)) +
   geom_point() +
@@ -151,7 +154,7 @@ ggplot(sex_data, aes(x = year, y = ave_overweight_percent, color = sex)) +
 ```
 
 ## racial group and overweight
-```{r}
+```{r message = FALSE, echo = FALSE}
 # the distribution of racial group, first group by district zip code
 race_dis_data = cleaned_data |>
   group_by (year, district) |>
@@ -173,7 +176,7 @@ race_year_data = pivot_longer(race_year_data, cols = -year, names_to = "race", v
 
 ```
 
-```{r}
+```{r message = FALSE, echo = FALSE}
 race_2015 = race_year_data |>
   filter(year == "2015")
 
@@ -212,7 +215,7 @@ plot_2019
 ```
 
 county level racial group and county level overweight
-```{r}
+```{r message = FALSE, echo = FALSE}
 county_dis_data = cleaned_data |>
   group_by(year, county, district) |>
   summarize (percent_overweight = mean(percent_overweight), 
@@ -250,7 +253,7 @@ county_data = county_data |>
 ```
 
 
-```{r}
+```{r message = FALSE, echo = FALSE}
 ggplot(county_data, aes(x = county)) +
   geom_bar(aes(y = percent_asian, fill = "Asian"), stat = "identity", position = "stack") +
   geom_bar(aes(y = percent_white, fill = "White"), stat = "identity", position = "stack") +
@@ -273,7 +276,7 @@ ggplot(county_data, aes(x = county)) +
 interpretation
 
 
-```{r}
+```{r message = FALSE, echo = FALSE}
 # the plotly version of the previous plot
 plot_ly(county_data) |>
   add_trace(type = "bar", x = ~county, y = ~percent_asian, name = "Asian", color = "pink") |>
