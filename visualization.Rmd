@@ -72,6 +72,14 @@ ggplot(county_year_data, aes(x = year, y = ave_overweight_percent)) +
   theme_minimal() +
   theme(legend.position = "none")
 ```
+interpretation: By analyzing two plots, it can be concluded that there is a consistant decrease in overweight rate for students in NY state over years. However, it should be noted that 2016 and 2017's data have some outliers, so additional analysis will be performed excluding those outliers. 
+
+```{r}
+# exclude outliers in 2016 and 2017
+```
+
+
+
 
 ## County level number of percent overweight/obese/healthy
 ```{r message = FALSE, echo = FALSE}
@@ -97,11 +105,14 @@ plot_ly(county_ave_data, x = ~county, y = ~ave_obese_percent, type = 'bar', colo
          showlegend = FALSE,
          xaxis = list(tickangle = -60))
 
+custom_order <- county_ave_data[order(county_ave_data$ave_healthy_percent), "county"]
 plot_ly(county_ave_data, x = ~county, y = ~ave_healthy_percent, type = 'bar', color = ~county) |>
   layout(title = "Percentage Healthy by County",
          xaxis = list(title = "County"),
          yaxis = list(title = "Average Percentage Healthy"),
          showlegend = FALSE,
+         categoryorder = "array",
+         categoryarray = custom_order, 
          xaxis = list(tickangle = -60))
 ```
 Interpretation: 
