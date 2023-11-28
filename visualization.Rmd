@@ -72,6 +72,14 @@ ggplot(county_year_data, aes(x = year, y = ave_overweight_percent)) +
   theme_minimal() +
   theme(legend.position = "none")
 ```
+interpretation: By analyzing two plots, it can be concluded that there is a consistant decrease in overweight rate for students in NY state over years. However, it should be noted that 2016 and 2017's data have some outliers, so additional analysis will be performed excluding those outliers. 
+
+```{r}
+# exclude outliers in 2016 and 2017
+```
+
+
+
 
 ## County level number of percent overweight/obese/healthy
 ```{r message = FALSE, echo = FALSE}
@@ -97,11 +105,14 @@ plot_ly(county_ave_data, x = ~county, y = ~ave_obese_percent, type = 'bar', colo
          showlegend = FALSE,
          xaxis = list(tickangle = -60))
 
+custom_order <- county_ave_data[order(county_ave_data$ave_healthy_percent), "county"]
 plot_ly(county_ave_data, x = ~county, y = ~ave_healthy_percent, type = 'bar', color = ~county) |>
   layout(title = "Percentage Healthy by County",
          xaxis = list(title = "County"),
          yaxis = list(title = "Average Percentage Healthy"),
          showlegend = FALSE,
+         categoryorder = "array",
+         categoryarray = custom_order, 
          xaxis = list(tickangle = -60))
 ```
 Interpretation: 
@@ -129,6 +140,27 @@ ggplot(element_middle_data, aes(x = county, y = ave_overweight_percent, fill = g
        fill = "Grade Level") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+Average Overweight Percent by Grade Level over year
+```{r}
+grade_level_data = 
+  cleaned_data |>
+  group_by (grade_level, year) |>
+  summarize(ave_overweight_percent = mean(percent_overweight), 
+            ave_obese_percent = mean(percent_obese), 
+            ave_healthy_percent = mean(percent_healthy_weight)*100)
+```
+
+```{r}
+ggplot(grade_level_data, aes(x = year, y = ave_overweight_percent, color = grade_level)) +
+  geom_point() +
+  geom_line() +
+  labs(title = "Average Overweight Percentage Over Years by Grade Level",
+       x = "Year",
+       y = "Average Overweight Percentage",
+       color = "Grade Level") +
+  theme_minimal()
 ```
 
 ## sex and overweight
@@ -253,7 +285,7 @@ county_data = county_data |>
 ```
 
 
-```{r message = FALSE, echo = FALSE}
+```{r eval = FALSE, message = FALSE, echo = FALSE}
 ggplot(county_data, aes(x = county)) +
   geom_bar(aes(y = percent_asian, fill = "Asian"), stat = "identity", position = "stack") +
   geom_bar(aes(y = percent_white, fill = "White"), stat = "identity", position = "stack") +
@@ -292,5 +324,39 @@ plot_ly(county_data) |>
          barmode = "stack",
          showlegend = TRUE)
 
+```
+
+
+```{r message = FALSE, echo = FALSE}
+# county level different races number vs. percent overweight scatterplots
+ggplot(county_data, aes(x = percent_asian, y = percent_overweight)) +
+  geom_point() +
+  labs(title = "County-Level Percentage Overweight vs. Percent of Asians",
+       x = "Percent of Asians",
+       y = "Percentage Overweight")
+
+ggplot(county_data, aes(x = percent_white, y = percent_overweight)) +
+  geom_point() +
+  labs(title = "County-Level Percentage Overweight vs. Percent of White",
+       x = "Percent of White",
+       y = "Percentage Overweight")
+
+ggplot(county_data, aes(x = percent_black, y = percent_overweight)) +
+  geom_point() +
+  labs(title = "County-Level Percentage Overweight vs. Percent of Black",
+       x = "Percent of Black",
+       y = "Percentage Overweight")
+
+ggplot(county_data, aes(x = percent_am_ind, y = percent_overweight)) +
+  geom_point() +
+  labs(title = "County-Level Percentage Overweight vs. Percent of American Indian",
+       x = "Percent of American Indian",
+       y = "Percentage Overweight")
+
+ggplot(county_data, aes(x = percent_hisp, y = percent_overweight)) +
+  geom_point() +
+  labs(title = "County-Level Percentage Overweight vs. Percent of Hispanic",
+       x = "Percent of hispanic",
+       y = "Percentage Overweight")
 ```
 
