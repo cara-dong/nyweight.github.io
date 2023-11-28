@@ -281,6 +281,27 @@ $(document).ready(function () {
 </div>
 
 
+<style>
+    body {
+        position: relative;
+        background-image: url('background.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+
+    body::before {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.5); 
+        z-index: -1;
+        top: 0;
+        left: 0;
+    }
+</style>
 <h1 style="text-align: center; font-weight: bold; font-size: 36px; margin-bottom: 40px;">
 Unlocking the Mystery: Are NYC Students’ Weights Telling a Hidden Story
 </h1>
@@ -291,13 +312,13 @@ Motivation
 The motivation for our project is to conduct a comprehensive analysis to
 understand the multifactorial dimensions of New York state student
 health, specifically relating to obesity and overweight prevalence. Our
-project will seek to establish correlations between access to food
-availability, demographic variables, and weight status to better
-understand the impact of social determinants on student health outcomes.
-Insights gained from this analysis will be instrumental in informing
-public health interventions, educational policies, and community-based
-programs to promote healthier lifestyles and address the obesity
-epidemic in New York state.
+project will seek to establish correlations between access to students’
+demographic variables and weight status to better understand the impact
+of social determinants on student health outcomes. Insights gained from
+this analysis will be instrumental in informing public health
+interventions, educational policies, and community-based programs to
+promote healthier lifestyles and address the obesity epidemic in New
+York state.
 </p>
 <h2 style="font-size: 24px; font-family: Times New Roman, sans-serif; font-weight: bold;">
 Screencast Introduction
