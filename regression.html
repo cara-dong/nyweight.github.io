@@ -13,7 +13,7 @@
 
 <title>Rregression Based on Data</title>
 
-<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -35,6 +35,13 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.10.3/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -362,9 +369,8 @@ div.tocify {
 <li>use sex group, grade level, num of healthy… to predict num of
 overweight in a finer level</li>
 </ul>
-<div id="sex-vs-percentage-of-overweight-students"
-class="section level3">
-<h3>Sex vs Percentage of overweight students</h3>
+<div id="slr---sex-vs-percentage-of-overweight" class="section level3">
+<h3>SLR - Sex vs Percentage of Overweight</h3>
 <pre class="r"><code>train_data  = 
   cleaned_data |&gt;
   select(year, sex, grade_level, 
@@ -375,14 +381,27 @@ class="section level3">
   mutate(sex = ifelse(sex==&quot;FEMALE&quot;, 0, 1), 
          grade_level = ifelse(grade_level==&quot;ELEMENTARY&quot;, 0, 1)) |&gt;
   drop_na()</code></pre>
+<p>Check if outcome is normally distributed:</p>
+<pre class="r"><code>school_level_dist = train_data |&gt;
+  ggplot(aes(x = percent_overweight)) + 
+  geom_histogram(alpha = 0.8, color = &quot;white&quot;) + 
+  labs(
+    x = &quot;Percent Overweight&quot; ,
+    y = &quot;Count&quot;,
+    title = &quot;Distribution of Percent Overweight at Finer School Level&quot;)
+
+ggplotly(school_level_dist)</code></pre>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-5c065c0bbff4909e9fea" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-5c065c0bbff4909e9fea">{"x":{"data":[{"orientation":"v","width":[2.0965517241379308,2.0965517241379317,2.0965517241379299,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379246,2.0965517241379317,2.0965517241379317,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[2.0965517241379308,4.1931034482758616,6.2896551724137924,8.3862068965517231,10.482758620689655,12.579310344827586,14.675862068965515,16.772413793103446,18.868965517241378,20.96551724137931,23.062068965517241,25.158620689655169,27.255172413793101,29.351724137931029,31.448275862068961,33.544827586206893,35.641379310344817,37.737931034482756,39.83448275862068,41.931034482758619,44.027586206896544,46.124137931034468,48.220689655172407,50.317241379310332,52.41379310344827,54.510344827586195,56.606896551724134,58.703448275862058,60.799999999999983,62.896551724137922],"y":[2,2,15,93,271,619,967,1061,794,483,232,111,62,36,19,17,6,5,1,1,0,1,1,0,0,0,0,0,0,1],"text":["count:    2<br />percent_overweight:  2.096552","count:    2<br />percent_overweight:  4.193103","count:   15<br />percent_overweight:  6.289655","count:   93<br />percent_overweight:  8.386207","count:  271<br />percent_overweight: 10.482759","count:  619<br />percent_overweight: 12.579310","count:  967<br />percent_overweight: 14.675862","count: 1061<br />percent_overweight: 16.772414","count:  794<br />percent_overweight: 18.868966","count:  483<br />percent_overweight: 20.965517","count:  232<br />percent_overweight: 23.062069","count:  111<br />percent_overweight: 25.158621","count:   62<br />percent_overweight: 27.255172","count:   36<br />percent_overweight: 29.351724","count:   19<br />percent_overweight: 31.448276","count:   17<br />percent_overweight: 33.544828","count:    6<br />percent_overweight: 35.641379","count:    5<br />percent_overweight: 37.737931","count:    1<br />percent_overweight: 39.834483","count:    1<br />percent_overweight: 41.931034","count:    0<br />percent_overweight: 44.027586","count:    1<br />percent_overweight: 46.124138","count:    1<br />percent_overweight: 48.220690","count:    0<br />percent_overweight: 50.317241","count:    0<br />percent_overweight: 52.413793","count:    0<br />percent_overweight: 54.510345","count:    0<br />percent_overweight: 56.606897","count:    0<br />percent_overweight: 58.703448","count:    0<br />percent_overweight: 60.800000","count:    1<br />percent_overweight: 62.896552"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(89,89,89,0.8)","line":{"width":1.8897637795275593,"color":"rgba(255,255,255,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Percent Overweight at Finer School Level","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.0965517241379308,67.089655172413785],"tickmode":"array","ticktext":["0","20","40","60"],"tickvals":[0,20,39.999999999999993,60],"categoryorder":"array","categoryarray":["0","20","40","60"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Percent Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-53.050000000000004,1114.05],"tickmode":"array","ticktext":["0","300","600","900"],"tickvals":[0,300,600,900],"categoryorder":"array","categoryarray":["0","300","600","900"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"685a2d6b9b90":{"x":{},"type":"bar"}},"cur_data":"685a2d6b9b90","visdat":{"685a2d6b9b90":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>Roughly normal, so no transformation needed.</p>
 <p>Check for normality of residuals:</p>
 <pre class="r"><code>model1 = lm(percent_overweight ~ sex, data = train_data)
 hist(resid(model1), breaks = &quot;FD&quot;, main = &quot;Histogram of Residuals&quot;)</code></pre>
-<p><img src="regression_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="regression_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>Check for homocedasticity:</p>
 <pre class="r"><code>plot(fitted(model1), resid(model1))
 abline(h = 0, col = &quot;red&quot;)</code></pre>
-<p><img src="regression_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<p><img src="regression_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 The variance of the residuals is roughly constant across all levels of
 the predictor. Checked.</p>
 <p>Fit the model:</p>
@@ -450,21 +469,27 @@ sex
 <p>Based on parameter estimate of -1.177219 with a p value of almost 0,
 being in the group of xxx sex had a negative relationship with the
 percent of overweight.</p>
-<p>Now, try using grade level to predict percent of overweight:</p>
+</div>
+<div id="slr---grade-level-vs-percentage-of-overweight"
+class="section level3">
+<h3>SLR - Grade Level vs Percentage of Overweight</h3>
 <p>Check for normality of residuals:</p>
 <pre class="r"><code>model2 = lm(percent_overweight ~ grade_level, data = train_data)
 hist(resid(model2), breaks = &quot;FD&quot;, main = &quot;Histogram of Residuals&quot;)</code></pre>
-<p><img src="regression_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="regression_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p>Check homosdasticity:</p>
 <pre class="r"><code>plot(fitted(model2), resid(model2))
 abline(h = 0, col = &quot;red&quot;)</code></pre>
-<p><img src="regression_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="regression_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>Fit the model:</p>
 <pre class="r"><code>grade_level_slr = lm(percent_overweight ~ grade_level, data = train_data)
 #grade_level_slr_df = grade_level_slr |&gt; broom::tidy()
 
 #knitr::kable(grade_level_slr_df)</code></pre>
-<p>Fit MLR with sex and grade_level:</p>
+</div>
+<div id="mlr---grade-level-sex-vs-percentage-of-overweight"
+class="section level3">
+<h3>MLR - Grade Level, Sex vs Percentage of Overweight</h3>
 <pre class="r"><code>mlr = lm(percent_overweight ~ grade_level + sex, data = train_data) 
 
 mlr_df = mlr |&gt; broom::tidy()
@@ -560,15 +585,262 @@ level) or MLR to predict:</p>
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>So, MLR is more preferrable than SLR here.</p>
 </div>
-<div
-id="percentage-of-healthy-students-vs-percentage-of-overweight-students"
+<div id="mlr---demo-info-vs-percentage-of-overweight"
 class="section level3">
-<h3>Percentage of healthy students vs Percentage of overweight
-students</h3>
+<h3>MLR - Demo Info vs Percentage of Overweight</h3>
 <ul>
-<li>use num_asian/num_hipanic/num_white…for each county (demographic)
+<li>use num_asian/num_hipanic/num_white…for each district (demographic)
 data to predict num of overweight in a county level</li>
 </ul>
+<pre class="r"><code>selected = 
+  cleaned_data |&gt;
+  select(year, district, percent_overweight, num_asian, num_black, num_hisp, num_am_ind, num_white)
+
+district_level_data = 
+  selected |&gt;
+  group_by(year, district) |&gt;
+  summarise(med_percent = median(percent_overweight, na.rm=TRUE)) |&gt;
+  drop_na()</code></pre>
+<pre class="r"><code>percent_dist = district_level_data |&gt;
+  ggplot(aes(x = med_percent)) + 
+  geom_histogram(alpha = 0.8, color = &quot;white&quot;) + 
+  labs(
+    x = &quot;Median Percent Overweight&quot; ,
+    y = &quot;Count&quot;,
+    title = &quot;Distribution of Median Percent Overweight&quot;)
+
+ggplotly(percent_dist)</code></pre>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-191b6f5b737f0d409786" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-191b6f5b737f0d409786">{"x":{"data":[{"orientation":"v","width":[1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896591,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896484,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[8.9793103448275868,10.262068965517242,11.544827586206896,12.827586206896552,14.110344827586207,15.393103448275863,16.675862068965518,17.958620689655174,19.241379310344829,20.524137931034485,21.80689655172414,23.089655172413796,24.372413793103451,25.655172413793107,26.937931034482762,28.220689655172418,29.503448275862073,30.786206896551729,32.068965517241381,33.351724137931043,34.634482758620692,35.917241379310354,37.200000000000003,38.482758620689658,39.765517241379314,41.048275862068962,42.331034482758625,43.613793103448273,44.896551724137936,46.179310344827584],"y":[8,13,30,83,154,228,276,228,107,79,30,17,12,4,3,4,2,2,1,1,1,0,0,0,0,0,0,0,0,1],"text":["count:   8<br />med_percent:  8.97931","count:  13<br />med_percent: 10.26207","count:  30<br />med_percent: 11.54483","count:  83<br />med_percent: 12.82759","count: 154<br />med_percent: 14.11034","count: 228<br />med_percent: 15.39310","count: 276<br />med_percent: 16.67586","count: 228<br />med_percent: 17.95862","count: 107<br />med_percent: 19.24138","count:  79<br />med_percent: 20.52414","count:  30<br />med_percent: 21.80690","count:  17<br />med_percent: 23.08966","count:  12<br />med_percent: 24.37241","count:   4<br />med_percent: 25.65517","count:   3<br />med_percent: 26.93793","count:   4<br />med_percent: 28.22069","count:   2<br />med_percent: 29.50345","count:   2<br />med_percent: 30.78621","count:   1<br />med_percent: 32.06897","count:   1<br />med_percent: 33.35172","count:   1<br />med_percent: 34.63448","count:   0<br />med_percent: 35.91724","count:   0<br />med_percent: 37.20000","count:   0<br />med_percent: 38.48276","count:   0<br />med_percent: 39.76552","count:   0<br />med_percent: 41.04828","count:   0<br />med_percent: 42.33103","count:   0<br />med_percent: 43.61379","count:   0<br />med_percent: 44.89655","count:   1<br />med_percent: 46.17931"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(89,89,89,0.8)","line":{"width":1.8897637795275593,"color":"rgba(255,255,255,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Median Percent Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[6.4137931034482758,48.744827586206895],"tickmode":"array","ticktext":["10","20","30","40"],"tickvals":[10,20,29.999999999999993,40],"categoryorder":"array","categoryarray":["10","20","30","40"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Median Percent Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-13.800000000000001,289.80000000000001],"tickmode":"array","ticktext":["0","100","200"],"tickvals":[0,100,200],"categoryorder":"array","categoryarray":["0","100","200"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"685a30d75657":{"x":{},"type":"bar"}},"cur_data":"685a30d75657","visdat":{"685a30d75657":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>Roughly normally distributed, good, no transformation needed</p>
+<p>Now we fit a linear regression model to see if</p>
+<pre class="r"><code>group_demo = 
+  selected |&gt;
+  group_by(year, district) |&gt;
+  summarise(total_asian = sum(num_asian), 
+            total_black = sum(num_black),
+            total_hisp = sum(num_hisp), 
+            total_am_ind = sum(num_am_ind), 
+            total_white = sum(num_white)) |&gt;
+  drop_na()</code></pre>
+<pre class="r"><code>result_df = 
+  district_level_data |&gt; 
+  left_join(group_demo, by = c(&quot;year&quot;, &quot;district&quot;))</code></pre>
+<pre class="r"><code>cor_matrix = cor(result_df[, c(colnames(result_df))])
+cor_matrix</code></pre>
+<pre><code>##                      year     district med_percent total_asian total_black
+## year          1.000000000  0.002596397 -0.05215978  0.07108390  0.03233263
+## district      0.002596397  1.000000000 -0.11328809  0.02201195  0.01053341
+## med_percent  -0.052159784 -0.113288091  1.00000000 -0.15780334  0.02707562
+## total_asian   0.071083897  0.022011954 -0.15780334  1.00000000  0.45382614
+## total_black   0.032332625  0.010533414  0.02707562  0.45382614  1.00000000
+## total_hisp    0.070110104  0.156068733  0.07163556  0.33846319  0.57597362
+## total_am_ind  0.031838533 -0.091390427  0.06728189  0.07928911  0.18961695
+## total_white   0.074271767  0.042352344 -0.18329864  0.43987113  0.18500333
+##              total_hisp total_am_ind total_white
+## year         0.07011010   0.03183853  0.07427177
+## district     0.15606873  -0.09139043  0.04235234
+## med_percent  0.07163556   0.06728189 -0.18329864
+## total_asian  0.33846319   0.07928911  0.43987113
+## total_black  0.57597362   0.18961695  0.18500333
+## total_hisp   1.00000000   0.08241081  0.17636805
+## total_am_ind 0.08241081   1.00000000  0.04950079
+## total_white  0.17636805   0.04950079  1.00000000</code></pre>
+<p>Multicollinearity cleared, now let’s fit an MLR model:</p>
+<pre class="r"><code>mlr = lm(med_percent ~ ., data = result_df)
+display = mlr |&gt; broom::tidy() |&gt; knitr::kable(digits=3)
+
+display</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+209.229
+</td>
+<td style="text-align:right;">
+118.602
+</td>
+<td style="text-align:right;">
+1.764
+</td>
+<td style="text-align:right;">
+0.078
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+year
+</td>
+<td style="text-align:right;">
+-0.095
+</td>
+<td style="text-align:right;">
+0.059
+</td>
+<td style="text-align:right;">
+-1.613
+</td>
+<td style="text-align:right;">
+0.107
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+district
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+-4.455
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+total_asian
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+-4.839
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+total_black
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.863
+</td>
+<td style="text-align:right;">
+0.388
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+total_hisp
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+4.459
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+total_am_ind
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+2.146
+</td>
+<td style="text-align:right;">
+0.032
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+total_white
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+-4.660
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+</tr>
+</tbody>
+</table>
+<p>Plot residuals against fitted value</p>
+<pre class="r"><code># Add predictions to the dataset
+df_with_predictions = result_df |&gt;
+  add_predictions(mlr, var = &quot;fitted_values&quot;)
+
+# Add residuals to the dataset
+df_with_residuals = df_with_predictions |&gt;
+  add_residuals(mlr, var = &quot;residuals&quot;)
+
+# Now plot the residuals against fitted values
+ggplot(df_with_residuals, aes(x = fitted_values, y = residuals)) +
+  geom_point() +
+  geom_hline(yintercept = 0, linetype = &quot;dashed&quot;, color = &quot;red&quot;) +
+  labs(x = &quot;Fitted Values&quot;, y = &quot;Residuals&quot;, title = &quot;Residuals against Fitted Values&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="regression_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>No clear pattern, so good. Overall, the residual plot suggests that
+the model has decent prediction performance. There’s no clear pattern to
+the residuals, which is good. However, the potential increase in
+variance among the higher fitted values and the presence of outliers
+could be a concern.</p>
+<p>The model we fit is:<br />
+Median Percent of Overweight = beta0 + ….</p>
+</div>
+<div id="mlr---percent-of-healthy-vs-percentage-of-overweight"
+class="section level3">
+<h3>MLR - Percent of Healthy vs Percentage of Overweight</h3>
+</div>
+<div id="mlr---number-of-free-lunch-vs-percentage-of-overweight"
+class="section level3">
+<h3>MLR - Number of Free Lunch vs Percentage of Overweight</h3>
 </div>
 
 

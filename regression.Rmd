@@ -7,6 +7,10 @@ output:
 ---
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(plotly)
+library(broom)
+library(boot)
+library(modelr)
 ```
 
 ```{r message=FALSE, warning=FALSE}
@@ -15,7 +19,7 @@ cleaned_data = read_csv("cleaned_data.csv")
 
 * use sex group, grade level, num of healthy… to predict num of overweight in a finer level
 
-### Sex vs Percentage of overweight students
+### SLR - Sex vs Percentage of Overweight
 ```{r message=FALSE, warning=FALSE}
 train_data  = 
   cleaned_data |>
@@ -28,6 +32,20 @@ train_data  =
          grade_level = ifelse(grade_level=="ELEMENTARY", 0, 1)) |>
   drop_na()
 ```
+
+Check if outcome is normally distributed:
+```{r message=FALSE, warning=FALSE}
+school_level_dist = train_data |>
+  ggplot(aes(x = percent_overweight)) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Percent Overweight" ,
+    y = "Count",
+    title = "Distribution of Percent Overweight at Finer School Level")
+
+ggplotly(school_level_dist)
+```
+Roughly normal, so no transformation needed.
 
 Check for normality of residuals:
 ```{r message=FALSE, warning=FALSE}
@@ -51,8 +69,8 @@ knitr::kable(sex_slr_df)
 ```
 Based on parameter estimate of -1.177219 with a p value of almost 0, being in the group of xxx sex had a negative relationship with the percent of overweight.
 
-Now, try using grade level to predict percent of overweight:
 
+### SLR - Grade Level vs Percentage of Overweight
 Check for normality of residuals:
 ```{r message=FALSE, warning=FALSE}
 model2 = lm(percent_overweight ~ grade_level, data = train_data)
@@ -73,8 +91,9 @@ grade_level_slr = lm(percent_overweight ~ grade_level, data = train_data)
 #knitr::kable(grade_level_slr_df)
 ```
 
-Fit MLR with sex and grade_level:
-```{r}
+
+### MLR - Grade Level, Sex vs Percentage of Overweight
+```{r message=FALSE, warning=FALSE}
 mlr = lm(percent_overweight ~ grade_level + sex, data = train_data) 
 
 mlr_df = mlr |> broom::tidy()
@@ -83,13 +102,96 @@ knitr::kable(mlr_df)
 ```
 
 Use anova test to see if we want to use SLR (with only sex or grade level) or MLR to predict:
-```{r}
+```{r message=FALSE, warning=FALSE}
 anova(sex_slr, grade_level_slr, mlr)
 ```
 So, MLR is more preferrable than SLR here.
 
-### Percentage of healthy students vs Percentage of overweight students
-* use num_asian/num_hipanic/num_white...for each county (demographic) data to predict num of overweight in a county level
-```{r}
+### MLR - Demo Info vs Percentage of Overweight
+* use num_asian/num_hipanic/num_white...for each district (demographic) data to predict num of overweight in a county level
 
+```{r message=FALSE, warning=FALSE}
+selected = 
+  cleaned_data |>
+  select(year, district, percent_overweight, num_asian, num_black, num_hisp, num_am_ind, num_white)
+
+district_level_data = 
+  selected |>
+  group_by(year, district) |>
+  summarise(med_percent = median(percent_overweight, na.rm=TRUE)) |>
+  drop_na()
 ```
+
+```{r message=FALSE, warning=FALSE}
+percent_dist = district_level_data |>
+  ggplot(aes(x = med_percent)) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Median Percent Overweight" ,
+    y = "Count",
+    title = "Distribution of Median Percent Overweight")
+
+ggplotly(percent_dist)
+```
+Roughly normally distributed, good, no transformation needed
+
+Now we fit a linear regression model to see if 
+```{r message=FALSE, warning=FALSE}
+group_demo = 
+  selected |>
+  group_by(year, district) |>
+  summarise(total_asian = sum(num_asian), 
+            total_black = sum(num_black),
+            total_hisp = sum(num_hisp), 
+            total_am_ind = sum(num_am_ind), 
+            total_white = sum(num_white)) |>
+  drop_na()
+```
+
+```{r message=FALSE, warning=FALSE}
+result_df = 
+  district_level_data |> 
+  left_join(group_demo, by = c("year", "district"))
+```
+
+
+```{r}
+cor_matrix = cor(result_df[, c(colnames(result_df))])
+cor_matrix
+```
+Multicollinearity cleared, now let's fit an MLR model:
+```{r}
+mlr = lm(med_percent ~ ., data = result_df)
+display = mlr |> broom::tidy() |> knitr::kable(digits=3)
+
+display
+```
+
+Plot residuals against fitted value
+```{r}
+# Add predictions to the dataset
+df_with_predictions = result_df |>
+  add_predictions(mlr, var = "fitted_values")
+
+# Add residuals to the dataset
+df_with_residuals = df_with_predictions |>
+  add_residuals(mlr, var = "residuals")
+
+# Now plot the residuals against fitted values
+ggplot(df_with_residuals, aes(x = fitted_values, y = residuals)) +
+  geom_point() +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  labs(x = "Fitted Values", y = "Residuals", title = "Residuals against Fitted Values") +
+  theme_minimal()
+```
+
+No clear pattern, so good. Overall, the residual plot suggests that the model has decent prediction performance. There's no clear pattern to the residuals, which is good. However, the potential increase in variance among the higher fitted values and the presence of outliers could be a concern.
+
+The model we fit is:  
+Median Percent of Overweight = beta0 + ....
+
+
+### MLR - Percent of Healthy vs Percentage of Overweight
+
+
+### MLR - Number of Free Lunch vs Percentage of Overweight
