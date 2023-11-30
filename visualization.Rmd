@@ -163,7 +163,7 @@ ggplot(grade_level_data, aes(x = year, y = ave_overweight_percent, color = grade
   theme_minimal()
 ```
 
-## sex and overweight
+## Sex and Overweight
 ```{r message = FALSE, echo = FALSE}
 sex_data = 
   cleaned_data |>
@@ -184,8 +184,10 @@ ggplot(sex_data, aes(x = year, y = ave_overweight_percent, color = sex)) +
        color = "Sex") +
   theme_minimal()
 ```
+The plot indicates that the likelihood of female students having a higher percentage of overweight cases compared to male students is noticeable. This inclination may be influenced by a complex interplay of biological, behavioral, and socio-cultural factors. For instance, hormonal differences between males and females can affect the distribution of muscle and fat in their bodies. Therefore, it is suggested to incorporate additional biological education for students facing overweight issues to empower them to make informed choices and address their situation effectively.
 
-## racial group and overweight
+## Racial Group and Overweight
+Upon reviewing the cleaned data, there is a hypothesis that various racial groups may exhibit distinct probabilities of experiencing overweight conditions. Therefore, our analysis will commence by examining the distribution of different racial groups among students for each year.
 ```{r message = FALSE, echo = FALSE}
 # the distribution of racial group, first group by district zip code
 race_dis_data = cleaned_data |>
@@ -245,6 +247,7 @@ plot_2017
 plot_2018
 plot_2019
 ```
+The pie charts reveal that approximately 60% of the student population is white, while around 20% identifies as Hispanic. There are smaller proportions of Asian, American Indian, and Black students.
 
 county level racial group and county level overweight
 ```{r message = FALSE, echo = FALSE}
