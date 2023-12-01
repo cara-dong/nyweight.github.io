@@ -67,7 +67,7 @@ plot_ly(county_year_data, x = ~year, y = ~ave_overweight_percent, type = "scatte
          yaxis = list(title = "Average Overweight Percentage"),
          showlegend = FALSE) 
 ```
-By analyzing two plots, it can be concluded that students' overweight percent in New York Stats is generally stable between year 2015 and year 2019; the number fluctuates between 16.7 and 17.3. 
+Upon examining two plots, the percentage of students classified as overweight in the state of New York remained relatively constant from 2015 to 2019. Despite apparent fluctuations in the depicted data, such as a surge in 2016 and a drop in 2017, these variations can be attributed to the confined range of the y-axis. Specifically, the values fluctuate within a limited span, ranging only between 16.7% and 17.3%.
 
 ## County-level percent overweight/obese/healthy
 ```{r message = FALSE, echo = FALSE}
@@ -247,9 +247,8 @@ plot_2017
 plot_2018
 plot_2019
 ```
-The pie charts reveal that approximately 60% of the student population is white, while around 20% identifies as Hispanic. There are smaller proportions of Asian, American Indian, and Black students.
+The pie charts reveal that approximately 60% of the student population is white, while around 20% identifies as Hispanic. There are smaller proportions of Asian, American Indian, and Black students.Following this, we generate plots to visualize the county-level average distribution of racial groups and the corresponding average percentage of overweight individuals.
 
-county level racial group and county level overweight
 ```{r message = FALSE, echo = FALSE}
 county_dis_data = cleaned_data |>
   group_by(year, county, district) |>
@@ -308,8 +307,6 @@ ggplot(county_data, aes(x = county)) +
 
 
 ```
-interpretation
-
 
 ```{r message = FALSE, echo = FALSE}
 # the plotly version of the previous plot
@@ -319,16 +316,17 @@ plot_ly(county_data) |>
   add_trace(type = "bar", x = ~county, y = ~percent_black, name = "Black", color = "green") |>
   add_trace(type = "bar", x = ~county, y = ~percent_am_ind, name = "Indian",color = "orange") |>
   add_trace(type = "bar", x = ~county, y = ~percent_hisp, name = "Hispanic",color = "purple") |>
-  add_trace(type = "scatter", x = ~county, y = ~percent_overweight*5, mode = "lines", name = "Overweight", line = list(color = "red", width = 3)) |>
+  add_trace(type = "scatter", x = ~county, y = ~percent_overweight, mode = "lines", name = "Overweight", line = list(color = "red", width = 3)) |>
   layout(title = "Racial Distribution and Percentage Overweight of Students by County",
          xaxis = list(title = "County"),
          yaxis = list(title = "Percentage of Students", side = "left"),
          yaxis2 = list(title = "Percentage Overweight", side = "right", overlaying = "y", zeroline = FALSE),
          barmode = "stack",
-         showlegend = TRUE)
+         showlegend = TRUE
+         )
 
 ```
-
+From the aforementioned plot, it is noteworthy that certain counties with a higher proportion of White students exhibit a greater percentage of overweight individuals compared to others. For instance, in Essex County, where the student population comprises a substantial 97.3% White individuals, the average overweight percentage is also the highest at 22.6%. To further investigate this issue, scatter plots are subsequently generated to visualize the distribution of percent overweight versus each racial group.
 
 ```{r message = FALSE, echo = FALSE}
 library(patchwork)
@@ -374,5 +372,5 @@ combined_plots = plot1+plot2+plot3+plot4+plot5
 
 combined_plots
 ```
-
+In the five scatterplots presented above, a noticeable trend emerges where an increase in the percentage of Asian, Black, and Hispanic students is associated with a decrease in the percentage of overweight individuals. Conversely, there appears to be no distinct relationship between the percentage of American Indian students and the percentage overweight. Notably, as the percentage of White students increases, there seems to be an upward trend in the percentage of overweight individuals. This suggests a potential positive correlation between the number of White students and the percentage of overweight individuals. To delve deeper into this relationship, further exploration will be conducted using regression analysis.
 
