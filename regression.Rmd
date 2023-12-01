@@ -17,7 +17,6 @@ library(modelr)
 cleaned_data = read_csv("cleaned_data.csv")
 ```
 
-* use sex group, grade level, num of healthy… to predict num of overweight in a finer level
 
 ### SLR - Sex vs Percentage of Overweight
 ```{r message=FALSE, warning=FALSE}
@@ -33,7 +32,7 @@ train_data  =
   drop_na()
 ```
 
-Check if outcome is normally distributed:
+Check if outcome is normally distributed.
 ```{r message=FALSE, warning=FALSE}
 school_level_dist = train_data |>
   ggplot(aes(x = percent_overweight)) + 
@@ -45,52 +44,61 @@ school_level_dist = train_data |>
 
 ggplotly(school_level_dist)
 ```
-Roughly normal, so no transformation needed.
+The outcome is roughly normal, so no transformation needed.
 
-Check for normality of residuals:
+Check for normality of residuals.
 ```{r message=FALSE, warning=FALSE}
 model1 = lm(percent_overweight ~ sex, data = train_data)
 hist(resid(model1), breaks = "FD", main = "Histogram of Residuals")
 ```
 
-Check for homocedasticity:
+Check for homocedasticity.
 ```{r message=FALSE, warning=FALSE}
 plot(fitted(model1), resid(model1))
 abline(h = 0, col = "red")
 ```
-The variance of the residuals is roughly constant across all levels of the predictor. Checked.
+The variance of the residuals is roughly constant across all levels of the predictor and the residuals are also normally distributed. So assumptions for linear regression are checked. We can proceed to conduct the prediction.
 
-Fit the model:
+Fit the model.
 ```{r message=FALSE, warning=FALSE}
 sex_slr = lm(percent_overweight ~ sex, data = train_data) 
 sex_slr_df = sex_slr |> broom::tidy()
 
 knitr::kable(sex_slr_df)
 ```
-Based on parameter estimate of -1.177219 with a p value of almost 0, being in the group of xxx sex had a negative relationship with the percent of overweight.
+The SLR model we fit is percent_overweight at school-level = 17.546446 - 1.177219 * sex.
+
+The coefficient estimate of -1.177219 with a p-value of almost 0 indicates that the effect of sex on the percentage of overweight students is statistically significant.
+
+Since female is encoded as the reference group 0, we can say that male students group in NY schools had lower percentage of overweight students compared to female students group. This corresponds to the line plot visualization displayed in the previous section, where the line for male students is always below that for female students.
 
 
 ### SLR - Grade Level vs Percentage of Overweight
-Check for normality of residuals:
+Check for normality of residuals.
 ```{r message=FALSE, warning=FALSE}
 model2 = lm(percent_overweight ~ grade_level, data = train_data)
 hist(resid(model2), breaks = "FD", main = "Histogram of Residuals")
 ```
 
-Check homosdasticity:
+Check homosdasticity.
 ```{r message=FALSE, warning=FALSE}
 plot(fitted(model2), resid(model2))
 abline(h = 0, col = "red")
 ```
+The variance of the residuals is roughly constant across all levels of the predictor and the residuals are also normally distributed. So assumptions for linear regression are checked. We can proceed to conduct the prediction.
 
-Fit the model:
+Fit the model.
 ```{r message=FALSE, warning=FALSE}
 grade_level_slr = lm(percent_overweight ~ grade_level, data = train_data)
-#grade_level_slr_df = grade_level_slr |> broom::tidy()
+grade_level_slr_df = grade_level_slr |> broom::tidy()
 
-#knitr::kable(grade_level_slr_df)
+knitr::kable(grade_level_slr_df)
 ```
+The SLR model we fit is percent_overweight at school-level = 16.126602 - 1.716477	 * grade_level.
 
+The coefficient estimate of 1.716477 with a p-value of almost 0 indicates that the effect of grade_level on the percentage of overweight students is statistically significant.
+
+Since elementary school is encoded as the reference group 0, we can say that middle/high school students in NY had higher percentage of overweight students compared to elementary school students. This also corresponds to the line plot visualization displayed in the previous section, where the line for elementary students is always below that for middle/high school students.
 
 ### MLR - Grade Level, Sex vs Percentage of Overweight
 ```{r message=FALSE, warning=FALSE}
@@ -100,16 +108,18 @@ mlr_df = mlr |> broom::tidy()
 
 knitr::kable(mlr_df)
 ```
+The MLR model we fit is percent_overweight at school-level = 16.717571 - -1.179560	 * grade_level + 1.718086 * grade_level.
 
-Use anova test to see if we want to use SLR (with only sex or grade level) or MLR to predict:
+The coefficient estimates with p-values of almost 0 indicates that the effect of both sex and grade_level on the percentage of overweight students are statistically significant.
+
+Next, we use anova to check if SLR (with only sex or grade level) is more preferrable than MLR.
 ```{r message=FALSE, warning=FALSE}
 anova(sex_slr, grade_level_slr, mlr)
 ```
-So, MLR is more preferrable than SLR here.
+So, MLR is more preferrable than SLR here because the p-value is < 2.2e-16, which is significant at 5% alpha level.
 
-### MLR - Demo Info vs Percentage of Overweight
-* use num_asian/num_hipanic/num_white...for each district (demographic) data to predict num of overweight in a county level
 
+### MLR - Demo Info vs Percentage/Number of Overweight
 ```{r message=FALSE, warning=FALSE}
 selected = 
   cleaned_data |>
@@ -118,24 +128,10 @@ selected =
 district_level_data = 
   selected |>
   group_by(year, district) |>
-  summarise(med_percent = median(percent_overweight, na.rm=TRUE)) |>
+  summarise(med_overweight = median(percent_overweight)) |>
   drop_na()
 ```
 
-```{r message=FALSE, warning=FALSE}
-percent_dist = district_level_data |>
-  ggplot(aes(x = med_percent)) + 
-  geom_histogram(alpha = 0.8, color = "white") + 
-  labs(
-    x = "Median Percent Overweight" ,
-    y = "Count",
-    title = "Distribution of Median Percent Overweight")
-
-ggplotly(percent_dist)
-```
-Roughly normally distributed, good, no transformation needed
-
-Now we fit a linear regression model to see if 
 ```{r message=FALSE, warning=FALSE}
 group_demo = 
   selected |>
@@ -151,18 +147,49 @@ group_demo =
 ```{r message=FALSE, warning=FALSE}
 result_df = 
   district_level_data |> 
-  left_join(group_demo, by = c("year", "district"))
+  left_join(group_demo, by = c("year", "district")) |>
+  ungroup() |>
+  select(-district)
 ```
 
+```{r message=FALSE, warning=FALSE}
+overweight_dist = result_df |>
+  ggplot(aes(x = med_overweight)) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Median Percent of Overweight" ,
+    y = "Count",
+    title = "Distribution of Median Percent of Overweight")
 
-```{r}
+ggplotly(overweight_dist)
+```
+
+The outcome distribution is roughly normal, so no transformation is needed.
+
+Then, we will look at a correlation matrix to determine which variables to select as predictors.
+```{r message=FALSE, warning=FALSE}
 cor_matrix = cor(result_df[, c(colnames(result_df))])
-cor_matrix
 ```
-Multicollinearity cleared, now let's fit an MLR model:
+
+We need to deal with the highly correlated predictor pairs before fitting the model.
+```{r message=FALSE, warning=FALSE}
+# Find the pairs where correlation is greater than or equal to 0.7 but less than 1
+high_cor_pairs = which(cor_matrix >= 0.7 & cor_matrix < 1, arr.ind = TRUE)
+
+# Extract the variable names for these pairs
+high_cor_var_pairs = data.frame(
+  Var1 = rownames(cor_matrix)[high_cor_pairs[, 1]],
+  Var2 = colnames(cor_matrix)[high_cor_pairs[, 2]],
+  Correlation = cor_matrix[high_cor_pairs]
+)
+
+high_cor_var_pairs
+```
+
+There is no highly correlated pairs in all predictors. So, multicollinearity is cleared, now we can fit an MLR model.
 ```{r}
-mlr = lm(med_percent ~ ., data = result_df)
-display = mlr |> broom::tidy() |> knitr::kable(digits=3)
+mlr = lm(med_overweight ~ ., data = result_df)
+display = mlr |> broom::tidy() |> knitr::kable()
 
 display
 ```
@@ -188,10 +215,33 @@ ggplot(df_with_residuals, aes(x = fitted_values, y = residuals)) +
 No clear pattern, so good. Overall, the residual plot suggests that the model has decent prediction performance. There's no clear pattern to the residuals, which is good. However, the potential increase in variance among the higher fitted values and the presence of outliers could be a concern.
 
 The model we fit is:  
-Median Percent of Overweight = beta0 + ....
+Median Percent of Overweight at District Level = 209.229 + ....
+
+The coefficient estimate of intercept is 209.229 with a p-value of 0.078, 
+
+indicates that the effect of grade_level on the percentage of overweight students is statistically significant.
+
+Since elementary school is encoded as the reference group 0, we can say that middle/high school students in NY had higher percentage of overweight students compared to elementary school students. This also corresponds to the line plot visualization displayed in the previous section, where the line for elementary students is always below that for middle/high school students.
 
 
-### MLR - Percent of Healthy vs Percentage of Overweight
+### MLR - Percent of Healthy,  vs Percentage of Overweight
+```{r}
+train_data = 
+  train_data |> 
+  select(year, percent_overweight, percent_obese, percent_overweight_or_obese, percent_healthy_weight)
+```
 
+```{r}
+mlr_weight = lm(percent_overweight ~ ., data = train_data)
+display_weight = mlr_weight |> broom::tidy() |> knitr::kable(digits=3)
+
+display_weight
+```
+Holding all other variables constant, with one percent increase in healthy weight students, there is a 0.039 percent increase in overweight students. However, this is not very significant as the p-value (0.262) for the coefficient is greater than 
 
 ### MLR - Number of Free Lunch vs Percentage of Overweight
+This prediction is only available for a few years' data.
+```{r}
+
+```
+
