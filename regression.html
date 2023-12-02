@@ -365,8 +365,8 @@ div.tocify {
 
 
 <pre class="r"><code>cleaned_data = read_csv(&quot;cleaned_data.csv&quot;)</code></pre>
-<div id="slr---sex-vs-percentage-of-overweight" class="section level3">
-<h3>SLR - Sex vs Percentage of Overweight</h3>
+<div id="slr---sex-vs-percent-of-overweight" class="section level3">
+<h3>SLR - Sex vs Percent of Overweight</h3>
 <pre class="r"><code>train_data  = 
   cleaned_data |&gt;
   select(year, sex, grade_level, 
@@ -387,8 +387,8 @@ div.tocify {
     title = &quot;Distribution of Percent Overweight at Finer School Level&quot;)
 
 ggplotly(school_level_dist)</code></pre>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-6278ba96df7972c8da6c" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-6278ba96df7972c8da6c">{"x":{"data":[{"orientation":"v","width":[2.0965517241379308,2.0965517241379317,2.0965517241379299,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379246,2.0965517241379317,2.0965517241379317,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[2.0965517241379308,4.1931034482758616,6.2896551724137924,8.3862068965517231,10.482758620689655,12.579310344827586,14.675862068965515,16.772413793103446,18.868965517241378,20.96551724137931,23.062068965517241,25.158620689655169,27.255172413793101,29.351724137931029,31.448275862068961,33.544827586206893,35.641379310344817,37.737931034482756,39.83448275862068,41.931034482758619,44.027586206896544,46.124137931034468,48.220689655172407,50.317241379310332,52.41379310344827,54.510344827586195,56.606896551724134,58.703448275862058,60.799999999999983,62.896551724137922],"y":[2,2,15,93,271,619,967,1061,794,483,232,111,62,36,19,17,6,5,1,1,0,1,1,0,0,0,0,0,0,1],"text":["count:    2<br />percent_overweight:  2.096552","count:    2<br />percent_overweight:  4.193103","count:   15<br />percent_overweight:  6.289655","count:   93<br />percent_overweight:  8.386207","count:  271<br />percent_overweight: 10.482759","count:  619<br />percent_overweight: 12.579310","count:  967<br />percent_overweight: 14.675862","count: 1061<br />percent_overweight: 16.772414","count:  794<br />percent_overweight: 18.868966","count:  483<br />percent_overweight: 20.965517","count:  232<br />percent_overweight: 23.062069","count:  111<br />percent_overweight: 25.158621","count:   62<br />percent_overweight: 27.255172","count:   36<br />percent_overweight: 29.351724","count:   19<br />percent_overweight: 31.448276","count:   17<br />percent_overweight: 33.544828","count:    6<br />percent_overweight: 35.641379","count:    5<br />percent_overweight: 37.737931","count:    1<br />percent_overweight: 39.834483","count:    1<br />percent_overweight: 41.931034","count:    0<br />percent_overweight: 44.027586","count:    1<br />percent_overweight: 46.124138","count:    1<br />percent_overweight: 48.220690","count:    0<br />percent_overweight: 50.317241","count:    0<br />percent_overweight: 52.413793","count:    0<br />percent_overweight: 54.510345","count:    0<br />percent_overweight: 56.606897","count:    0<br />percent_overweight: 58.703448","count:    0<br />percent_overweight: 60.800000","count:    1<br />percent_overweight: 62.896552"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(89,89,89,0.8)","line":{"width":1.8897637795275593,"color":"rgba(255,255,255,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Percent Overweight at Finer School Level","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.0965517241379308,67.089655172413785],"tickmode":"array","ticktext":["0","20","40","60"],"tickvals":[0,20,39.999999999999993,60],"categoryorder":"array","categoryarray":["0","20","40","60"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Percent Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-53.050000000000004,1114.05],"tickmode":"array","ticktext":["0","300","600","900"],"tickvals":[0,300,600,900],"categoryorder":"array","categoryarray":["0","300","600","900"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"8ff24cb4637a":{"x":{},"type":"bar"}},"cur_data":"8ff24cb4637a","visdat":{"8ff24cb4637a":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-f2ceaba46e38ccdc9a23" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-f2ceaba46e38ccdc9a23">{"x":{"data":[{"orientation":"v","width":[2.0965517241379308,2.0965517241379317,2.0965517241379299,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379246,2.0965517241379317,2.0965517241379317,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[2.0965517241379308,4.1931034482758616,6.2896551724137924,8.3862068965517231,10.482758620689655,12.579310344827586,14.675862068965515,16.772413793103446,18.868965517241378,20.96551724137931,23.062068965517241,25.158620689655169,27.255172413793101,29.351724137931029,31.448275862068961,33.544827586206893,35.641379310344817,37.737931034482756,39.83448275862068,41.931034482758619,44.027586206896544,46.124137931034468,48.220689655172407,50.317241379310332,52.41379310344827,54.510344827586195,56.606896551724134,58.703448275862058,60.799999999999983,62.896551724137922],"y":[2,2,15,93,271,619,967,1061,794,483,232,111,62,36,19,17,6,5,1,1,0,1,1,0,0,0,0,0,0,1],"text":["count:    2<br />percent_overweight:  2.096552","count:    2<br />percent_overweight:  4.193103","count:   15<br />percent_overweight:  6.289655","count:   93<br />percent_overweight:  8.386207","count:  271<br />percent_overweight: 10.482759","count:  619<br />percent_overweight: 12.579310","count:  967<br />percent_overweight: 14.675862","count: 1061<br />percent_overweight: 16.772414","count:  794<br />percent_overweight: 18.868966","count:  483<br />percent_overweight: 20.965517","count:  232<br />percent_overweight: 23.062069","count:  111<br />percent_overweight: 25.158621","count:   62<br />percent_overweight: 27.255172","count:   36<br />percent_overweight: 29.351724","count:   19<br />percent_overweight: 31.448276","count:   17<br />percent_overweight: 33.544828","count:    6<br />percent_overweight: 35.641379","count:    5<br />percent_overweight: 37.737931","count:    1<br />percent_overweight: 39.834483","count:    1<br />percent_overweight: 41.931034","count:    0<br />percent_overweight: 44.027586","count:    1<br />percent_overweight: 46.124138","count:    1<br />percent_overweight: 48.220690","count:    0<br />percent_overweight: 50.317241","count:    0<br />percent_overweight: 52.413793","count:    0<br />percent_overweight: 54.510345","count:    0<br />percent_overweight: 56.606897","count:    0<br />percent_overweight: 58.703448","count:    0<br />percent_overweight: 60.800000","count:    1<br />percent_overweight: 62.896552"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(89,89,89,0.8)","line":{"width":1.8897637795275593,"color":"rgba(255,255,255,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Percent Overweight at Finer School Level","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.0965517241379308,67.089655172413785],"tickmode":"array","ticktext":["0","20","40","60"],"tickvals":[0,20,39.999999999999993,60],"categoryorder":"array","categoryarray":["0","20","40","60"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Percent Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-53.050000000000004,1114.05],"tickmode":"array","ticktext":["0","300","600","900"],"tickvals":[0,300,600,900],"categoryorder":"array","categoryarray":["0","300","600","900"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"aac386a2fec":{"x":{},"type":"bar"}},"cur_data":"aac386a2fec","visdat":{"aac386a2fec":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>The outcome is roughly normal, so no transformation needed.</p>
 <p>Check for normality of residuals.</p>
 <pre class="r"><code>model1 = lm(percent_overweight ~ sex, data = train_data)
@@ -475,9 +475,9 @@ students compared to female students group. This corresponds to the line
 plot visualization displayed in the previous section, where the line for
 male students is always below that for female students.</p>
 </div>
-<div id="slr---grade-level-vs-percentage-of-overweight"
+<div id="slr---grade-level-vs-percent-of-overweight"
 class="section level3">
-<h3>SLR - Grade Level vs Percentage of Overweight</h3>
+<h3>SLR - Grade Level vs Percent of Overweight</h3>
 <p>Check for normality of residuals.</p>
 <pre class="r"><code>model2 = lm(percent_overweight ~ grade_level, data = train_data)
 hist(resid(model2), breaks = &quot;FD&quot;, main = &quot;Histogram of Residuals&quot;)</code></pre>
@@ -564,9 +564,9 @@ corresponds to the line plot visualization displayed in the previous
 section, where the line for elementary students is always below that for
 middle/high school students.</p>
 </div>
-<div id="mlr---grade-level-sex-vs-percentage-of-overweight"
+<div id="mlr---grade-level-sex-vs-percent-of-overweight"
 class="section level3">
-<h3>MLR - Grade Level, Sex vs Percentage of Overweight</h3>
+<h3>MLR - Grade Level &amp; Sex vs Percent of Overweight</h3>
 <pre class="r"><code>mlr = lm(percent_overweight ~ grade_level + sex, data = train_data) 
 
 mlr_df = mlr |&gt; broom::tidy()
@@ -668,9 +668,9 @@ more preferrable than MLR.</p>
 <p>So, MLR is more preferrable than SLR here because the p-value is &lt;
 2.2e-16, which is significant at 5% alpha level.</p>
 </div>
-<div id="mlr---demo-info-vs-percentagenumber-of-overweight"
+<div id="mlr---student-demographic-info-vs-percent-of-overweight"
 class="section level3">
-<h3>MLR - Demo Info vs Percentage/Number of Overweight</h3>
+<h3>MLR - Student Demographic Info vs Percent of Overweight</h3>
 <pre class="r"><code>selected = 
   cleaned_data |&gt;
   select(year, district, percent_overweight, num_asian, num_black, num_hisp, num_am_ind, num_white)
@@ -683,11 +683,11 @@ district_level_data =
 <pre class="r"><code>group_demo = 
   selected |&gt;
   group_by(year, district) |&gt;
-  summarise(total_asian = sum(num_asian), 
-            total_black = sum(num_black),
-            total_hisp = sum(num_hisp), 
-            total_am_ind = sum(num_am_ind), 
-            total_white = sum(num_white)) |&gt;
+  summarise(total_asian = max(num_asian), 
+            total_black = max(num_black),
+            total_hisp = max(num_hisp), 
+            total_am_ind = max(num_am_ind), 
+            total_white = max(num_white)) |&gt;
   drop_na()</code></pre>
 <pre class="r"><code>result_df = 
   district_level_data |&gt; 
@@ -703,8 +703,8 @@ district_level_data =
     title = &quot;Distribution of Median Percent of Overweight&quot;)
 
 ggplotly(overweight_dist)</code></pre>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-61eba9a78d6132b68324" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-61eba9a78d6132b68324">{"x":{"data":[{"orientation":"v","width":[1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896591,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896484,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[8.9793103448275868,10.262068965517242,11.544827586206896,12.827586206896552,14.110344827586207,15.393103448275863,16.675862068965518,17.958620689655174,19.241379310344829,20.524137931034485,21.80689655172414,23.089655172413796,24.372413793103451,25.655172413793107,26.937931034482762,28.220689655172418,29.503448275862073,30.786206896551729,32.068965517241381,33.351724137931043,34.634482758620692,35.917241379310354,37.200000000000003,38.482758620689658,39.765517241379314,41.048275862068962,42.331034482758625,43.613793103448273,44.896551724137936,46.179310344827584],"y":[8,13,30,83,154,228,276,228,107,79,30,17,12,4,3,4,2,2,1,1,1,0,0,0,0,0,0,0,0,1],"text":["count:   8<br />med_overweight:  8.97931","count:  13<br />med_overweight: 10.26207","count:  30<br />med_overweight: 11.54483","count:  83<br />med_overweight: 12.82759","count: 154<br />med_overweight: 14.11034","count: 228<br />med_overweight: 15.39310","count: 276<br />med_overweight: 16.67586","count: 228<br />med_overweight: 17.95862","count: 107<br />med_overweight: 19.24138","count:  79<br />med_overweight: 20.52414","count:  30<br />med_overweight: 21.80690","count:  17<br />med_overweight: 23.08966","count:  12<br />med_overweight: 24.37241","count:   4<br />med_overweight: 25.65517","count:   3<br />med_overweight: 26.93793","count:   4<br />med_overweight: 28.22069","count:   2<br />med_overweight: 29.50345","count:   2<br />med_overweight: 30.78621","count:   1<br />med_overweight: 32.06897","count:   1<br />med_overweight: 33.35172","count:   1<br />med_overweight: 34.63448","count:   0<br />med_overweight: 35.91724","count:   0<br />med_overweight: 37.20000","count:   0<br />med_overweight: 38.48276","count:   0<br />med_overweight: 39.76552","count:   0<br />med_overweight: 41.04828","count:   0<br />med_overweight: 42.33103","count:   0<br />med_overweight: 43.61379","count:   0<br />med_overweight: 44.89655","count:   1<br />med_overweight: 46.17931"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(89,89,89,0.8)","line":{"width":1.8897637795275593,"color":"rgba(255,255,255,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Median Percent of Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[6.4137931034482758,48.744827586206895],"tickmode":"array","ticktext":["10","20","30","40"],"tickvals":[10,20,29.999999999999993,40],"categoryorder":"array","categoryarray":["10","20","30","40"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Median Percent of Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-13.800000000000001,289.80000000000001],"tickmode":"array","ticktext":["0","100","200"],"tickvals":[0,100,200],"categoryorder":"array","categoryarray":["0","100","200"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"8ff27012616c":{"x":{},"type":"bar"}},"cur_data":"8ff27012616c","visdat":{"8ff27012616c":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-b52a99541a78bef50e6b" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-b52a99541a78bef50e6b">{"x":{"data":[{"orientation":"v","width":[1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896591,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896484,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[8.9793103448275868,10.262068965517242,11.544827586206896,12.827586206896552,14.110344827586207,15.393103448275863,16.675862068965518,17.958620689655174,19.241379310344829,20.524137931034485,21.80689655172414,23.089655172413796,24.372413793103451,25.655172413793107,26.937931034482762,28.220689655172418,29.503448275862073,30.786206896551729,32.068965517241381,33.351724137931043,34.634482758620692,35.917241379310354,37.200000000000003,38.482758620689658,39.765517241379314,41.048275862068962,42.331034482758625,43.613793103448273,44.896551724137936,46.179310344827584],"y":[8,13,30,83,154,228,276,228,107,79,30,17,12,4,3,4,2,2,1,1,1,0,0,0,0,0,0,0,0,1],"text":["count:   8<br />med_overweight:  8.97931","count:  13<br />med_overweight: 10.26207","count:  30<br />med_overweight: 11.54483","count:  83<br />med_overweight: 12.82759","count: 154<br />med_overweight: 14.11034","count: 228<br />med_overweight: 15.39310","count: 276<br />med_overweight: 16.67586","count: 228<br />med_overweight: 17.95862","count: 107<br />med_overweight: 19.24138","count:  79<br />med_overweight: 20.52414","count:  30<br />med_overweight: 21.80690","count:  17<br />med_overweight: 23.08966","count:  12<br />med_overweight: 24.37241","count:   4<br />med_overweight: 25.65517","count:   3<br />med_overweight: 26.93793","count:   4<br />med_overweight: 28.22069","count:   2<br />med_overweight: 29.50345","count:   2<br />med_overweight: 30.78621","count:   1<br />med_overweight: 32.06897","count:   1<br />med_overweight: 33.35172","count:   1<br />med_overweight: 34.63448","count:   0<br />med_overweight: 35.91724","count:   0<br />med_overweight: 37.20000","count:   0<br />med_overweight: 38.48276","count:   0<br />med_overweight: 39.76552","count:   0<br />med_overweight: 41.04828","count:   0<br />med_overweight: 42.33103","count:   0<br />med_overweight: 43.61379","count:   0<br />med_overweight: 44.89655","count:   1<br />med_overweight: 46.17931"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(89,89,89,0.8)","line":{"width":1.8897637795275593,"color":"rgba(255,255,255,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Median Percent of Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[6.4137931034482758,48.744827586206895],"tickmode":"array","ticktext":["10","20","30","40"],"tickvals":[10,20,29.999999999999993,40],"categoryorder":"array","categoryarray":["10","20","30","40"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Median Percent of Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-13.800000000000001,289.80000000000001],"tickmode":"array","ticktext":["0","100","200"],"tickvals":[0,100,200],"categoryorder":"array","categoryarray":["0","100","200"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"aac319961c9b":{"x":{},"type":"bar"}},"cur_data":"aac319961c9b","visdat":{"aac319961c9b":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>The outcome distribution is roughly normal, so no transformation is
 needed.</p>
 <p>Then, we will look at a correlation matrix to determine which
@@ -757,16 +757,16 @@ p.value
 (Intercept)
 </td>
 <td style="text-align:right;">
-204.2116961
+204.6285368
 </td>
 <td style="text-align:right;">
-119.4682431
+119.2937283
 </td>
 <td style="text-align:right;">
-1.709339
+1.715334
 </td>
 <td style="text-align:right;">
-0.0876312
+0.0865267
 </td>
 </tr>
 <tr>
@@ -774,16 +774,16 @@ p.value
 year
 </td>
 <td style="text-align:right;">
--0.0926723
+-0.0928606
 </td>
 <td style="text-align:right;">
-0.0592411
+0.0591545
 </td>
 <td style="text-align:right;">
--1.564326
+-1.569797
 </td>
 <td style="text-align:right;">
-0.1179889
+0.1167100
 </td>
 </tr>
 <tr>
@@ -791,16 +791,16 @@ year
 total_asian
 </td>
 <td style="text-align:right;">
--0.0003668
+-0.0014845
 </td>
 <td style="text-align:right;">
-0.0000772
+0.0003005
 </td>
 <td style="text-align:right;">
--4.749735
+-4.940426
 </td>
 <td style="text-align:right;">
-0.0000023
+0.0000009
 </td>
 </tr>
 <tr>
@@ -808,16 +808,16 @@ total_asian
 total_black
 </td>
 <td style="text-align:right;">
-0.0000297
+0.0001223
 </td>
 <td style="text-align:right;">
-0.0000248
+0.0000984
 </td>
 <td style="text-align:right;">
-1.194413
+1.242595
 </td>
 <td style="text-align:right;">
-0.2325383
+0.2142454
 </td>
 </tr>
 <tr>
@@ -825,16 +825,16 @@ total_black
 total_hisp
 </td>
 <td style="text-align:right;">
-0.0000755
+0.0002993
 </td>
 <td style="text-align:right;">
-0.0000204
+0.0000816
 </td>
 <td style="text-align:right;">
-3.695056
+3.667092
 </td>
 <td style="text-align:right;">
-0.0002291
+0.0002554
 </td>
 </tr>
 <tr>
@@ -842,16 +842,16 @@ total_hisp
 total_am_ind
 </td>
 <td style="text-align:right;">
-0.0009470
+0.0037642
 </td>
 <td style="text-align:right;">
-0.0003723
+0.0014737
 </td>
 <td style="text-align:right;">
-2.543651
+2.554306
 </td>
 <td style="text-align:right;">
-0.0110871
+0.0107552
 </td>
 </tr>
 <tr>
@@ -859,16 +859,16 @@ total_am_ind
 total_white
 </td>
 <td style="text-align:right;">
--0.0000756
+-0.0003124
 </td>
 <td style="text-align:right;">
-0.0000159
+0.0000638
 </td>
 <td style="text-align:right;">
--4.763158
+-4.894690
 </td>
 <td style="text-align:right;">
-0.0000021
+0.0000011
 </td>
 </tr>
 </tbody>
@@ -889,27 +889,37 @@ ggplot(df_with_residuals, aes(x = fitted_values, y = residuals)) +
   labs(x = &quot;Fitted Values&quot;, y = &quot;Residuals&quot;, title = &quot;Residuals against Fitted Values&quot;) +
   theme_minimal()</code></pre>
 <p><img src="regression_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
-<p>No clear pattern, so good. Overall, the residual plot suggests that
-the model has decent prediction performance. There’s no clear pattern to
-the residuals, which is good. However, the potential increase in
-variance among the higher fitted values and the presence of outliers
-could be a concern.</p>
-<p>The model we fit is:<br />
-Median Percent of Overweight at District Level = 209.229 + ….</p>
-<p>The coefficient estimate of intercept is 209.229 with a p-value of
-0.078,</p>
-<p>indicates that the effect of grade_level on the percentage of
-overweight students is statistically significant.</p>
-<p>Since elementary school is encoded as the reference group 0, we can
-say that middle/high school students in NY had higher percentage of
-overweight students compared to elementary school students. This also
-corresponds to the line plot visualization displayed in the previous
-section, where the line for elementary students is always below that for
-middle/high school students.</p>
+<p>There is no clear pattern shown in the plot, so it is pretty
+desirable. Overall, the residual plot suggests that the model has decent
+prediction performance. However, the potential increase in variance
+among the higher fitted values and the presence of outliers could be a
+concern.</p>
+<p>The model we fit is: Median Percent of Overweight at District Level =
+209.229 - 0.0928606 * year - 0.0014845 * total_asian + 0.0001223 *
+total_black + 0.0002993 * total_hisp + 0.0037642 * total_am_ind -
+0.0003124 * total_white.</p>
+<p>Except for the p-value for total_black and year, the coefficients for
+all other variables are significant. Among them, the total number of
+American Indian in that school district has the largest absolute value
+of coefficient. So, holding all other variables constant, with one
+person increase in the ethnic group of American Indians, there is a
+0.0037642 percent increase in the median percent of overweight students
+at district level.</p>
+<p>The regression analysis indicates that demographic factors,
+specifically the racial composition of students, have a statistically
+significant association with the median percentage of overweight
+students at the district level, as evidenced by the p-values for certain
+racial groups.</p>
+<p>However, the magnitude of these associations, as reflected by the
+estimated coefficients, is relatively small. It is important to note
+that while these effects are statistically significant for some racial
+groups, the small size of the coefficients suggests that the practical
+significance of these demographic variables on the median percentage of
+overweight students might be limited.</p>
 </div>
-<div id="mlr---percent-of-healthy-vs-percentage-of-overweight"
+<div id="mlr---other-weight-status-vs-percent-of-overweight"
 class="section level3">
-<h3>MLR - Percent of Healthy, vs Percentage of Overweight</h3>
+<h3>MLR - Other Weight Status vs Percent of Overweight</h3>
 <pre class="r"><code>train_data = 
   train_data |&gt; 
   select(year, percent_overweight, percent_obese, percent_overweight_or_obese, percent_healthy_weight)</code></pre>
@@ -1028,12 +1038,130 @@ percent_healthy_weight
 <p>Holding all other variables constant, with one percent increase in
 healthy weight students, there is a 0.039 percent increase in overweight
 students. However, this is not very significant as the p-value (0.262)
-for the coefficient is greater than</p>
+for the coefficient is greater than 0.05 at an 95% confidence level.</p>
 </div>
-<div id="mlr---number-of-free-lunch-vs-percentage-of-overweight"
+<div id="mlr---lunch-type-vs-percent-of-overweight"
 class="section level3">
-<h3>MLR - Number of Free Lunch vs Percentage of Overweight</h3>
-<p>This prediction is only available for a few years’ data.</p>
+<h3>MLR - Lunch Type vs Percent of Overweight</h3>
+<p>This prediction is only available for a few years’ data because some
+years do not contain the data record for free lunch and reduced
+lunch.</p>
+<pre class="r"><code>lunch = 
+  cleaned_data |&gt; 
+  filter(year %in% c(2015, 2016, 2017)) |&gt;
+  group_by(year, district) |&gt;
+  summarise(total_num_free_lunch = max(num_free_lunch), 
+            total_num_reduced_lunch = max(num_reduced_lunch))</code></pre>
+<pre class="r"><code>lunch_df = 
+  district_level_data |&gt; 
+  left_join(lunch, by = c(&quot;year&quot;, &quot;district&quot;)) |&gt;
+  ungroup() |&gt;
+  select(-district)</code></pre>
+<pre class="r"><code>mlr = lm(med_overweight ~ ., data = lunch_df)
+display = mlr |&gt; broom::tidy() |&gt; knitr::kable()
+
+display</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+294.4593529
+</td>
+<td style="text-align:right;">
+268.2056744
+</td>
+<td style="text-align:right;">
+1.0978864
+</td>
+<td style="text-align:right;">
+0.2725683
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+year
+</td>
+<td style="text-align:right;">
+-0.1377206
+</td>
+<td style="text-align:right;">
+0.1330457
+</td>
+<td style="text-align:right;">
+-1.0351379
+</td>
+<td style="text-align:right;">
+0.3009021
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+total_num_free_lunch
+</td>
+<td style="text-align:right;">
+0.0000718
+</td>
+<td style="text-align:right;">
+0.0000697
+</td>
+<td style="text-align:right;">
+1.0289415
+</td>
+<td style="text-align:right;">
+0.3038030
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+total_num_reduced_lunch
+</td>
+<td style="text-align:right;">
+0.0001812
+</td>
+<td style="text-align:right;">
+0.0009498
+</td>
+<td style="text-align:right;">
+0.1907815
+</td>
+<td style="text-align:right;">
+0.8487428
+</td>
+</tr>
+</tbody>
+</table>
+<p>The model we fit is: Median Percent of Overweight at District Level =
+294.4593529 - 0.1377206 * year + 0.0000718 * total_num_free_lunch +
+0.0001812 * total_num_reduced_lunch.</p>
+<p>We might be able to say that having more free lunch and reduced lunch
+both are associated with increase in the median percent of overweight
+students at school-district level.</p>
+<p>However, none of the predictors included in the model show a
+statistically significant relationship with the median percentage of
+overweight students at the school-district level, as all p-values are
+above the conventional threshold for significance (0.05).</p>
 </div>
 
 
