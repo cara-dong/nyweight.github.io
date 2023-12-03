@@ -374,3 +374,5 @@ combined_plots
 ```
 In the five scatterplots presented above, a noticeable trend emerges where an increase in the percentage of Asian, Black, and Hispanic students is associated with a decrease in the percentage of overweight individuals. Conversely, there appears to be no distinct relationship between the percentage of American Indian students and the percentage overweight. Notably, as the percentage of White students increases, there seems to be an upward trend in the percentage of overweight individuals. This suggests a potential positive correlation between the number of White students and the percentage of overweight individuals. To delve deeper into this relationship, further exploration will be conducted using regression analysis.
 
+
+
