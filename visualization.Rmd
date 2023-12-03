@@ -138,7 +138,7 @@ ggplot(element_middle_data, aes(x = county, y = ave_overweight_percent, fill = g
        y = "Overweight Percentage",
        fill = "Grade Level") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 70, hjust = 1, size = 6))
 ```
 Observing this plot reveals that, in the majority of counties, elementary school students exhibit a lower percentage of overweight compared to their middle school counterparts. As a suggestion, it is recommended to first adjust the school lunch menu to incorporate healthier options, possibly including more fiber. Additionally, middle school students should ensure sufficient exercise by dedicating more time or classes to physical education.
 
@@ -202,9 +202,9 @@ race_year_data = race_dis_data |>
   group_by (year) |>
   summarize(asian = sum(num_asian), 
             white = sum(num_white), 
-            am_ind = sum(num_am_ind), 
+            american_indian = sum(num_am_ind), 
             black = sum(num_black), 
-            hisp = sum(num_hisp))
+            hispanic = sum(num_hisp))
 
 race_year_data = pivot_longer(race_year_data, cols = -year, names_to = "race", values_to = "number" )
 
@@ -214,7 +214,7 @@ race_year_data = pivot_longer(race_year_data, cols = -year, names_to = "race", v
 race_2015 = race_year_data |>
   filter(year == "2015")
 
-plot_2015 <- plot_ly(race_2015, labels = ~race, values = ~ number, type = "pie", hole = 0.2, textinfo = 'number', textposition = 'inside', marker = list(colors = c("pink", "orange", "brown", "blue", "green"))) |>
+plot_2015 = plot_ly(race_2015, labels = ~race, values = ~ number, type = "pie", hole = 0.2, textinfo = 'number', textposition = 'inside', marker = list(colors = c("pink", "orange", "brown", "blue", "green"))) |>
   layout(title = "Distribution of Races in 2015")
 
 race_2016 = race_year_data |>
@@ -314,7 +314,7 @@ plot_ly(county_data) |>
   add_trace(type = "bar", x = ~county, y = ~percent_asian, name = "Asian", color = "pink") |>
   add_trace(type = "bar", x = ~county, y = ~percent_white, name = "White", color = "blue") |>
   add_trace(type = "bar", x = ~county, y = ~percent_black, name = "Black", color = "green") |>
-  add_trace(type = "bar", x = ~county, y = ~percent_am_ind, name = "Indian",color = "orange") |>
+  add_trace(type = "bar", x = ~county, y = ~percent_am_ind, name = "American Indian",color = "orange") |>
   add_trace(type = "bar", x = ~county, y = ~percent_hisp, name = "Hispanic",color = "purple") |>
   add_trace(type = "scatter", x = ~county, y = ~percent_overweight, mode = "lines", name = "Overweight", line = list(color = "red", width = 3)) |>
   layout(title = "Racial Distribution and Percentage Overweight of Students by County",
