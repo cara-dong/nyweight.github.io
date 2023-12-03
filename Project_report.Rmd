@@ -28,7 +28,11 @@ In our exploratory analysis, we employed visualizations to examine the trends in
 # Additional Analysis
 The additional analysis phase of our project involved conducting both Simple Linear Regression (SLR) and Multiple Linear Regression (MLR) analyses to explore and understand the factors influencing the weight status of students in New York State.
 
-SLR - Sex vs Percent of Overweight:
+Two-sample T-test
+
+We also conducted a two-sample t-test to compare the average number of overweight female students across different grade levels (elementary and middle/high school). The test revealed a statistically significant difference, suggesting that the grade level significantly influences the prevalence of overweight conditions among female students. This result further underscores the importance of considering educational stages in public health strategies aimed at addressing student overweight and obesity.
+
+SLR - Sex vs Percentage of Overweight:
 
 This model explored the impact of sex on the percentage of overweight students. The results indicated a significant difference between male and female students, with male students generally having a lower percentage of overweight cases. The model's equation was percent_overweight = 17.546446 - 1.177219 * sex, and the negative coefficient for sex (p-value almost 0) suggested a higher percentage of overweight in female students compared to males.
 
@@ -53,3 +57,9 @@ MLR - Lunch Type vs Percent of Overweight:
 This model explored the association between types of lunch (free or reduced) and the percentage of overweight students. The results suggested a potential relationship; however, none of the predictors showed a statistically significant relationship, pointing to the need for further research in this area.
 
 # Discussion
+
+Our analysis of student health data in New York State has illuminated several critical aspects of overweight and obesity prevalence among students. The relatively constant overweight percentages over the years indicate a persistent challenge in student health, necessitating continuous public health and educational interventions. Notably, the variation in overweight percentages across counties, and the higher prevalence among female and middle/high school students, highlights the need for targeted health initiatives that address specific demographic needs.
+
+The regression analyses and two-sample t-test results underscore the significant roles of sex, grade level, and racial composition in influencing overweight prevalence. This suggests a multifaceted approach is required in addressing student health, one that encompasses not only biological and behavioral aspects but also socio-cultural considerations.
+
+However, the limitations of our study, particularly in establishing causality, suggest the need for more in-depth research, potentially employing longitudinal data. Overall, our findings provide a foundation for developing nuanced and effective health policies and programs, tailored to the diverse needs of students across New York State.

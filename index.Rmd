@@ -29,7 +29,7 @@ output:
 
 <h1 style="text-align: center; font-weight: bold; font-size: 36px; margin-bottom: 40px;">Unlocking the Mystery: Are NYC Students' Weights Telling a Hidden Story</h1>
 
-<h2 style="font-size: 24px; font-family: Times New Roman, sans-serif; font-weight: bold; margin-bottom: 20px;">Motivation</h2>
+<h2 style="font-size: 24px; font-family: Times New Roman, sans-serif; font-weight: bold; margin-bottom: 20px;">Introduction</h2>
 <p style="font-size: 20px; font-family: Times New Roman, sans-serif;">
 Our project aims to tackle the critical issue of obesity and overweight prevalence among students in New York State. By analyzing student health data alongside demographic variables, we seek to understand how social factors impact obesity and overweight rates in this population. Our approach includes various statistical techniques, including regression analysis, to uncover the underlying patterns and correlations. The insights from this study will guide public health strategies and educational policies, aiming to improve student health outcomes and address the obesity challenge in New York State.
 </p>

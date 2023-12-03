@@ -19,7 +19,8 @@ cleaned_data = read_csv("cleaned_data.csv")
 
 ### Two sample t-test
 
-<<<<<<< HEAD
+First, we want to conduct a two-sample t-test to compare the average number of overweight female students across two different educational levels: elementary and middle/high school. 
+
 ```{r message = FALSE, echo = FALSE}
 data = read.csv("cleaned_data.csv")
 
@@ -34,9 +35,9 @@ print(t_test_result)
 ```
 
 The two-sample t-test test results indicated a statistically significant difference in the average number of overweight female students between the two grade levels, leading to the rejection of the null hypothesis. This suggests that the grade level is an influential factor in the prevalence of overweight conditions among female students.
-### SLR - Sex vs Percentage of Overweight
+
 =======
-### SLR - Sex vs Percent of Overweight
+### SLR - Sex vs Percentage of Overweight
 >>>>>>> 3941cf1b318ed025d461bf43f9a1f61fbd214914
 ```{r message=FALSE, warning=FALSE}
 train_data  = 
