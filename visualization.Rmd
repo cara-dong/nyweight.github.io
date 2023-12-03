@@ -35,6 +35,7 @@ scale_fill_disrete = scale_fill_viridis_d
 
 
 ## Overweight Percentage Changes Over Year
+Firstly, we want to look at the county-level overweight percentage changes over years. We do that by calculating the county-level average overweight percent and plot results as a spaghetti plot. Legends are dropped to help visualization. 
 ```{r message = FALSE, echo = FALSE}
 # add up each county's percentage for each year
 county_year_data = 
@@ -70,6 +71,7 @@ plot_ly(county_year_data, x = ~year, y = ~ave_overweight_percent, type = "scatte
 Upon examining two plots, the percentage of students classified as overweight in the state of New York remained relatively constant from 2015 to 2019. Despite apparent fluctuations in the depicted data, such as a surge in 2016 and a drop in 2017, these variations can be attributed to the confined range of the y-axis. Specifically, the values fluctuate within a limited span, ranging only between 16.7% and 17.3%.
 
 ## County-level percent overweight/obese/healthy
+Then, we want to compare each counties' overweight, obesity, and healthy percentage. We did this comparison by plotting average percentage overweight/obese/healthy for each county as histograms. 
 ```{r message = FALSE, echo = FALSE}
 # calculate the average percentage of overweight/obsed/healthy for all years
 county_ave_data = 
@@ -119,6 +121,7 @@ knitr::kable(top_healthy, caption = "Three Counties with Highest Healthy Percent
 Analyzing the plots and tables reveals that Oswego ranks among the top 5 counties with the highest percentages of overweight and obese populations. Consequently, it is recommended that educational and health authorities explore counties with lower indices to glean insights on effectively managing this situation.
 
 ## Elementary & Middle school overweight across county
+Now, we want to dive deeper to each variable. We want to compare elementary school and middle/high school overweight percentages for each county. 
 ```{r message = FALSE, echo = FALSE}
 element_middle_data = 
   cleaned_data |>
@@ -142,7 +145,6 @@ ggplot(element_middle_data, aes(x = county, y = ave_overweight_percent, fill = g
 ```
 Observing this plot reveals that, in the majority of counties, elementary school students exhibit a lower percentage of overweight compared to their middle school counterparts. As a suggestion, it is recommended to first adjust the school lunch menu to incorporate healthier options, possibly including more fiber. Additionally, middle school students should ensure sufficient exercise by dedicating more time or classes to physical education.
 
-Average Overweight Percent by Grade Level over year
 ```{r message = FALSE, echo = FALSE}
 grade_level_data = 
   cleaned_data |>
@@ -164,6 +166,7 @@ ggplot(grade_level_data, aes(x = year, y = ave_overweight_percent, color = grade
 ```
 
 ## Sex and Overweight
+What about sex? Does different sex affect students' overweight percentage? 
 ```{r message = FALSE, echo = FALSE}
 sex_data = 
   cleaned_data |>
@@ -372,6 +375,7 @@ combined_plots = plot1+plot2+plot3+plot4+plot5
 
 combined_plots
 ```
+<br>
 In the five scatterplots presented above, a noticeable trend emerges where an increase in the percentage of Asian, Black, and Hispanic students is associated with a decrease in the percentage of overweight individuals. Conversely, there appears to be no distinct relationship between the percentage of American Indian students and the percentage overweight. Notably, as the percentage of White students increases, there seems to be an upward trend in the percentage of overweight individuals. This suggests a potential positive correlation between the number of White students and the percentage of overweight individuals. To delve deeper into this relationship, further exploration will be conducted using regression analysis.
 
 
