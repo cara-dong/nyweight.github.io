@@ -82,7 +82,7 @@ county_ave_data =
            ave_healthy_percent = mean(percent_healthy_weight)*100) 
 
 county_ave_data = county_ave_data |>
-  arrange(ave_overweight_percent)
+   mutate(county = fct_reorder(county, ave_overweight_percent)) 
 
 plot_ly(county_ave_data, y = ~ave_overweight_percent, x = ~county, type = 'bar', color = ~county) |>
   layout(title = "Percentage Overweight by County",
@@ -95,6 +95,9 @@ top_overweight = county_ave_data |> arrange(desc(ave_overweight_percent)) |>head
 
 knitr::kable(top_overweight, caption = "Three Counties with Highest Overweight Percent") 
 
+county_ave_data = county_ave_data |>
+   mutate(county = fct_reorder(county, ave_obese_percent)) 
+
 plot_ly(county_ave_data, x = ~county, y = ~ave_obese_percent, type = 'bar', color = ~county) |>
   layout(title = "Percentage Obese by County",
          xaxis = list(title = "County"),
@@ -106,6 +109,9 @@ plot_ly(county_ave_data, x = ~county, y = ~ave_obese_percent, type = 'bar', colo
 top_obese = county_ave_data |> arrange(desc(ave_obese_percent)) |>head(5)|>select(county,ave_obese_percent)
 
 knitr::kable(top_obese, caption = "Three Counties with Highest Obese Percent") 
+
+county_ave_data = county_ave_data |>
+   mutate(county = fct_reorder(county, ave_healthy_percent)) 
 
 plot_ly(county_ave_data, x = ~county, y = ~ave_healthy_percent, type = 'bar', color = ~county) |>
   layout(title = "Percentage Healthy by County",
