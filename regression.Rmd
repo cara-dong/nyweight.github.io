@@ -4,6 +4,7 @@ output:
   html_document:
     toc: true
     toc_float: true
+    code_folding: "hide"
 ---
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -11,34 +12,192 @@ library(plotly)
 library(broom)
 library(boot)
 library(modelr)
+library(ggpubr)
+library(rstatix)
+library(patchwork)
 ```
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 cleaned_data = read_csv("cleaned_data.csv")
 ```
 
-### Two sample t-test
+## Two sample t-test
+### T-test for Means in Sex Groups
+First, we need to check for normality assumptions.
+```{r message = FALSE, warning=FALSE}
+normality_check1 = cleaned_data |>
+  filter(sex=="FEMALE") |>
+  ggplot(aes(x = number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Number Overweight" ,
+    y = "Count",
+    title = "Female Number Overweight")
 
-First, we want to conduct a two-sample t-test to compare the average number of overweight female students across two different educational levels: elementary and middle/high school. 
+normality_check2 = cleaned_data |>
+  filter(sex=="MALE") |>
+  ggplot(aes(x = number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Number Overweight" ,
+    y = "Count",
+    title = "Male Number Overweight")
 
-```{r message = FALSE, echo = FALSE}
-data = read.csv("cleaned_data.csv")
+normality_check3 = cleaned_data |>
+  filter(grade_level=="ELEMENTARY") |>
+  ggplot(aes(x = number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Number Overweight" ,
+    y = "Count",
+    title = "Elementary Number Overweight")
 
-female_data = data[data$sex == 'FEMALE', ]
+normality_check4 = cleaned_data |>
+  filter(grade_level=="MIDDLE/HIGH") |>
+  ggplot(aes(x = number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Number Overweight" ,
+    y = "Count",
+    title = "Middle/High Number Overweight")
 
-elementary_data = female_data[female_data$grade_level == 'ELEMENTARY', 'number_overweight']
-middle_high_data = female_data[female_data$grade_level == 'MIDDLE/HIGH', 'number_overweight']
+combined_plot = normality_check1 + normality_check2 + normality_check3 + normality_check4 
 
-t_test_result = t.test(elementary_data, middle_high_data, var.equal = FALSE)
+combined_plot_layout = combined_plot + 
+  plot_layout(ncol = 2, nrow = 2)
+
+combined_plot_layout
+```
+
+From the histogram, the number of overweight students in four groups are all right-skewed, so we need to perform a log transformation before testing. Here are the distributions after transformation.
+```{r message = FALSE, warning=FALSE}
+t_test_data = cleaned_data |>
+  mutate(log_number_overweight = log(number_overweight + 1))
+
+normality_check1 = t_test_data |>
+  filter(sex=="FEMALE") |>
+  ggplot(aes(x = log_number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Log Number Overweight" ,
+    y = "Count",
+    title = "Log Female Number Overweight")
+
+normality_check2 = t_test_data |>
+  filter(sex=="MALE") |>
+  ggplot(aes(x = log_number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Log Number Overweight" ,
+    y = "Count",
+    title = "Log Male Number Overweight")
+
+normality_check3 = t_test_data |>
+  filter(grade_level=="ELEMENTARY") |>
+  ggplot(aes(x = log_number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Log Number Overweight" ,
+    y = "Count",
+    title = "Log Elementary Number Overweight")
+
+normality_check4 = t_test_data |>
+  filter(grade_level=="MIDDLE/HIGH") |>
+  ggplot(aes(x = log_number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Log Number Overweight" ,
+    y = "Count",
+    title = "Log Middle/High Number Overweight")
+
+combined_plot = normality_check1 + normality_check2 + normality_check3 + normality_check4 
+
+combined_plot_layout = combined_plot + 
+  plot_layout(ncol = 2, nrow = 2)
+
+combined_plot_layout
+```
+
+Now, the distributions look roughly normal.
+
+Check equality of variance:
+
+Test for Equality of Variances by Sex
+```{r message=FALSE, warning=FALSE}
+t_test_data |> 
+  levene_test(log_number_overweight ~ sex) |>
+  knitr::kable(title = "Test for Equality of Variances by Sex")
+```
+
+Test for Equality of Variances by Grade Level
+```{r message=FALSE, warning=FALSE}
+t_test_data |> 
+  levene_test(log_number_overweight ~ grade_level) |> 
+  knitr::kable(title="Test for Equality of Variances by Grade Level")
+```
+
+
+Since the p-values for both are not significant, we will use independent t-test with equal variance.
+
+We want to conduct a two-sample t-test to compare the average number of overweight female students across two different educational levels: elementary and middle/high school. 
+```{r message = FALSE}
+female_data = t_test_data[t_test_data$sex == 'FEMALE', ]
+
+elementary_data = female_data[female_data$grade_level == 'ELEMENTARY', 'log_number_overweight']
+middle_high_data = female_data[female_data$grade_level == 'MIDDLE/HIGH', 'log_number_overweight']
+
+t_test_result = t.test(elementary_data, middle_high_data, var.equal = TRUE)
 
 print(t_test_result)
 ```
 
-The two-sample t-test test results indicated a statistically significant difference in the average number of overweight female students between the two grade levels, leading to the rejection of the null hypothesis. This suggests that the grade level is an influential factor in the prevalence of overweight conditions among female students.
+The test results suggest that there is a statistically significant difference in the mean log number of female overweight students between elementary and middle/high schools, with elementary schools having a higher mean on the log scale, given the very low p-value and the confidence interval that does not include zero.
 
-=======
+Next, we conduct a two-sample t-test to compare the average number of overweight male students across two different educational levels: elementary and middle/high school.
+```{r message = FALSE}
+male_data = t_test_data[t_test_data$sex == 'MALE', ]
+
+elementary_data = male_data[male_data$grade_level == 'ELEMENTARY', 'log_number_overweight']
+middle_high_data = male_data[male_data$grade_level == 'MIDDLE/HIGH', 'log_number_overweight']
+
+t_test_result = t.test(elementary_data, middle_high_data, var.equal = TRUE)
+
+print(t_test_result)
+```
+There is a statistically significant difference between the mean log number of male overweight students in elementary schools compared to middle/high schools, with elementary schools having a higher mean on the log scale, given the 2.367e-13 low p-value and the confidence interval that does not include zero.
+
+### T-test for Means in Grade Level
+Next, we conduct a two-sample t-test to compare the average number of overweight elementary students across two different sex groups: male and female.
+```{r message = FALSE}
+elementary = t_test_data[t_test_data$grade_level == 'ELEMENTARY', ]
+
+male = elementary[elementary$sex == 'MALE', 'log_number_overweight']
+female = elementary[elementary$sex == 'FEMALE', 'log_number_overweight']
+
+t_test_result = t.test(male, female, var.equal = TRUE)
+
+print(t_test_result)
+```
+
+The t-test results suggest that there is no significant difference in the mean log number of overweight students in elementary school students between male and female sex groups, given that p-value 0.9557 is greater than 0.05 at 95% confidence level. The means are nearly identical, and the statistical analysis does not provide evidence of a meaningful disparity.
+
+Then, we conduct a two-sample t-test to compare the average number of overweight middle/high school students across two different sex groups: male and female.
+```{r message = FALSE}
+elementary = t_test_data[t_test_data$grade_level == 'MIDDLE/HIGH', ]
+
+male = elementary[elementary$sex == 'MALE', 'log_number_overweight']
+female = elementary[elementary$sex == 'FEMALE', 'log_number_overweight']
+
+t_test_result = t.test(male, female, var.equal = TRUE)
+
+print(t_test_result)
+```
+
+The t-test results also suggest that there is no significant difference in the mean log number of overweight students in middle/high school students between male and female sex groups, given that p-value 0.1223 is greater than 0.05 at 95% confidence level.
+
+
+## Regression
 ### SLR - Sex vs Percentage of Overweight
->>>>>>> 3941cf1b318ed025d461bf43f9a1f61fbd214914
 ```{r message=FALSE, warning=FALSE}
 train_data  = 
   cleaned_data |>
@@ -64,6 +223,7 @@ school_level_dist = train_data |>
 
 ggplotly(school_level_dist)
 ```
+
 The outcome is roughly normal, so no transformation needed.
 
 Check for normality of residuals.
@@ -77,6 +237,7 @@ Check for homocedasticity.
 plot(fitted(model1), resid(model1))
 abline(h = 0, col = "red")
 ```
+
 The variance of the residuals is roughly constant across all levels of the predictor and the residuals are also normally distributed. So assumptions for linear regression are checked. We can proceed to conduct the prediction.
 
 Fit the model.
@@ -86,6 +247,7 @@ sex_slr_df = sex_slr |> broom::tidy()
 
 knitr::kable(sex_slr_df)
 ```
+
 The SLR model we fit is percent_overweight at school-level = 17.546446 - 1.177219 * sex.
 
 The coefficient estimate of -1.177219 with a p-value of almost 0 indicates that the effect of sex on the percentage of overweight students is statistically significant.
@@ -114,6 +276,7 @@ grade_level_slr_df = grade_level_slr |> broom::tidy()
 
 knitr::kable(grade_level_slr_df)
 ```
+
 The SLR model we fit is percent_overweight at school-level = 16.126602 - 1.716477	 * grade_level.
 
 The coefficient estimate of 1.716477 with a p-value of almost 0 indicates that the effect of grade_level on the percentage of overweight students is statistically significant.
@@ -128,6 +291,7 @@ mlr_df = mlr |> broom::tidy()
 
 knitr::kable(mlr_df)
 ```
+
 The MLR model we fit is percent_overweight at school-level = 16.717571 - -1.179560	 * grade_level + 1.718086 * grade_level.
 
 The coefficient estimates with p-values of almost 0 indicates that the effect of both sex and grade_level on the percentage of overweight students are statistically significant.
@@ -136,6 +300,7 @@ Next, we use anova to check if SLR (with only sex or grade level) is more prefer
 ```{r message=FALSE, warning=FALSE}
 anova(sex_slr, grade_level_slr, mlr)
 ```
+
 So, MLR is more preferrable than SLR here because the p-value is < 2.2e-16, which is significant at 5% alpha level.
 
 
@@ -257,6 +422,7 @@ display_weight = mlr_weight |> broom::tidy() |> knitr::kable(digits=3)
 
 display_weight
 ```
+
 Holding all other variables constant, with one percent increase in healthy weight students, there is a 0.039 percent increase in overweight students. However, this is not very significant as the p-value (0.262) for the coefficient is greater than 0.05 at an 95% confidence level.
 
 ### MLR - Lunch Type vs Percent of Overweight
