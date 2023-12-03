@@ -23,6 +23,33 @@ Our project will develop a web platform designed for the exploration of intrinsi
 
 # Exploratory Analysis
 
+In our exploratory analysis, we employed visualizations to examine the trends in overweight percentages among New York State students from 2015 to 2019. Our findings revealed a relatively stable trend in overweight percentages, with minor fluctuations across the years. County-level analysis highlighted regions with notably high overweight and obese percentages, pinpointing areas such as Oswego County for potential targeted interventions. Further, our visual comparisons between elementary and middle school students across counties indicated a general trend of higher overweight percentages among middle school students. Gender-based analysis revealed that female students were more likely to be overweight than male students. Additionally, our exploration into the racial composition of student populations across counties suggested a correlation between a higher proportion of White students and increased overweight percentages, while a greater presence of Asian, Black, and Hispanic students correlated with lower overweight percentages. 
+
 # Additional Analysis
+The additional analysis phase of our project involved conducting both Simple Linear Regression (SLR) and Multiple Linear Regression (MLR) analyses to explore and understand the factors influencing the weight status of students in New York State.
+
+SLR - Sex vs Percent of Overweight:
+
+This model explored the impact of sex on the percentage of overweight students. The results indicated a significant difference between male and female students, with male students generally having a lower percentage of overweight cases. The model's equation was percent_overweight = 17.546446 - 1.177219 * sex, and the negative coefficient for sex (p-value almost 0) suggested a higher percentage of overweight in female students compared to males.
+
+SLR - Grade Level vs Percent of Overweight:
+
+Another SLR model was developed to assess the effect of grade level on overweight percentages. The results showed that middle/high school students had a higher percentage of overweight compared to elementary school students. The model's equation was percent_overweight = 16.126602 - 1.716477 * grade_level, with a significant positive coefficient for grade level, indicating a higher prevalence of overweight in middle/high school levels.
+
+MLR - Grade Level & Sex vs Percent of Overweight:
+
+An MLR model was used to understand the combined effects of sex and grade level. The model showed that both factors were significant determinants of overweight percentage, with the equation being percent_overweight = 16.717571 - -1.179560 * grade_level + 1.718086 * grade_level. The analysis suggested that the MLR model was more informative than individual SLR models.
+
+MLR - Student Demographic Info vs Percent of Overweight:
+
+This MLR analysis focused on the relationship between student demographics and overweight percentages at the district level. The results highlighted a significant, yet small, association between racial composition and overweight percentages. For example, as the percentage of American Indian students increased, so did the percentage of overweight students. However, the practical significance of these findings was limited due to the small effect sizes.
+
+MLR - Other Weight Status vs Percent of Overweight:
+
+In this model, different weight statuses were analyzed against the percentage of overweight students. The results showed a very small, statistically insignificant effect of the percentage of healthy weight students on the percentage of overweight students, indicating the complexity of factors influencing overweight prevalence.
+
+MLR - Lunch Type vs Percent of Overweight:
+
+This model explored the association between types of lunch (free or reduced) and the percentage of overweight students. The results suggested a potential relationship; however, none of the predictors showed a statistically significant relationship, pointing to the need for further research in this area.
 
 # Discussion

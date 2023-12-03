@@ -19,6 +19,7 @@ cleaned_data = read_csv("cleaned_data.csv")
 
 ### Two sample t-test
 
+<<<<<<< HEAD
 ```{r message = FALSE, echo = FALSE}
 data = read.csv("cleaned_data.csv")
 
@@ -34,6 +35,9 @@ print(t_test_result)
 
 The two-sample t-test test results indicated a statistically significant difference in the average number of overweight female students between the two grade levels, leading to the rejection of the null hypothesis. This suggests that the grade level is an influential factor in the prevalence of overweight conditions among female students.
 ### SLR - Sex vs Percentage of Overweight
+=======
+### SLR - Sex vs Percent of Overweight
+>>>>>>> 3941cf1b318ed025d461bf43f9a1f61fbd214914
 ```{r message=FALSE, warning=FALSE}
 train_data  = 
   cleaned_data |>
@@ -88,7 +92,7 @@ The coefficient estimate of -1.177219 with a p-value of almost 0 indicates that 
 Since female is encoded as the reference group 0, we can say that male students group in NY schools had lower percentage of overweight students compared to female students group. This corresponds to the line plot visualization displayed in the previous section, where the line for male students is always below that for female students.
 
 
-### SLR - Grade Level vs Percentage of Overweight
+### SLR - Grade Level vs Percent of Overweight
 Check for normality of residuals.
 ```{r message=FALSE, warning=FALSE}
 model2 = lm(percent_overweight ~ grade_level, data = train_data)
@@ -115,7 +119,7 @@ The coefficient estimate of 1.716477 with a p-value of almost 0 indicates that t
 
 Since elementary school is encoded as the reference group 0, we can say that middle/high school students in NY had higher percentage of overweight students compared to elementary school students. This also corresponds to the line plot visualization displayed in the previous section, where the line for elementary students is always below that for middle/high school students.
 
-### MLR - Grade Level, Sex vs Percentage of Overweight
+### MLR - Grade Level & Sex vs Percent of Overweight
 ```{r message=FALSE, warning=FALSE}
 mlr = lm(percent_overweight ~ grade_level + sex, data = train_data) 
 
@@ -134,7 +138,7 @@ anova(sex_slr, grade_level_slr, mlr)
 So, MLR is more preferrable than SLR here because the p-value is < 2.2e-16, which is significant at 5% alpha level.
 
 
-### MLR - Demo Info vs Percentage/Number of Overweight
+### MLR - Student Demographic Info vs Percent of Overweight
 ```{r message=FALSE, warning=FALSE}
 selected = 
   cleaned_data |>
@@ -151,11 +155,11 @@ district_level_data =
 group_demo = 
   selected |>
   group_by(year, district) |>
-  summarise(total_asian = sum(num_asian), 
-            total_black = sum(num_black),
-            total_hisp = sum(num_hisp), 
-            total_am_ind = sum(num_am_ind), 
-            total_white = sum(num_white)) |>
+  summarise(total_asian = max(num_asian), 
+            total_black = max(num_black),
+            total_hisp = max(num_hisp), 
+            total_am_ind = max(num_am_ind), 
+            total_white = max(num_white)) |>
   drop_na()
 ```
 
@@ -202,7 +206,7 @@ high_cor_var_pairs
 ```
 
 There is no highly correlated pairs in all predictors. So, multicollinearity is cleared, now we can fit an MLR model.
-```{r}
+```{r message=FALSE, warning=FALSE}
 mlr = lm(med_overweight ~ ., data = result_df)
 display = mlr |> broom::tidy() |> knitr::kable()
 
@@ -210,7 +214,7 @@ display
 ```
 
 Plot residuals against fitted value
-```{r}
+```{r message=FALSE, warning=FALSE}
 # Add predictions to the dataset
 df_with_predictions = result_df |>
   add_predictions(mlr, var = "fitted_values")
@@ -227,36 +231,61 @@ ggplot(df_with_residuals, aes(x = fitted_values, y = residuals)) +
   theme_minimal()
 ```
 
-No clear pattern, so good. Overall, the residual plot suggests that the model has decent prediction performance. There's no clear pattern to the residuals, which is good. However, the potential increase in variance among the higher fitted values and the presence of outliers could be a concern.
+There is no clear pattern shown in the plot, so it is pretty desirable. Overall, the residual plot suggests that the model has decent prediction performance. However, the potential increase in variance among the higher fitted values and the presence of outliers could be a concern.
 
-The model we fit is:  
-Median Percent of Overweight at District Level = 209.229 + ....
+The model we fit is:
+Median Percent of Overweight at District Level = 209.229 - 0.0928606 * year - 0.0014845 * total_asian + 0.0001223 * total_black + 0.0002993 * total_hisp + 0.0037642 * total_am_ind - 0.0003124 * total_white. 
 
-The coefficient estimate of intercept is 209.229 with a p-value of 0.078, 
+Except for the p-value for total_black and year, the coefficients for all other variables are significant. Among them, the total number of American Indian in that school district has the largest absolute value of coefficient. So, holding all other variables constant, with one person increase in the ethnic group of American Indians, there is a 0.0037642 percent increase in the median percent of overweight students at district level.
 
-indicates that the effect of grade_level on the percentage of overweight students is statistically significant.
+The regression analysis indicates that demographic factors, specifically the racial composition of students, have a statistically significant association with the median percentage of overweight students at the district level, as evidenced by the p-values for certain racial groups. 
 
-Since elementary school is encoded as the reference group 0, we can say that middle/high school students in NY had higher percentage of overweight students compared to elementary school students. This also corresponds to the line plot visualization displayed in the previous section, where the line for elementary students is always below that for middle/high school students.
+However, the magnitude of these associations, as reflected by the estimated coefficients, is relatively small. It is important to note that while these effects are statistically significant for some racial groups, the small size of the coefficients suggests that the practical significance of these demographic variables on the median percentage of overweight students might be limited.
 
 
-### MLR - Percent of Healthy,  vs Percentage of Overweight
-```{r}
+### MLR - Other Weight Status vs Percent of Overweight
+```{r message=FALSE, warning=FALSE}
 train_data = 
   train_data |> 
   select(year, percent_overweight, percent_obese, percent_overweight_or_obese, percent_healthy_weight)
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 mlr_weight = lm(percent_overweight ~ ., data = train_data)
 display_weight = mlr_weight |> broom::tidy() |> knitr::kable(digits=3)
 
 display_weight
 ```
-Holding all other variables constant, with one percent increase in healthy weight students, there is a 0.039 percent increase in overweight students. However, this is not very significant as the p-value (0.262) for the coefficient is greater than 
+Holding all other variables constant, with one percent increase in healthy weight students, there is a 0.039 percent increase in overweight students. However, this is not very significant as the p-value (0.262) for the coefficient is greater than 0.05 at an 95% confidence level.
 
-### MLR - Number of Free Lunch vs Percentage of Overweight
-This prediction is only available for a few years' data.
-```{r}
-
+### MLR - Lunch Type vs Percent of Overweight
+This prediction is only available for a few years' data because some years do not contain the data record for free lunch and reduced lunch.
+```{r message=FALSE, warning=FALSE}
+lunch = 
+  cleaned_data |> 
+  filter(year %in% c(2015, 2016, 2017)) |>
+  group_by(year, district) |>
+  summarise(total_num_free_lunch = max(num_free_lunch), 
+            total_num_reduced_lunch = max(num_reduced_lunch))
 ```
 
+```{r message=FALSE, warning=FALSE}
+lunch_df = 
+  district_level_data |> 
+  left_join(lunch, by = c("year", "district")) |>
+  ungroup() |>
+  select(-district)
+```
+
+```{r message=FALSE, warning=FALSE}
+mlr = lm(med_overweight ~ ., data = lunch_df)
+display = mlr |> broom::tidy() |> knitr::kable()
+
+display
+```
+
+The model we fit is: Median Percent of Overweight at District Level = 294.4593529 - 0.1377206	* year + 0.0000718 * total_num_free_lunch + 0.0001812	* total_num_reduced_lunch. 
+
+We might be able to say that having more free lunch and reduced lunch both are associated with increase in the median percent of overweight students at school-district level.
+
+However, none of the predictors included in the model show a statistically significant relationship with the median percentage of overweight students at the school-district level, as all p-values are above the conventional threshold for significance (0.05).
