@@ -1,5 +1,5 @@
 ---
-title: "Rregression Based on Data"
+title: "Regression"
 output: 
   html_document:
     toc: true
@@ -32,7 +32,7 @@ t_test_result = t.test(elementary_data, middle_high_data, var.equal = FALSE)
 print(t_test_result)
 ```
 
-The two-sample t-test conducted compares the average number of overweight female students across two different educational levels: elementary and middle/high school. This statistical test was designed to determine whether there is a significant difference in the prevalence of overweight conditions among female students in these distinct grade levels. The test results indicated a statistically significant difference in the average number of overweight female students between the two grade levels, leading to the rejection of the null hypothesis. This suggests that the grade level is an influential factor in the prevalence of overweight conditions among female students.
+The two-sample t-test test results indicated a statistically significant difference in the average number of overweight female students between the two grade levels, leading to the rejection of the null hypothesis. This suggests that the grade level is an influential factor in the prevalence of overweight conditions among female students.
 ### SLR - Sex vs Percentage of Overweight
 ```{r message=FALSE, warning=FALSE}
 train_data  = 
