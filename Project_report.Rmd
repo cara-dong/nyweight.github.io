@@ -1,31 +1,30 @@
 ---
+title: "Project Report"
 output: 
   html_document:
     toc: true
     toc_float: true
 ---
 
-<h1 style="font-size: 40px; margin-bottom: 30px;">Project Report</h1>
-
-# Motivation 
+### Motivation 
 
 The motivation for our project is to conduct a comprehensive analysis to understand the multifactorial dimensions of New York state student health, specifically relating to obesity and overweight prevalence. Our project will seek to establish correlations between access to food availability, demographic variables, and weight status to better understand the impact of social determinants on student health outcomes. Insights gained from this analysis will be instrumental in informing public health interventions, educational policies, and community-based programs to promote healthier lifestyles and address the obesity epidemic in New York state.
 
-# Aim 
+### Aim 
 
 Our project will develop a web platform designed for the exploration of intrinsic connections between the weight status of New York state students and their demographic characteristics. A multifaceted correlation analysis will be conducted to comprehensively analyze each demographic variable, including causal inferences, regression analyses, and hypothesis testing. Subsequently, the outcomes will be presented in the form of interactive graphs and tabulated data for enhanced accessibility and clarity. Furthermore, a narrated screencast will provide an intuitive overview of the final product, offering an in-depth understanding of the research findings and their implications.
 
-# Data Source
+### Data Source
 
 - [New York State Demographic Data](https://pad.human.cornell.edu/schools/datadownload.cfm)
 - [Student Weight Status in New York State](https://health.data.ny.gov/Health/Student-Weight-Status-Category-Reporting-Results-B/es3k-2aus)
 
 
-# Exploratory Analysis
+### Exploratory Analysis
 
 In our exploratory analysis, we employed visualizations to examine the trends in overweight percentages among New York State students from 2015 to 2019. Our findings revealed a relatively stable trend in overweight percentages, with minor fluctuations across the years. County-level analysis highlighted regions with notably high overweight and obese percentages, pinpointing areas such as Oswego County for potential targeted interventions. Further, our visual comparisons between elementary and middle school students across counties indicated a general trend of higher overweight percentages among middle school students. Gender-based analysis revealed that female students were more likely to be overweight than male students. Additionally, our exploration into the racial composition of student populations across counties suggested a correlation between a higher proportion of White students and increased overweight percentages, while a greater presence of Asian, Black, and Hispanic students correlated with lower overweight percentages. 
 
-# Additional Analysis
+### Additional Analysis
 The additional analysis phase of our project involved conducting both Simple Linear Regression (SLR) and Multiple Linear Regression (MLR) analyses to explore and understand the factors influencing the weight status of students in New York State.
 
 Two-sample T-test
@@ -56,7 +55,7 @@ MLR - Lunch Type vs Percent of Overweight:
 
 This model explored the association between types of lunch (free or reduced) and the percentage of overweight students. The results suggested a potential relationship; however, none of the predictors showed a statistically significant relationship, pointing to the need for further research in this area.
 
-# Discussion
+### Discussion
 
 Our analysis of student health data in New York State has illuminated several critical aspects of overweight and obesity prevalence among students. The relatively constant overweight percentages over the years indicate a persistent challenge in student health, necessitating continuous public health and educational interventions. Notably, the variation in overweight percentages across counties, and the higher prevalence among female and middle/high school students, highlights the need for targeted health initiatives that address specific demographic needs.
 
