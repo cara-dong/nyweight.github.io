@@ -53,7 +53,7 @@ ggplot(county_year_data, aes(x = year, y = ave_overweight_percent, group = count
   theme(legend.position = "none")
   
 ```
-<br>
+
 The current visualization appears messy, making it challenging to see a clear trend. To enhance the clarity of the trend, a new plot depicting the average overweight percentage across counties over time has been created. 
 ```{r message = FALSE, echo = FALSE}
 # add up each county's percentage for each year
@@ -149,7 +149,7 @@ ggplot(element_middle_data, aes(x = county, y = ave_overweight_percent, fill = g
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 70, hjust = 1, size = 6))
 ```
-<br>
+
 Observing this plot reveals that, in the majority of counties, elementary school students exhibit a lower percentage of overweight compared to their middle school counterparts. As a suggestion, it is recommended to first adjust the school lunch menu to incorporate healthier options, possibly including more fiber. Additionally, middle school students should ensure sufficient exercise by dedicating more time or classes to physical education.
 
 ```{r message = FALSE, echo = FALSE}
@@ -194,7 +194,7 @@ ggplot(sex_data, aes(x = year, y = ave_overweight_percent, color = sex)) +
        color = "Sex") +
   theme_minimal()
 ```
-<br>
+
 The plot indicates that the likelihood of female students having a higher percentage of overweight cases compared to male students is noticeable. This inclination may be influenced by a complex interplay of biological, behavioral, and socio-cultural factors. For instance, hormonal differences between males and females can affect the distribution of muscle and fat in their bodies. Therefore, it is suggested to incorporate additional biological education for students facing overweight issues to empower them to make informed choices and address their situation effectively.
 
 ## Racial Group and Overweight
@@ -258,7 +258,8 @@ plot_2017
 plot_2018
 plot_2019
 ```
-The pie charts reveal that approximately 60% of the student population is white, while around 20% identifies as Hispanic. There are smaller proportions of Asian, American Indian, and Black students.Following this, we generate plots to visualize the county-level average distribution of racial groups and the corresponding average percentage of overweight individuals.
+
+The pie charts reveal that approximately 60% of the student population is white, while around 20% identifies as Hispanic. There are smaller proportions of Asian, American Indian, and Black students. Following this, we generate plots to visualize the county-level average distribution of racial groups and the corresponding average percentage of overweight individuals.
 
 ```{r message = FALSE, echo = FALSE}
 county_dis_data = cleaned_data |>
@@ -383,7 +384,7 @@ combined_plots = plot1+plot2+plot3+plot4+plot5
 
 combined_plots
 ```
-<br>
+
 In the five scatterplots presented above, a noticeable trend emerges where an increase in the percentage of Asian, Black, and Hispanic students is associated with a decrease in the percentage of overweight individuals. Conversely, there appears to be no distinct relationship between the percentage of American Indian students and the percentage overweight. Notably, as the percentage of White students increases, there seems to be an upward trend in the percentage of overweight individuals. This suggests a potential positive correlation between the number of White students and the percentage of overweight individuals. To delve deeper into this relationship, further exploration will be conducted using regression analysis.
 
 

@@ -6,61 +6,396 @@ output:
     toc_float: true
 ---
 
-### Motivation 
+# Motivation 
 
-The motivation for our project is to conduct a comprehensive analysis to understand the multifactorial dimensions of New York state student health, specifically relating to obesity and overweight prevalence. Our project will seek to establish correlations between access to food availability, demographic variables, and weight status to better understand the impact of social determinants on student health outcomes. Insights gained from this analysis will be instrumental in informing public health interventions, educational policies, and community-based programs to promote healthier lifestyles and address the obesity epidemic in New York state.
+The motivation for our project is to conduct a comprehensive analysis to understand the multifactorial dimensions of New York state student health, specifically relating to obesity and overweight prevalence. Our project will seek to establish correlations between student gender groups, grade levels, demographic variables, and weight status to better understand the impact of social determinants on student health outcomes. Insights gained from this analysis will be instrumental in informing public health interventions, educational policies, and community-based programs to promote healthier lifestyles and address the obesity epidemic in New York state.
 
-### Aim 
+# Aim 
 
 Our project will develop a web platform designed for the exploration of intrinsic connections between the weight status of New York state students and their demographic characteristics. A multifaceted correlation analysis will be conducted to comprehensively analyze each demographic variable, including causal inferences, regression analyses, and hypothesis testing. Subsequently, the outcomes will be presented in the form of interactive graphs and tabulated data for enhanced accessibility and clarity. Furthermore, a narrated screencast will provide an intuitive overview of the final product, offering an in-depth understanding of the research findings and their implications.
 
-### Data Source
+
+# Data Source
 
 - [New York State Demographic Data](https://pad.human.cornell.edu/schools/datadownload.cfm)
 - [Student Weight Status in New York State](https://health.data.ny.gov/Health/Student-Weight-Status-Category-Reporting-Results-B/es3k-2aus)
 
+# Data Cleaning
 
-### Exploratory Analysis
 
-In our exploratory analysis, we employed visualizations to examine the trends in overweight percentages among New York State students from 2015 to 2019. Our findings revealed a relatively stable trend in overweight percentages, with minor fluctuations across the years. County-level analysis highlighted regions with notably high overweight and obese percentages, pinpointing areas such as Oswego County for potential targeted interventions. Further, our visual comparisons between elementary and middle school students across counties indicated a general trend of higher overweight percentages among middle school students. Gender-based analysis revealed that female students were more likely to be overweight than male students. Additionally, our exploration into the racial composition of student populations across counties suggested a correlation between a higher proportion of White students and increased overweight percentages, while a greater presence of Asian, Black, and Hispanic students correlated with lower overweight percentages. 
+# Exploratory Analysis
 
-### Additional Analysis
+```{r message = FALSE, echo = FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+library(tidyverse)
+library(plotly)
+library(viridis)
+cleaned_data = read_csv("cleaned_data.csv")
 
-Two-Sample T-Tests:
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6, 
+  out.width = "90%"
+)
 
-Female Students Across Grade Levels: The two-sample t-test revealed a statistically significant difference in the mean log number of overweight female students between elementary and middle/high schools. Elementary schools exhibited a higher mean, suggesting a greater prevalence of overweight conditions among younger female students.
+theme_set (theme_minimal() +theme(legend.position = "bottom"))
 
-Male Students Across Grade Levels: A similar pattern was observed in male students. The t-test showed a significant difference between elementary and middle/high school male students, with higher mean log numbers of overweight students in elementary schools.
+options(
+  ggplot2.continuous.colour = "viridis", 
+  ggplots.continuous.fill = "viridis"
+)
 
-Elementary Students Across Sex Groups: In elementary schools, the t-test indicated no significant difference in the mean log number of overweight students between male and female groups, suggesting similar overweight prevalence across genders at this educational level.
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_disrete = scale_fill_viridis_d
+```
 
-Middle/High School Students Across Sex Groups: For middle/high school students, the t-test also found no significant difference in overweight prevalence between male and female students, highlighting comparable conditions across genders in older student groups.
+### 1. County-level overweight percentage changes over years
+We want to look at the county-level overweight percentage changes over years to check if there is a change as time goes by, so we employed visualizations to examine the trends in average overweight percentages among New York State students from 2015 to 2019. We do that by calculating the county-level average overweight percent and plot results as a spaghetti plot. Legends are dropped to help visualization. 
+```{r message = FALSE, echo = FALSE}
+# add up each county's percentage for each year
+county_year_data = 
+  cleaned_data |>
+  group_by (year) |>
+  summarize(ave_overweight_percent = mean(percent_overweight)) 
 
-Regression Analyses:
+plot_ly(county_year_data, x = ~year, y = ~ave_overweight_percent, type = "scatter", mode = "lines+markers") |>
+  layout(title = "Average Overweight Percentage Over Time",
+       xaxis = list(title = "Year"),
+         yaxis = list(title = "Average Overweight Percentage"),
+         showlegend = FALSE) 
+```
 
-SLR - Sex vs Percentage of Overweight: This model demonstrated a significant influence of sex on the percentage of overweight students. Male students were found to have a lower percentage of overweight cases than female students, as indicated by the model's negative coefficient for sex.
+The percentage of students classified as overweight in the state of New York remained relatively constant from 2015 to 2019. Despite apparent fluctuations in the depicted data, such as a surge in 2016 and a drop in 2017, these variations can be attributed to the confined range of the y-axis. Specifically, the values fluctuate within a limited span, ranging only between 16.7% and 17.3%.
 
-SLR - Grade Level vs Percent of Overweight: The regression analysis assessing the impact of grade level on overweight percentages revealed that middle/high school students had a higher percentage of overweight students compared to elementary students. This finding suggests that older students are more prone to overweight conditions.
 
-MLR - Grade Level & Sex vs Percent of Overweight: Combining sex and grade level in an MLR model, both factors were shown to significantly influence the percentage of overweight students. This model provided a more comprehensive understanding than the individual SLR analyses.
+### 2. County-level percent of overweight/obese/healthy students
+```{r message = FALSE, echo = FALSE}
+# calculate the average percentage of overweight/obsed/healthy for all years
+county_ave_data = 
+  cleaned_data |>
+  group_by (county) |>
+  summarize(ave_overweight_percent = mean(percent_overweight), 
+            ave_obese_percent = mean(percent_obese), 
+           ave_healthy_percent = mean(percent_healthy_weight)*100) 
 
-MLR - Student Demographic Info vs Percent of Overweight: This model analyzed the relationship between student demographics and overweight percentages at the district level. It highlighted a significant but small association between racial composition and overweight percentages, with certain racial groups more affected than others.
+county_ave_data = county_ave_data |>
+   mutate(county = fct_reorder(county, ave_overweight_percent)) 
 
-MLR - Other Weight Status vs Percent of Overweight: The analysis of the relationship between different weight statuses and the percentage of overweight students showed a very small and statistically insignificant effect of the percentage of healthy weight students on the percentage of overweight students. This points to the complexity of factors influencing overweight prevalence.
+plot_ly(county_ave_data, y = ~ave_overweight_percent, x = ~county, type = 'bar', color = ~county) |>
+  layout(title = "Percentage Overweight by County",
+         xaxis = list(title = "County"),
+         yaxis = list(title = "Average Percentage Overweight"),
+         showlegend = FALSE,
+         xaxis = list(tickangle = -60))
 
-MLR - Lunch Type vs Percent of Overweight: The model examining the association between types of lunch and overweight percentages suggested a potential relationship. However, the lack of statistically significant findings indicates the need for further investigation into how nutritional factors contribute to student weight status.
+top_overweight = county_ave_data |> arrange(desc(ave_overweight_percent)) |>head(5) |>select(county,ave_overweight_percent) 
 
-### Discussion
+knitr::kable(top_overweight, caption = "Three Counties with Highest Overweight Percent") 
+
+county_ave_data = county_ave_data |>
+   mutate(county = fct_reorder(county, ave_obese_percent)) 
+
+plot_ly(county_ave_data, x = ~county, y = ~ave_obese_percent, type = 'bar', color = ~county) |>
+  layout(title = "Percentage Obese by County",
+         xaxis = list(title = "County"),
+         yaxis = list(title = "Average Percentage Obese"),
+         showlegend = FALSE,
+         xaxis = list(tickangle = -60))
+
+
+top_obese = county_ave_data |> arrange(desc(ave_obese_percent)) |>head(5)|>select(county,ave_obese_percent)
+
+knitr::kable(top_obese, caption = "Three Counties with Highest Obese Percent") 
+
+county_ave_data = county_ave_data |>
+   mutate(county = fct_reorder(county, ave_healthy_percent)) 
+
+plot_ly(county_ave_data, x = ~county, y = ~ave_healthy_percent, type = 'bar', color = ~county) |>
+  layout(title = "Percentage Healthy by County",
+         xaxis = list(title = "County"),
+         yaxis = list(title = "Average Percentage Healthy"),
+         showlegend = FALSE,
+         xaxis = list(tickangle = -60))
+
+top_healthy = county_ave_data |> arrange(desc(ave_healthy_percent)) |> head(5)|>select(county,ave_healthy_percent)
+
+knitr::kable(top_healthy, caption = "Three Counties with Highest Healthy Percent") 
+```
+
+This county-level analysis highlighted regions with notably high overweight and obese percentages, pinpointing areas such as Oswego County for potential targeted interventions. It is recommended that educational and health authorities explore counties ranked high in student overweight percentage to glean insights on effectively managing this situation by policy making.
+
+### 3. Change of percent of overweight students in two grade levels
+We also want to look at the change of the percent of overweight students in two different grade levels to guide our variable selection process in later regression model fitting step.
+```{r message = FALSE, echo = FALSE}
+element_middle_data = 
+  cleaned_data |>
+  group_by (county, grade_level) |>
+  filter(grade_level == "ELEMENTARY" | grade_level == "MIDDLE/HIGH") |>
+  summarize(ave_overweight_percent = mean(percent_overweight), 
+            ave_obese_percent = mean(percent_obese), 
+            ave_healthy_percent = mean(percent_healthy_weight)*100) 
+
+grade_level_data = 
+  cleaned_data |>
+  group_by (grade_level, year) |>
+  summarize(ave_overweight_percent = mean(percent_overweight), 
+            ave_obese_percent = mean(percent_obese), 
+            ave_healthy_percent = mean(percent_healthy_weight)*100)
+
+ggplot(grade_level_data, aes(x = year, y = ave_overweight_percent, color = grade_level)) +
+  geom_point() +
+  geom_line() +
+  labs(title = "Average Overweight Percentage Over Years by Grade Level",
+       x = "Year",
+       y = "Average Overweight Percentage",
+       color = "Grade Level") +
+  theme_minimal()
+```
+
+Our visual comparisons between elementary and middle school students across counties indicated a general trend of higher overweight percentages among middle school students, which tells us that this variable is a fair choice to be included in our prediction model.
+
+### 4. Change of percent of overweight students in two sex groups
+Next, we want to see if sex affects students' overweight percentage for each school district over the five years of data record.
+```{r message = FALSE, echo = FALSE}
+sex_data = 
+  cleaned_data |>
+  group_by (sex, year) |>
+  summarize(ave_overweight_percent = mean(percent_overweight), 
+            ave_obese_percent = mean(percent_obese), 
+            ave_healthy_percent = mean(percent_healthy_weight)*100) 
+
+# geom line to compare 
+ggplot(sex_data, aes(x = year, y = ave_overweight_percent, color = sex)) +
+  geom_point() +
+  geom_line() +
+  labs(title = "Average Overweight Percentage Over Years by Sex",
+       x = "Year",
+       y = "Average Overweight Percentage",
+       color = "Sex") +
+  theme_minimal()
+```
+
+The plot indicates that the likelihood of female students having a higher percentage of overweight cases compared to male students is noticeable. This pattern may be influenced by a complex interplay of biological, behavioral, and socio-cultural factors. For instance, hormonal differences between males and females can affect the distribution of muscle and fat in their bodies.
+
+### 5. Student Demographic Information
+Lastly, we want to examine the association between the number of five different student racial groups in each district with the average percentage of overweight students in that district. Upon reviewing the cleaned data, there is a hypothesis that various racial groups may exhibit distinct probabilities of experiencing overweight conditions. Therefore, our analysis will commence by examining the distribution of different racial groups among students for each year.
+
+```{r message = FALSE, echo = FALSE}
+# the distribution of racial group, first group by district zip code
+race_dis_data = cleaned_data |>
+  group_by (year, district) |>
+  summarize (num_white = mean(num_white), 
+             num_asian = mean(num_asian), 
+             num_am_ind = mean(num_am_ind), 
+             num_black = mean(num_black), 
+             num_hisp = mean(num_hisp))
+
+race_year_data = race_dis_data |>
+  group_by (year) |>
+  summarize(asian = sum(num_asian), 
+            white = sum(num_white), 
+            american_indian = sum(num_am_ind), 
+            black = sum(num_black), 
+            hispanic = sum(num_hisp))
+
+race_year_data = pivot_longer(race_year_data, cols = -year, names_to = "race", values_to = "number" )
+
+```
+
+```{r message = FALSE, echo = FALSE}
+race_2015 = race_year_data |>
+  filter(year == "2015")
+
+plot_2015 = plot_ly(race_2015, labels = ~race, values = ~ number, type = "pie", hole = 0.2, textinfo = 'number', textposition = 'inside', marker = list(colors = c("pink", "orange", "brown", "blue", "green"))) |>
+  layout(title = "Distribution of Races in 2015")
+
+race_2016 = race_year_data |>
+  filter(year == "2016")
+
+plot_2016 = plot_ly(race_2016, labels = ~race, values = ~ number, type = "pie", hole = 0.2, textinfo = 'number', textposition = 'inside', marker = list(colors = c("pink", "orange", "brown", "blue", "green"))) |>
+  layout(title = "Distribution of Races in 2016")
+
+race_2017 = race_year_data |>
+  filter(year == "2017")
+
+plot_2017 = plot_ly(race_2017, labels = ~race, values = ~ number, type = "pie", hole = 0.2, textinfo = 'number', textposition = 'inside', marker = list(colors = c("pink", "orange", "brown", "blue", "green"))) |>
+  layout(title = "Distribution of Races in 2017")
+
+race_2018 = race_year_data |>
+  filter(year == "2018")
+
+plot_2018 = plot_ly(race_2018, labels = ~race, values = ~ number, type = "pie", hole = 0.2, textinfo = 'number', textposition = 'inside', marker = list(colors = c("pink", "orange", "brown", "blue", "green"))) |>
+  layout(title = "Distribution of Races in 2018")
+
+race_2019 = race_year_data |>
+  filter(year == "2019")
+
+plot_2019 = plot_ly(race_2019, labels = ~race, values = ~ number, type = "pie", hole = 0.2, textinfo = 'number', textposition = 'inside', marker = list(colors = c("pink", "orange", "brown", "blue", "green"))) |>
+  layout(title = "Distribution of Races in 2019")
+
+plot_2015
+plot_2016
+plot_2017
+plot_2018
+plot_2019
+```
+
+The pie charts reveal that approximately 60% of the student population is white, while around 20% identifies as Hispanic. There are smaller proportions of Asian, American Indian, and Black students. 
+
+Following this, we generate scatter plots to visualize the county-level average distribution of racial groups and the corresponding average percentage of overweight individuals to guide out variable selection in linear models.
+
+```{r message = FALSE, echo = FALSE}
+county_dis_data = cleaned_data |>
+  group_by(year, county, district) |>
+  summarize (percent_overweight = mean(percent_overweight), 
+             num_white = mean(num_white), 
+             num_asian = mean(num_asian), 
+             num_am_ind = mean(num_am_ind), 
+             num_black = mean(num_black), 
+             num_hisp = mean(num_hisp))
+
+county_year_data = county_dis_data |>
+  group_by(year, county) |>
+  summarize (percent_overweight = mean(percent_overweight), 
+             num_white = sum(num_white), 
+             num_asian = sum(num_asian), 
+             num_am_ind = sum(num_am_ind), 
+             num_black = sum(num_black), 
+             num_hisp = sum(num_hisp))
+
+county_data = county_year_data |>
+  group_by(county) |>
+  summarize (percent_overweight = mean(percent_overweight), 
+             num_white = mean(num_white), 
+             num_asian = mean(num_asian), 
+             num_am_ind = mean(num_am_ind), 
+             num_black = mean(num_black), 
+             num_hisp = mean(num_hisp))
+
+county_data = county_data |>
+  mutate(total_students = num_am_ind+num_white+num_asian+num_black+num_hisp, 
+         percent_asian = num_asian/total_students*100, 
+         percent_white = num_white/total_students*100, 
+         percent_hisp = num_hisp /total_students*100, 
+         percent_am_ind = num_am_ind/total_students*100, 
+         percent_black = num_black/total_students*100)
+```
+
+```{r message = FALSE, echo = FALSE}
+library(patchwork)
+# county level different races number vs. percent overweight scatterplots
+plot1 = ggplot(county_data, aes(x = percent_asian, y = percent_overweight)) +
+  geom_point() +
+  labs(title = "County-Level Percentage Overweight vs. Percent of Each Racial Groups",
+       x = "Percent of Asians",
+       y = "Percentage Overweight") +
+  theme(plot.title = element_text(size = 12),
+        axis.title.x = element_text(size = 6),   # Adjust x-axis label size
+        axis.title.y = element_text(size = 6))
+
+plot2 = ggplot(county_data, aes(x = percent_white, y = percent_overweight)) +
+  geom_point() +
+  labs(x = "Percent of White",
+       y = "Percentage Overweight")+
+  theme(axis.title.x = element_text(size = 6),   # Adjust x-axis label size
+        axis.title.y = element_text(size = 6))
+
+plot3 = ggplot(county_data, aes(x = percent_black, y = percent_overweight)) +
+  geom_point() +
+  labs(x = "Percent of Black",
+       y = "Percentage Overweight") +
+  theme(axis.title.x = element_text(size = 6),   # Adjust x-axis label size
+        axis.title.y = element_text(size = 6))
+
+plot4 = ggplot(county_data, aes(x = percent_am_ind, y = percent_overweight)) +
+  geom_point() +
+  labs(x = "Percent of American Indian",
+       y = "Percentage Overweight") +
+  theme(axis.title.x = element_text(size = 6),   # Adjust x-axis label size
+        axis.title.y = element_text(size = 6))
+
+plot5 = ggplot(county_data, aes(x = percent_hisp, y = percent_overweight)) +
+  geom_point() +
+  labs(x = "Percent of hispanic",
+       y = "Percentage Overweight") +
+  theme(axis.title.x = element_text(size = 6),   # Adjust x-axis label size
+        axis.title.y = element_text(size = 6))
+
+combined_plots = plot1+plot2+plot3+plot4+plot5 
+
+combined_plots
+```
+
+In the five scatterplots presented above, a noticeable trend emerges where an increase in the percentage of Asian, Black, and Hispanic students is associated with a decrease in the percentage of overweight individuals. Conversely, there appears to be no distinct relationship between the percentage of American Indian students and the percentage overweight. Notably, as the percentage of White students increases, there seems to be an upward trend in the percentage of overweight individuals. This suggests a potential positive correlation between the number of White students and the percentage of overweight individuals. To delve deeper into this relationship, further exploration will be conducted using regression analysis.
+
+# Statistical Analysis
+
+## Two-Sample T-Tests
+
+**Female Students Across Grade Levels**
+
+The two-sample t-test revealed a statistically significant difference in the mean log number of overweight female students between elementary and middle/high schools. Elementary schools exhibited a higher mean, suggesting a greater prevalence of overweight conditions among younger female students.
+
+**Male Students Across Grade Levels**
+
+A similar pattern was observed in male students. The t-test showed a significant difference between elementary and middle/high school male students, with higher mean log numbers of overweight students in elementary schools.
+
+**Elementary Students Across Sex Groups**
+
+In elementary schools, the t-test indicated no significant difference in the mean log number of overweight students between male and female groups, suggesting similar overweight prevalence across genders at this educational level.
+
+**Middle/High School Students Across Sex Groups**
+
+For middle/high school students, the t-test also found no significant difference in overweight prevalence between male and female students, highlighting comparable conditions across genders in older student groups.
+
+
+## Regression Analyses
+
+### SLR - Sex vs Percentage of Overweight
+
+This model demonstrated a significant influence of sex on the percentage of overweight students. Male students were found to have a lower percentage of overweight cases than female students, as indicated by the model's negative coefficient for sex, which corresponds to the visualization we conduct in the earlier section.
+
+### SLR - Grade Level vs Percent of Overweight
+
+The regression analysis assessing the impact of grade level on overweight percentages revealed that middle/high school students had a higher percentage of overweight students compared to elementary students. This finding suggests that older students are more prone to overweight conditions.
+
+### MLR - Grade Level & Sex vs Percent of Overweight
+
+Combining sex and grade level in an MLR model, both factors were shown to significantly influence the percentage of overweight students. This model provided a more comprehensive understanding than the individual SLR analyses.
+
+### MLR - Student Demographic Info vs Percent of Overweight
+
+This model analyzed the relationship between student demographics and overweight percentages at the district level. It highlighted a significant but small association between racial composition and overweight percentages, with certain racial groups more affected than others.
+
+### MLR - Other Weight Status vs Percent of Overweight
+
+The analysis of the relationship between different weight statuses and the percentage of overweight students showed a very small and statistically insignificant effect of the percentage of healthy weight students on the percentage of overweight students. This points to the complexity of factors influencing overweight prevalence.
+
+### MLR - Lunch Type vs Percent of Overweight
+
+The model examining the association between types of lunch and overweight percentages suggested a potential relationship. However, the lack of statistically significant findings indicates the need for further investigation into how nutritional factors contribute to student weight status.
+
+# Discussion
 
 The comprehensive analysis of student health data in New York State has yielded several key insights into the factors influencing the prevalence of overweight and obesity among students. These insights are critical for shaping effective public health strategies and educational interventions.
 
-Impact of Demographic Factors: Our findings highlight the significant role of demographic factors such as sex and grade level in influencing overweight and obesity rates among students. The distinct patterns observed across different grade levels and between male and female students underscore the need for targeted health initiatives that are sensitive to these demographic nuances.
+**Impact of Demographic Factors**
 
-Role of Socio-Cultural Factors: The association between racial composition and overweight percentages, although statistically significant, revealed small effect sizes. This suggests that while racial and socio-cultural factors play a role in student health outcomes, their practical impact might be limited. This calls for a deeper exploration into the complex interplay of socio-cultural dynamics and health behaviors.
+Our findings highlight the significant role of demographic factors such as sex and grade level in influencing overweight and obesity rates among students. The distinct patterns observed across different grade levels and between male and female students underscore the need for targeted health initiatives that are sensitive to these demographic nuances.
 
-Limitations and Future Research Directions: It's important to note the limitations inherent in our study, particularly the observational nature of the data which restricts our ability to draw causal inferences. Future research, possibly incorporating longitudinal studies and experimental designs, could provide more definitive insights into the causal factors influencing student health.
+**Role of Socio-Cultural Factors**
 
-Implications for Policy and Practice: The study's findings have important implications for public health policies and school-based health programs. Tailoring interventions to address the specific needs of different student groups, particularly considering age and gender, could be more effective in mitigating overweight and obesity issues. Additionally, integrating an understanding of socio-cultural influences into health promotion strategies could enhance their effectiveness and inclusivity.
+The association between racial composition and overweight percentages, although statistically significant, revealed small effect sizes. This suggests that while racial and socio-cultural factors play a role in student health outcomes, their practical impact might be limited. This calls for a deeper exploration into the complex interplay of socio-cultural dynamics and health behaviors.
 
-Comprehensive Approach to Student Health: Ultimately, our analysis points to the necessity of a multifaceted approach in addressing the overweight and obesity epidemic among students. This approach should combine public health interventions, educational policies, and community-based programs, all tailored to the unique needs and backgrounds of the student population.
+**Limitations and Future Research Directions**
+
+It's important to note the limitations inherent in our study, particularly the observational nature of the data which restricts our ability to draw causal inferences. Future research, possibly incorporating longitudinal studies and experimental designs, could provide more definitive insights into the causal factors influencing student health.
+
+**Implications for Policy and Practice**
+
+The study's findings have important implications for public health policies and school-based health programs. Tailoring interventions to address the specific needs of different student groups, particularly considering age and gender, could be more effective in mitigating overweight and obesity issues. Additionally, integrating an understanding of socio-cultural influences into health promotion strategies could enhance their effectiveness and inclusivenss.
+
+**Comprehensive Approach to Student Health**
+
+Ultimately, our analysis points to the necessity of a multifaceted approach in addressing the overweight and obesity epidemic among students. This approach should combine public health interventions, educational policies, and community-based programs, all tailored to the unique needs and backgrounds of the student population.
 
