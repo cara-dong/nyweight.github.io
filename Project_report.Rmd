@@ -43,10 +43,175 @@ Our project will develop a web platform designed for the exploration of intrinsi
 
 # Data Source
 
-- [New York State Demographic Data](https://pad.human.cornell.edu/schools/datadownload.cfm)
-- [Student Weight Status in New York State](https://health.data.ny.gov/Health/Student-Weight-Status-Category-Reporting-Results-B/es3k-2aus)
+* **[Student Weight Status](https://health.data.ny.gov/Health/Student-Weight-Status-Category-Reporting-Results-B/es3k-2aus)**: The source is official health.data.ny.gov (NY state government). The data provides information about weight status category data (underweight, healthy weight, overweight or obese) and estimates of the percent of students overweight, obese and overweight or obese for all reportable grades within the county and/or region and by grade groups (elementary and middle/high).
+
+* **[Student Enrolled Demographics Data](https://pad.human.cornell.edu/schools/datadownload.cfm)**: The source is Cornell University's data library. The data provides information on demographic information, especially racial and ethnic information, of elementary and middle/high school students at a school district level, spanning years from 1990s to 2019.
 
 # Data Cleaning
+## Student Weight Data
+
+* We focused our investigation on the most recent five academic years, spanning from 2014 to 2019. To maintain consistency, each academic `year`, which is represented by the later half of the previous year and the earlier half of the next year, is denoted by the next year in our cleaned dataset. For example, the academic year 2014-2015 is denoted as 2015.
+
+* We renamed `district` to `location_code` to make this dataset easier to join with the other on common-named column.
+
+* We changed the format of `year_reported` to `year` in numeric to prepare for easier plotting and regression model fitting.
+
+* We excluded the rows with "DISTRICT TOTAL" category for `grade_level`, "ALL" category for `sex`, and "STATEWIDE (EXCLUDING NYC)" category for `county`. This is because stratification on a finer level is better for analysis, and overall data record can be very susceptible to outliers already. We do not want them to confuse the analysis more. This ensures that our focus is solely on granular data from diverse categories.
+
+```{r message=FALSE, echo=FALSE}
+library(tidyverse)
+library(readr)
+
+Student_Weight = read_csv("data/Student Weight.csv")
+
+Student_Weight  = 
+  Student_Weight |>
+  janitor::clean_names() |>
+  rename('district'='location_code') |>
+  filter(year_reported %in% c("2014-2015", "2015-2016", "2016-2017", "2017-2018", "2018-2019"))
+
+Student_Weight$year_reported = sub(".*-", "", Student_Weight$year_reported)
+
+Student_Weight = 
+  Student_Weight |>
+  mutate(year_reported = as.numeric(Student_Weight$year_reported)) |>
+  filter(grade_level!="DISTRICT TOTAL" & sex!="ALL" & county!='STATEWIDE (EXCLUDING NYC)') |> 
+  select(-region, -area_name)
+
+show_student_weight = 
+  Student_Weight |>
+  head(7) |>
+  knitr::kable(digits = 3) |>
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) |> 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+
+show_student_weight
+```
+
+
+## Demographics Data
+
+* We have adhered to the standardized format of variable names, similar to the conventions followed in the Student_Weight dataset.
+
+* We did not filter on year as before because this dataset spans from year 2015 to year 2019, just like the filtered Student_Weight data.
+
+* We decided to keep all columns at this time because we think it is better to see which columns should be dropped after joining so that we can keep as many information as possible.
+
+* We converted `district` to numeric type for easier joining.
+
+```{r message=FALSE, echo=FALSE}
+Demographics_all = read_csv("data/Demographics_all.csv")
+
+Demographics_all = 
+  Demographics_all |> 
+  janitor::clean_names() |>
+  mutate(district = as.numeric(district))
+
+show_demographics = 
+  Demographics_all |>
+  head(7) |>
+  knitr::kable() |>
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) |> 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+
+show_demographics
+```
+
+
+## Join Demographics with Student Weight for Years 2015-2019
+
+* To integrate valuable information from the Student_Weight dataset and the Demographics dataset, we've looped through the five years from 2015 to 2019 to merge these two datasets corresponding to each year. The merging process is based on bindings rows regarding with district codes, ensuring cohesiveness between the datasets for each academic year reported.
+
+* We dropped `num_ell` column because it contains null data for most columns.
+
+* We kept only the `num_free_lunch` and `num_reduced_lunch` columns as is for data in years from 2015 to 2017, and replaced the values for these two columns with the median from year 2016 and 2017 for data in years 2018 and 2019. They are replaced just to be consistent with the overall data structure. Analysis regarding lunch types will only be conducted for data in years from 2015 to 2017.
+
+* The variables in the combined dataset are selected to retain only high-quality, pertinent data essential for our subsequent analyses, such as district, county, year, sex, grade_level, number_overweight, percent_overweight, number_obese, percent_obese, number_overweight_or_obese, percent_overweight_or_obese, number_healthy_weight, percent_healthy_weight, num_asian, num_black, num_hisp, num_am_ind, num_white, num_female, num_male, num_lep, num_multi, num_swd, num_ecdis, num_free_lunch, num_reduced_lunch.
+
+```{r message=FALSE, echo=FALSE}
+Student_Weight_2015 = 
+  Student_Weight |> 
+  filter(year_reported==2015)
+
+Demographics_all_2015 = 
+  Demographics_all |>
+  filter(year==2015)
+
+result_2015 = merge(Student_Weight_2015, Demographics_all_2015, by = "district")|>
+  select(-num_ell, -year_reported) |>
+  drop_na()
+
+Student_Weight_2016 = 
+  Student_Weight |> 
+  filter(year_reported==2016)
+
+Demographics_all_2016 = 
+  Demographics_all |>
+  filter(year==2016)
+
+result_2016 = merge(Student_Weight_2016, Demographics_all_2016, by = "district")|>
+  select(-num_ell, -year_reported) |>
+  drop_na()
+
+Student_Weight_2017 = 
+  Student_Weight |> 
+  filter(year_reported==2017)
+
+Demographics_all_2017 = 
+  Demographics_all |>
+  filter(year==2017)
+
+result_2017 = merge(Student_Weight_2017, Demographics_all_2017, by = "district")|>
+  select(-num_ell, -year_reported) |>
+  drop_na()
+
+Student_Weight_2018 = 
+  Student_Weight |> 
+  filter(year_reported==2018)
+
+Demographics_all_2018 = 
+  Demographics_all |>
+  filter(year==2018)
+
+result_2018 = merge(Student_Weight_2018, Demographics_all_2018, by = "district")|>
+  select(-num_ell, -year_reported) |>
+  mutate(num_free_lunch = ifelse(is.na(num_free_lunch), median(result_2016$num_free_lunch)), 
+         num_reduced_lunch = ifelse(is.na(num_reduced_lunch), median(result_2016$num_reduced_lunch))) |>
+  drop_na()
+
+Student_Weight_2019 = 
+  Student_Weight |> 
+  filter(year_reported==2019)
+
+Demographics_all_2019 = 
+  Demographics_all |>
+  filter(year==2019)
+
+result_2019 = merge(Student_Weight_2019, Demographics_all_2019, by = "district")|>
+  select(-num_ell, -year_reported) |>
+  mutate(num_free_lunch = ifelse(is.na(num_free_lunch), median(result_2017$num_free_lunch)), 
+         num_reduced_lunch = ifelse(is.na(num_reduced_lunch), median(result_2017$num_reduced_lunch))) |>
+  drop_na()
+
+cleaned_data = bind_rows(result_2015, result_2016, result_2017, result_2018, result_2019)
+
+cleaned_data = 
+  cleaned_data |>
+  select(district, county, year, sex, grade_level, 
+         number_overweight, percent_overweight, number_obese, percent_obese, 
+         number_overweight_or_obese, percent_overweight_or_obese, 
+         number_healthy_weight, percent_healthy_weight, 
+         num_asian, num_black, num_hisp, num_am_ind, num_white, num_female, num_male, num_lep, num_multi, num_swd, num_ecdis, num_free_lunch, num_reduced_lunch)
+
+show_cleaned_data = 
+  cleaned_data |>
+  head(7) |>
+  knitr::kable(digits=3) |>
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), font_size = 12) |> 
+  kableExtra::scroll_box(width = "100%", height = "300px")
+
+show_cleaned_data
+```
 
 
 # Exploratory Analysis
@@ -84,9 +249,11 @@ county_year_data =
   group_by (year) |>
   summarize(ave_overweight_percent = mean(percent_overweight)) 
 
+years = unique(sort(county_year_data$year))
+
 plot_ly(county_year_data, x = ~year, y = ~ave_overweight_percent, type = "scatter", mode = "lines+markers") |>
   layout(title = "Average Overweight Percentage Over Time",
-       xaxis = list(title = "Year"),
+       xaxis = list(title = "Year", tickmode = "array", tickvals = years),
          yaxis = list(title = "Average Overweight Percentage"),
          showlegend = FALSE) 
 ```

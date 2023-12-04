@@ -88,9 +88,11 @@ county_year_data =
   group_by (year) |>
   summarize(ave_overweight_percent = mean(percent_overweight)) 
 
+years = unique(sort(county_year_data$year))
+
 plot_ly(county_year_data, x = ~year, y = ~ave_overweight_percent, type = "scatter", mode = "lines+markers") |>
   layout(title = "Average Overweight Percentage Over Time",
-       xaxis = list(title = "Year"),
+       xaxis = list(title = "Year", tickmode = "array", tickvals = years),
          yaxis = list(title = "Average Overweight Percentage"),
          showlegend = FALSE) 
 ```
@@ -188,6 +190,7 @@ grade_level_data =
 ```
 
 ```{r message = FALSE, echo = FALSE}
+
 ggplot(grade_level_data, aes(x = year, y = ave_overweight_percent, color = grade_level)) +
   geom_point() +
   geom_line() +

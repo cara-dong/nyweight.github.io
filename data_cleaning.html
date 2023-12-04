@@ -13,7 +13,7 @@
 
 <title>data_cleaning.knit</title>
 
-<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -411,7 +411,10 @@ grade groups (elementary and middle/high).</p></li>
 <li><p><strong><a
 href="https://pad.human.cornell.edu/schools/datadownload.cfm">Student
 Enrolled Demographics Data</a></strong>: The source is Cornell
-University’s data library. The data provides</p></li>
+University’s data library. The data provides information on demographic
+information, especially racial and ethnic information, of elementary and
+middle/high school students at a school district level, spanning years
+from 1990s to 2019.</p></li>
 </ul>
 </div>
 <div id="data-cleaning" class="section level1">
@@ -420,34 +423,43 @@ University’s data library. The data provides</p></li>
 <h2>Student Weight Data</h2>
 <p>What we did:</p>
 <ul>
-<li><p>We have focused our investigation on the most recent five
-academic years, spanning from 2014 to 2019. To maintain consistency,
-each academic year, which is represented by the later half of the
-previous year and the earlier half of the next year, is denoted by the
-next year. For example, the academic year 2014-2015 is denoted as
-2015.</p></li>
-<li><p>In our analysis, we deliberately excluded summation data,
-retaining only information from distinct categories. This ensures that
-our focus is solely on granular data from diverse categories.</p></li>
-<li><p>To streamline our dataset for subsequent analyses, we have
-retained only the informative variables. These variables have been
-carefully selected based on their quality and relevance to our intended
-analytical purposes.</p></li>
+<li><p>We focused our investigation on the most recent five academic
+years, spanning from 2014 to 2019. To maintain consistency, each
+academic <code>year</code>, which is represented by the later half of
+the previous year and the earlier half of the next year, is denoted by
+the next year in our cleaned dataset. For example, the academic year
+2014-2015 is denoted as 2015.</p></li>
+<li><p>We renamed <code>district</code> to <code>location_code</code> to
+make this dataset easier to join with the other on common-named
+column.</p></li>
+<li><p>We changed the format of <code>year_reported</code> to
+<code>year</code> in numeric to prepare for easier plotting and
+regression model fitting.</p></li>
+<li><p>We excluded the rows with “DISTRICT TOTAL” category for
+<code>grade_level</code>, “ALL” category for <code>sex</code>, and
+“STATEWIDE (EXCLUDING NYC)” category for <code>county</code>. This is
+because stratification on a finer level is better for analysis, and
+overall data record can be very susceptible to outliers already. We do
+not want them to confuse the analysis more. This ensures that our focus
+is solely on granular data from diverse categories.</p></li>
 </ul>
-<pre class="r"><code>Student_Weight = read_csv(&quot;data/Student Weight.csv&quot;)</code></pre>
-<pre class="r"><code>Student_Weight  = 
+<pre class="r"><code>Student_Weight = read_csv(&quot;data/Student Weight.csv&quot;)
+
+Student_Weight  = 
   Student_Weight |&gt;
   janitor::clean_names() |&gt;
   rename(&#39;district&#39;=&#39;location_code&#39;) |&gt;
-  filter(year_reported %in% c(&quot;2014-2015&quot;, &quot;2015-2016&quot;, &quot;2016-2017&quot;, &quot;2017-2018&quot;, &quot;2018-2019&quot;))</code></pre>
-<pre class="r"><code>Student_Weight$year_reported = sub(&quot;.*-&quot;, &quot;&quot;, Student_Weight$year_reported)
+  filter(year_reported %in% c(&quot;2014-2015&quot;, &quot;2015-2016&quot;, &quot;2016-2017&quot;, &quot;2017-2018&quot;, &quot;2018-2019&quot;))
+
+Student_Weight$year_reported = sub(&quot;.*-&quot;, &quot;&quot;, Student_Weight$year_reported)
 
 Student_Weight = 
   Student_Weight |&gt;
   mutate(year_reported = as.numeric(Student_Weight$year_reported)) |&gt;
   filter(grade_level!=&quot;DISTRICT TOTAL&quot; &amp; sex!=&quot;ALL&quot; &amp; county!=&#39;STATEWIDE (EXCLUDING NYC)&#39;) |&gt; 
-  select(-region, -area_name)</code></pre>
-<pre class="r"><code>show_student_weight = 
+  select(-region, -area_name)
+
+show_student_weight = 
   Student_Weight |&gt;
   head(7) |&gt;
   knitr::kable(digits = 3) |&gt;
@@ -800,15 +812,23 @@ FEMALE
 <li><p>We have adhered to the standardized format of variable names,
 similar to the conventions followed in the Student_Weight
 dataset.</p></li>
-<li><p>we have diligently converted variables to their appropriate data
-types.</p></li>
+<li><p>We did not filter on year as before because this dataset spans
+from year 2015 to year 2019, just like the filtered Student_Weight
+data.</p></li>
+<li><p>We decided to keep all columns at this time because we think it
+is better to see which columns should be dropped after joining so that
+we can keep as many information as possible.</p></li>
+<li><p>We converted <code>district</code> to numeric type for easier
+joining.</p></li>
 </ul>
-<pre class="r"><code>Demographics_all = read_csv(&quot;data/Demographics_all.csv&quot;)</code></pre>
-<pre class="r"><code>Demographics_all = 
+<pre class="r"><code>Demographics_all = read_csv(&quot;data/Demographics_all.csv&quot;)
+
+Demographics_all = 
   Demographics_all |&gt; 
   janitor::clean_names() |&gt;
-  mutate(district = as.numeric(district))</code></pre>
-<pre class="r"><code>show_demographics = 
+  mutate(district = as.numeric(district))
+
+show_demographics = 
   Demographics_all |&gt;
   head(7) |&gt;
   knitr::kable() |&gt;
@@ -1232,51 +1252,106 @@ class="section level2">
 <p>What we did:</p>
 <ul>
 <li><p>To integrate valuable information from the Student_Weight dataset
-and the Demographics dataset, we’ve crafted a function designed to merge
-these datasets. The merging process is based on matching the district
-code, ensuring cohesiveness between the datasets for each academic
-year.</p></li>
-<li><p>This integration procedure is applied iteratively across the
-academic years from 2015 to 2019. The outcomes of each iteration,
-representing a specific academic year, are combined into a comprehensive
-dataset.</p></li>
+and the Demographics dataset, we’ve looped through the five years from
+2015 to 2019 to merge these two datasets corresponding to each year. The
+merging process is based on bindings rows regarding with district codes,
+ensuring cohesiveness between the datasets for each academic year
+reported.</p></li>
+<li><p>We dropped <code>num_ell</code> column because it contains null
+data for most columns.</p></li>
+<li><p>We kept only the <code>num_free_lunch</code> and
+<code>num_reduced_lunch</code> columns as is for data in years from 2015
+to 2017, and replaced the values for these two columns with the median
+from year 2016 and 2017 for data in years 2018 and 2019. They are
+replaced just to be consistent with the overall data structure. Analysis
+regarding lunch types will only be conducted for data in years from 2015
+to 2017.</p></li>
 <li><p>The variables in the combined dataset are selected to retain only
-high-quality, pertinent data essential for our subsequent
-analyses.</p></li>
+high-quality, pertinent data essential for our subsequent analyses, such
+as district, county, year, sex, grade_level, number_overweight,
+percent_overweight, number_obese, percent_obese,
+number_overweight_or_obese, percent_overweight_or_obese,
+number_healthy_weight, percent_healthy_weight, num_asian, num_black,
+num_hisp, num_am_ind, num_white, num_female, num_male, num_lep,
+num_multi, num_swd, num_ecdis, num_free_lunch,
+num_reduced_lunch.</p></li>
 </ul>
-<pre class="r"><code>join_demo = function(year) {
-  Student_Weight_year = 
+<pre class="r"><code>Student_Weight_2015 = 
   Student_Weight |&gt; 
-  filter(year_reported == year)
+  filter(year_reported==2015)
 
-Demographics_all_year = 
+Demographics_all_2015 = 
   Demographics_all |&gt;
-  filter(year==year)
+  filter(year==2015)
 
-result_year = merge(Student_Weight_year, Demographics_all_year, by = &quot;district&quot;)|&gt;
+result_2015 = merge(Student_Weight_2015, Demographics_all_2015, by = &quot;district&quot;)|&gt;
   select(-num_ell, -year_reported) |&gt;
   drop_na()
 
-return(result_year)
-}</code></pre>
-<pre class="r"><code>year = c(2015, 2016, 2017, 2018, 2019)
-result_list = list(result_2015 = tibble(), result_2016 = tibble(), result_2017 = tibble(), result_2018 = tibble(), result_2019 = tibble())
+Student_Weight_2016 = 
+  Student_Weight |&gt; 
+  filter(year_reported==2016)
 
-for (i in 1:length(year)) {
-  result_list[[i]] = join_demo(year[i])
-}
+Demographics_all_2016 = 
+  Demographics_all |&gt;
+  filter(year==2016)
 
-cleaned = bind_rows(result_list)
+result_2016 = merge(Student_Weight_2016, Demographics_all_2016, by = &quot;district&quot;)|&gt;
+  select(-num_ell, -year_reported) |&gt;
+  drop_na()
 
-cleaned = 
-  cleaned |&gt;
+Student_Weight_2017 = 
+  Student_Weight |&gt; 
+  filter(year_reported==2017)
+
+Demographics_all_2017 = 
+  Demographics_all |&gt;
+  filter(year==2017)
+
+result_2017 = merge(Student_Weight_2017, Demographics_all_2017, by = &quot;district&quot;)|&gt;
+  select(-num_ell, -year_reported) |&gt;
+  drop_na()
+
+Student_Weight_2018 = 
+  Student_Weight |&gt; 
+  filter(year_reported==2018)
+
+Demographics_all_2018 = 
+  Demographics_all |&gt;
+  filter(year==2018)
+
+result_2018 = merge(Student_Weight_2018, Demographics_all_2018, by = &quot;district&quot;)|&gt;
+  select(-num_ell, -year_reported) |&gt;
+  mutate(num_free_lunch = ifelse(is.na(num_free_lunch), median(result_2016$num_free_lunch)), 
+         num_reduced_lunch = ifelse(is.na(num_reduced_lunch), median(result_2016$num_reduced_lunch))) |&gt;
+  drop_na()
+
+Student_Weight_2019 = 
+  Student_Weight |&gt; 
+  filter(year_reported==2019)
+
+Demographics_all_2019 = 
+  Demographics_all |&gt;
+  filter(year==2019)
+
+result_2019 = merge(Student_Weight_2019, Demographics_all_2019, by = &quot;district&quot;)|&gt;
+  select(-num_ell, -year_reported) |&gt;
+  mutate(num_free_lunch = ifelse(is.na(num_free_lunch), median(result_2017$num_free_lunch)), 
+         num_reduced_lunch = ifelse(is.na(num_reduced_lunch), median(result_2017$num_reduced_lunch))) |&gt;
+  drop_na()
+
+cleaned_data = bind_rows(result_2015, result_2016, result_2017, result_2018, result_2019)
+
+cleaned_data = 
+  cleaned_data |&gt;
   select(district, county, year, sex, grade_level, 
          number_overweight, percent_overweight, number_obese, percent_obese, 
          number_overweight_or_obese, percent_overweight_or_obese, 
          number_healthy_weight, percent_healthy_weight, 
-         num_asian, num_black, num_hisp, num_am_ind, num_white, num_female, num_male, num_lep, num_multi, num_swd, num_ecdis, num_free_lunch, num_reduced_lunch)</code></pre>
-<pre class="r"><code>show_cleaned_data = 
-  cleaned |&gt;
+         num_asian, num_black, num_hisp, num_am_ind, num_white, num_female, num_male, num_lep, num_multi, num_swd, num_ecdis, num_free_lunch, num_reduced_lunch)
+
+show_cleaned_data = 
+  cleaned_data |&gt;
   head(7) |&gt;
   knitr::kable(digits=3) |&gt;
   kableExtra::kable_styling(bootstrap_options = c(&quot;striped&quot;, &quot;hover&quot;), font_size = 12) |&gt; 
@@ -1377,86 +1452,6 @@ num_reduced_lunch
 ALBANY
 </td>
 <td style="text-align:right;">
-2012
-</td>
-<td style="text-align:left;">
-FEMALE
-</td>
-<td style="text-align:left;">
-ELEMENTARY
-</td>
-<td style="text-align:right;">
-20
-</td>
-<td style="text-align:right;">
-11.0
-</td>
-<td style="text-align:right;">
-39
-</td>
-<td style="text-align:right;">
-21.5
-</td>
-<td style="text-align:right;">
-59
-</td>
-<td style="text-align:right;">
-32.6
-</td>
-<td style="text-align:right;">
-122
-</td>
-<td style="text-align:right;">
-0.674
-</td>
-<td style="text-align:right;">
-16
-</td>
-<td style="text-align:right;">
-81
-</td>
-<td style="text-align:right;">
-110
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1677
-</td>
-<td style="text-align:right;">
-930
-</td>
-<td style="text-align:right;">
-1016
-</td>
-<td style="text-align:right;">
-17
-</td>
-<td style="text-align:right;">
-61
-</td>
-<td style="text-align:right;">
-281
-</td>
-<td style="text-align:right;">
-753
-</td>
-<td style="text-align:right;">
-544
-</td>
-<td style="text-align:right;">
-143
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-10402
-</td>
-<td style="text-align:left;">
-ALBANY
-</td>
-<td style="text-align:right;">
 2015
 </td>
 <td style="text-align:left;">
@@ -1537,327 +1532,7 @@ ELEMENTARY
 ALBANY
 </td>
 <td style="text-align:right;">
-2016
-</td>
-<td style="text-align:left;">
-FEMALE
-</td>
-<td style="text-align:left;">
-ELEMENTARY
-</td>
-<td style="text-align:right;">
-20
-</td>
-<td style="text-align:right;">
-11.0
-</td>
-<td style="text-align:right;">
-39
-</td>
-<td style="text-align:right;">
-21.5
-</td>
-<td style="text-align:right;">
-59
-</td>
-<td style="text-align:right;">
-32.6
-</td>
-<td style="text-align:right;">
-122
-</td>
-<td style="text-align:right;">
-0.674
-</td>
-<td style="text-align:right;">
-13
-</td>
-<td style="text-align:right;">
-79
-</td>
-<td style="text-align:right;">
-129
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1459
-</td>
-<td style="text-align:right;">
-862
-</td>
-<td style="text-align:right;">
-905
-</td>
-<td style="text-align:right;">
-14
-</td>
-<td style="text-align:right;">
-86
-</td>
-<td style="text-align:right;">
-275
-</td>
-<td style="text-align:right;">
-775
-</td>
-<td style="text-align:right;">
-672
-</td>
-<td style="text-align:right;">
-59
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-10402
-</td>
-<td style="text-align:left;">
-ALBANY
-</td>
-<td style="text-align:right;">
-2017
-</td>
-<td style="text-align:left;">
-FEMALE
-</td>
-<td style="text-align:left;">
-ELEMENTARY
-</td>
-<td style="text-align:right;">
-20
-</td>
-<td style="text-align:right;">
-11.0
-</td>
-<td style="text-align:right;">
-39
-</td>
-<td style="text-align:right;">
-21.5
-</td>
-<td style="text-align:right;">
-59
-</td>
-<td style="text-align:right;">
-32.6
-</td>
-<td style="text-align:right;">
-122
-</td>
-<td style="text-align:right;">
-0.674
-</td>
-<td style="text-align:right;">
-21
-</td>
-<td style="text-align:right;">
-72
-</td>
-<td style="text-align:right;">
-145
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1528
-</td>
-<td style="text-align:right;">
-914
-</td>
-<td style="text-align:right;">
-948
-</td>
-<td style="text-align:right;">
-8
-</td>
-<td style="text-align:right;">
-95
-</td>
-<td style="text-align:right;">
-324
-</td>
-<td style="text-align:right;">
-811
-</td>
-<td style="text-align:right;">
-653
-</td>
-<td style="text-align:right;">
-73
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-10402
-</td>
-<td style="text-align:left;">
-ALBANY
-</td>
-<td style="text-align:right;">
-2013
-</td>
-<td style="text-align:left;">
-FEMALE
-</td>
-<td style="text-align:left;">
-ELEMENTARY
-</td>
-<td style="text-align:right;">
-20
-</td>
-<td style="text-align:right;">
-11.0
-</td>
-<td style="text-align:right;">
-39
-</td>
-<td style="text-align:right;">
-21.5
-</td>
-<td style="text-align:right;">
-59
-</td>
-<td style="text-align:right;">
-32.6
-</td>
-<td style="text-align:right;">
-122
-</td>
-<td style="text-align:right;">
-0.674
-</td>
-<td style="text-align:right;">
-20
-</td>
-<td style="text-align:right;">
-73
-</td>
-<td style="text-align:right;">
-119
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1592
-</td>
-<td style="text-align:right;">
-890
-</td>
-<td style="text-align:right;">
-982
-</td>
-<td style="text-align:right;">
-15
-</td>
-<td style="text-align:right;">
-67
-</td>
-<td style="text-align:right;">
-242
-</td>
-<td style="text-align:right;">
-747
-</td>
-<td style="text-align:right;">
-585
-</td>
-<td style="text-align:right;">
-107
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-10402
-</td>
-<td style="text-align:left;">
-ALBANY
-</td>
-<td style="text-align:right;">
-2014
-</td>
-<td style="text-align:left;">
-FEMALE
-</td>
-<td style="text-align:left;">
-ELEMENTARY
-</td>
-<td style="text-align:right;">
-20
-</td>
-<td style="text-align:right;">
-11.0
-</td>
-<td style="text-align:right;">
-39
-</td>
-<td style="text-align:right;">
-21.5
-</td>
-<td style="text-align:right;">
-59
-</td>
-<td style="text-align:right;">
-32.6
-</td>
-<td style="text-align:right;">
-122
-</td>
-<td style="text-align:right;">
-0.674
-</td>
-<td style="text-align:right;">
-20
-</td>
-<td style="text-align:right;">
-74
-</td>
-<td style="text-align:right;">
-114
-</td>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-1537
-</td>
-<td style="text-align:right;">
-870
-</td>
-<td style="text-align:right;">
-953
-</td>
-<td style="text-align:right;">
-14
-</td>
-<td style="text-align:right;">
-77
-</td>
-<td style="text-align:right;">
-259
-</td>
-<td style="text-align:right;">
-659
-</td>
-<td style="text-align:right;">
-443
-</td>
-<td style="text-align:right;">
-52
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-10402
-</td>
-<td style="text-align:left;">
-ALBANY
-</td>
-<td style="text-align:right;">
-2012
+2015
 </td>
 <td style="text-align:left;">
 MALE
@@ -1890,43 +1565,443 @@ ELEMENTARY
 0.616
 </td>
 <td style="text-align:right;">
-16
+18
 </td>
 <td style="text-align:right;">
-81
+74
 </td>
 <td style="text-align:right;">
-110
+117
 </td>
 <td style="text-align:right;">
 1
 </td>
 <td style="text-align:right;">
-1677
+1493
 </td>
 <td style="text-align:right;">
-930
+868
 </td>
 <td style="text-align:right;">
-1016
+919
 </td>
 <td style="text-align:right;">
-17
+11
 </td>
 <td style="text-align:right;">
-61
+84
 </td>
 <td style="text-align:right;">
-281
+249
 </td>
 <td style="text-align:right;">
-753
+784
 </td>
 <td style="text-align:right;">
-544
+650
 </td>
 <td style="text-align:right;">
-143
+74
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10402
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+<td style="text-align:left;">
+MIDDLE/HIGH
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+19.8
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
+24.4
+</td>
+<td style="text-align:right;">
+58
+</td>
+<td style="text-align:right;">
+44.3
+</td>
+<td style="text-align:right;">
+73
+</td>
+<td style="text-align:right;">
+0.557
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:right;">
+117
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1493
+</td>
+<td style="text-align:right;">
+868
+</td>
+<td style="text-align:right;">
+919
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+249
+</td>
+<td style="text-align:right;">
+784
+</td>
+<td style="text-align:right;">
+650
+</td>
+<td style="text-align:right;">
+74
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10402
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+MALE
+</td>
+<td style="text-align:left;">
+MIDDLE/HIGH
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+14.0
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+26.5
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+40.4
+</td>
+<td style="text-align:right;">
+81
+</td>
+<td style="text-align:right;">
+0.596
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:right;">
+117
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1493
+</td>
+<td style="text-align:right;">
+868
+</td>
+<td style="text-align:right;">
+919
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+249
+</td>
+<td style="text-align:right;">
+784
+</td>
+<td style="text-align:right;">
+650
+</td>
+<td style="text-align:right;">
+74
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10500
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+19.4
+</td>
+<td style="text-align:right;">
+37
+</td>
+<td style="text-align:right;">
+19.9
+</td>
+<td style="text-align:right;">
+73
+</td>
+<td style="text-align:right;">
+39.2
+</td>
+<td style="text-align:right;">
+100
+</td>
+<td style="text-align:right;">
+0.538
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+164
+</td>
+<td style="text-align:right;">
+133
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1443
+</td>
+<td style="text-align:right;">
+910
+</td>
+<td style="text-align:right;">
+951
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+97
+</td>
+<td style="text-align:right;">
+282
+</td>
+<td style="text-align:right;">
+1271
+</td>
+<td style="text-align:right;">
+1097
+</td>
+<td style="text-align:right;">
+94
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10500
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+MALE
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:right;">
+14.4
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:right;">
+24.2
+</td>
+<td style="text-align:right;">
+83
+</td>
+<td style="text-align:right;">
+38.6
+</td>
+<td style="text-align:right;">
+113
+</td>
+<td style="text-align:right;">
+0.526
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+164
+</td>
+<td style="text-align:right;">
+133
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1443
+</td>
+<td style="text-align:right;">
+910
+</td>
+<td style="text-align:right;">
+951
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+97
+</td>
+<td style="text-align:right;">
+282
+</td>
+<td style="text-align:right;">
+1271
+</td>
+<td style="text-align:right;">
+1097
+</td>
+<td style="text-align:right;">
+94
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10500
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+<td style="text-align:left;">
+MIDDLE/HIGH
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+16.5
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+26.8
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+43.3
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+0.567
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+164
+</td>
+<td style="text-align:right;">
+133
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1443
+</td>
+<td style="text-align:right;">
+910
+</td>
+<td style="text-align:right;">
+951
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+97
+</td>
+<td style="text-align:right;">
+282
+</td>
+<td style="text-align:right;">
+1271
+</td>
+<td style="text-align:right;">
+1097
+</td>
+<td style="text-align:right;">
+94
 </td>
 </tr>
 </tbody>
@@ -1937,9 +2012,9 @@ ELEMENTARY
 <h2>Export to .csv for Use</h2>
 <p>What we did:</p>
 <ul>
-<li>We saved this refined dataset in a .csv file.</li>
+<li>We saved this combined and cleaned dataset in a .csv file.</li>
 </ul>
-<pre class="r"><code>write.csv(cleaned, file = &quot;cleaned_data.csv&quot;, row.names = FALSE)</code></pre>
+<pre class="r"><code>write.csv(cleaned_data, file = &quot;cleaned_data.csv&quot;, row.names = FALSE)</code></pre>
 <p>Here is the dataset we will use for further analysis: <a
 href="cleaned_data.csv">Cleaned Student Weight and Demographics</a></p>
 </div>

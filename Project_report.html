@@ -13,7 +13,7 @@
 
 <title>Project_report.knit</title>
 
-<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -35,8 +35,10 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <script src="site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
-<script src="site_libs/plotly-binding-4.10.2/plotly.js"></script>
+<script src="site_libs/plotly-binding-4.10.3/plotly.js"></script>
 <script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
 <link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
@@ -419,15 +421,1490 @@ understanding of the research findings and their implications.</p>
 <div id="data-source" class="section level1">
 <h1>Data Source</h1>
 <ul>
-<li><a href="https://pad.human.cornell.edu/schools/datadownload.cfm">New
-York State Demographic Data</a></li>
-<li><a
+<li><p><strong><a
 href="https://health.data.ny.gov/Health/Student-Weight-Status-Category-Reporting-Results-B/es3k-2aus">Student
-Weight Status in New York State</a></li>
+Weight Status</a></strong>: The source is official health.data.ny.gov
+(NY state government). The data provides information about weight status
+category data (underweight, healthy weight, overweight or obese) and
+estimates of the percent of students overweight, obese and overweight or
+obese for all reportable grades within the county and/or region and by
+grade groups (elementary and middle/high).</p></li>
+<li><p><strong><a
+href="https://pad.human.cornell.edu/schools/datadownload.cfm">Student
+Enrolled Demographics Data</a></strong>: The source is Cornell
+University’s data library. The data provides information on demographic
+information, especially racial and ethnic information, of elementary and
+middle/high school students at a school district level, spanning years
+from 1990s to 2019.</p></li>
 </ul>
 </div>
 <div id="data-cleaning" class="section level1">
 <h1>Data Cleaning</h1>
+<div id="student-weight-data" class="section level2">
+<h2>Student Weight Data</h2>
+<ul>
+<li><p>We focused our investigation on the most recent five academic
+years, spanning from 2014 to 2019. To maintain consistency, each
+academic <code>year</code>, which is represented by the later half of
+the previous year and the earlier half of the next year, is denoted by
+the next year in our cleaned dataset. For example, the academic year
+2014-2015 is denoted as 2015.</p></li>
+<li><p>We renamed <code>district</code> to <code>location_code</code> to
+make this dataset easier to join with the other on common-named
+column.</p></li>
+<li><p>We changed the format of <code>year_reported</code> to
+<code>year</code> in numeric to prepare for easier plotting and
+regression model fitting.</p></li>
+<li><p>We excluded the rows with “DISTRICT TOTAL” category for
+<code>grade_level</code>, “ALL” category for <code>sex</code>, and
+“STATEWIDE (EXCLUDING NYC)” category for <code>county</code>. This is
+because stratification on a finer level is better for analysis, and
+overall data record can be very susceptible to outliers already. We do
+not want them to confuse the analysis more. This ensures that our focus
+is solely on granular data from diverse categories.</p></li>
+</ul>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+district
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+county
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+year_reported
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+number_overweight
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_overweight
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+number_obese
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_obese
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+number_overweight_or_obese
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_overweight_or_obese
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+grade_level
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+number_healthy_weight
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_healthy_weight
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+sex
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+10100
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+17.0
+</td>
+<td style="text-align:right;">
+140
+</td>
+<td style="text-align:right;">
+19.9
+</td>
+<td style="text-align:right;">
+260
+</td>
+<td style="text-align:right;">
+36.9
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+423
+</td>
+<td style="text-align:right;">
+0.601
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10100
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:right;">
+107
+</td>
+<td style="text-align:right;">
+15.2
+</td>
+<td style="text-align:right;">
+142
+</td>
+<td style="text-align:right;">
+20.2
+</td>
+<td style="text-align:right;">
+249
+</td>
+<td style="text-align:right;">
+35.4
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+441
+</td>
+<td style="text-align:right;">
+0.626
+</td>
+<td style="text-align:left;">
+MALE
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10100
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:right;">
+54
+</td>
+<td style="text-align:right;">
+23.2
+</td>
+<td style="text-align:right;">
+53
+</td>
+<td style="text-align:right;">
+22.7
+</td>
+<td style="text-align:right;">
+107
+</td>
+<td style="text-align:right;">
+45.9
+</td>
+<td style="text-align:left;">
+MIDDLE/HIGH
+</td>
+<td style="text-align:right;">
+121
+</td>
+<td style="text-align:right;">
+0.519
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10100
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2016
+</td>
+<td style="text-align:right;">
+44
+</td>
+<td style="text-align:right;">
+20.1
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+19.2
+</td>
+<td style="text-align:right;">
+86
+</td>
+<td style="text-align:right;">
+39.3
+</td>
+<td style="text-align:left;">
+MIDDLE/HIGH
+</td>
+<td style="text-align:right;">
+124
+</td>
+<td style="text-align:right;">
+0.566
+</td>
+<td style="text-align:left;">
+MALE
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10100
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:right;">
+125
+</td>
+<td style="text-align:right;">
+17.9
+</td>
+<td style="text-align:right;">
+114
+</td>
+<td style="text-align:right;">
+16.4
+</td>
+<td style="text-align:right;">
+239
+</td>
+<td style="text-align:right;">
+34.3
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+453
+</td>
+<td style="text-align:right;">
+0.650
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10100
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:right;">
+135
+</td>
+<td style="text-align:right;">
+16.0
+</td>
+<td style="text-align:right;">
+152
+</td>
+<td style="text-align:right;">
+18.0
+</td>
+<td style="text-align:right;">
+287
+</td>
+<td style="text-align:right;">
+34.0
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+553
+</td>
+<td style="text-align:right;">
+0.654
+</td>
+<td style="text-align:left;">
+MALE
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10100
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:right;">
+44
+</td>
+<td style="text-align:right;">
+18.3
+</td>
+<td style="text-align:right;">
+67
+</td>
+<td style="text-align:right;">
+27.9
+</td>
+<td style="text-align:right;">
+111
+</td>
+<td style="text-align:right;">
+46.3
+</td>
+<td style="text-align:left;">
+MIDDLE/HIGH
+</td>
+<td style="text-align:right;">
+123
+</td>
+<td style="text-align:right;">
+0.513
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="demographics-data" class="section level2">
+<h2>Demographics Data</h2>
+<ul>
+<li><p>We have adhered to the standardized format of variable names,
+similar to the conventions followed in the Student_Weight
+dataset.</p></li>
+<li><p>We did not filter on year as before because this dataset spans
+from year 2015 to year 2019, just like the filtered Student_Weight
+data.</p></li>
+<li><p>We decided to keep all columns at this time because we think it
+is better to see which columns should be dropped after joining so that
+we can keep as many information as possible.</p></li>
+<li><p>We converted <code>district</code> to numeric type for easier
+joining.</p></li>
+</ul>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+district
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+year
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_asian
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_black
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_hisp
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_am_ind
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_white
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_female
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_male
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_lep
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_free_lunch
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_reduced_lunch
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_multi
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_swd
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_ecdis
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_ell
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+10100
+</td>
+<td style="text-align:right;">
+1993
+</td>
+<td style="text-align:right;">
+255
+</td>
+<td style="text-align:right;">
+4951
+</td>
+<td style="text-align:right;">
+483
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+3555
+</td>
+<td style="text-align:right;">
+4663
+</td>
+<td style="text-align:right;">
+4588
+</td>
+<td style="text-align:right;">
+133
+</td>
+<td style="text-align:right;">
+4736
+</td>
+<td style="text-align:right;">
+658
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10100
+</td>
+<td style="text-align:right;">
+1994
+</td>
+<td style="text-align:right;">
+279
+</td>
+<td style="text-align:right;">
+5106
+</td>
+<td style="text-align:right;">
+520
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+3442
+</td>
+<td style="text-align:right;">
+4644
+</td>
+<td style="text-align:right;">
+4716
+</td>
+<td style="text-align:right;">
+206
+</td>
+<td style="text-align:right;">
+4762
+</td>
+<td style="text-align:right;">
+672
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10100
+</td>
+<td style="text-align:right;">
+1995
+</td>
+<td style="text-align:right;">
+365
+</td>
+<td style="text-align:right;">
+5448
+</td>
+<td style="text-align:right;">
+585
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+3296
+</td>
+<td style="text-align:right;">
+4873
+</td>
+<td style="text-align:right;">
+4835
+</td>
+<td style="text-align:right;">
+260
+</td>
+<td style="text-align:right;">
+5232
+</td>
+<td style="text-align:right;">
+659
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10100
+</td>
+<td style="text-align:right;">
+1996
+</td>
+<td style="text-align:right;">
+283
+</td>
+<td style="text-align:right;">
+5809
+</td>
+<td style="text-align:right;">
+603
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+3247
+</td>
+<td style="text-align:right;">
+4933
+</td>
+<td style="text-align:right;">
+5034
+</td>
+<td style="text-align:right;">
+268
+</td>
+<td style="text-align:right;">
+5058
+</td>
+<td style="text-align:right;">
+575
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10100
+</td>
+<td style="text-align:right;">
+1997
+</td>
+<td style="text-align:right;">
+278
+</td>
+<td style="text-align:right;">
+6101
+</td>
+<td style="text-align:right;">
+647
+</td>
+<td style="text-align:right;">
+28
+</td>
+<td style="text-align:right;">
+3196
+</td>
+<td style="text-align:right;">
+5015
+</td>
+<td style="text-align:right;">
+5235
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:right;">
+5299
+</td>
+<td style="text-align:right;">
+594
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10100
+</td>
+<td style="text-align:right;">
+1998
+</td>
+<td style="text-align:right;">
+275
+</td>
+<td style="text-align:right;">
+6252
+</td>
+<td style="text-align:right;">
+711
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+3117
+</td>
+<td style="text-align:right;">
+5110
+</td>
+<td style="text-align:right;">
+5270
+</td>
+<td style="text-align:right;">
+308
+</td>
+<td style="text-align:right;">
+5823
+</td>
+<td style="text-align:right;">
+787
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10100
+</td>
+<td style="text-align:right;">
+1999
+</td>
+<td style="text-align:right;">
+275
+</td>
+<td style="text-align:right;">
+6091
+</td>
+<td style="text-align:right;">
+734
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:right;">
+3003
+</td>
+<td style="text-align:right;">
+5022
+</td>
+<td style="text-align:right;">
+5110
+</td>
+<td style="text-align:right;">
+284
+</td>
+<td style="text-align:right;">
+5249
+</td>
+<td style="text-align:right;">
+805
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="join-demographics-with-student-weight-for-years-2015-2019"
+class="section level2">
+<h2>Join Demographics with Student Weight for Years 2015-2019</h2>
+<ul>
+<li><p>To integrate valuable information from the Student_Weight dataset
+and the Demographics dataset, we’ve looped through the five years from
+2015 to 2019 to merge these two datasets corresponding to each year. The
+merging process is based on bindings rows regarding with district codes,
+ensuring cohesiveness between the datasets for each academic year
+reported.</p></li>
+<li><p>We dropped <code>num_ell</code> column because it contains null
+data for most columns.</p></li>
+<li><p>We kept only the <code>num_free_lunch</code> and
+<code>num_reduced_lunch</code> columns as is for data in years from 2015
+to 2017, and replaced the values for these two columns with the median
+from year 2016 and 2017 for data in years 2018 and 2019. They are
+replaced just to be consistent with the overall data structure. Analysis
+regarding lunch types will only be conducted for data in years from 2015
+to 2017.</p></li>
+<li><p>The variables in the combined dataset are selected to retain only
+high-quality, pertinent data essential for our subsequent analyses, such
+as district, county, year, sex, grade_level, number_overweight,
+percent_overweight, number_obese, percent_obese,
+number_overweight_or_obese, percent_overweight_or_obese,
+number_healthy_weight, percent_healthy_weight, num_asian, num_black,
+num_hisp, num_am_ind, num_white, num_female, num_male, num_lep,
+num_multi, num_swd, num_ecdis, num_free_lunch,
+num_reduced_lunch.</p></li>
+</ul>
+<div
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
+<table class="table table-striped table-hover" style="font-size: 12px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+district
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+county
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+year
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+sex
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+grade_level
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+number_overweight
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_overweight
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+number_obese
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_obese
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+number_overweight_or_obese
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_overweight_or_obese
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+number_healthy_weight
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+percent_healthy_weight
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_asian
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_black
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_hisp
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_am_ind
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_white
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_female
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_male
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_lep
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_multi
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_swd
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_ecdis
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_free_lunch
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+num_reduced_lunch
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+10402
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+11.0
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+21.5
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+32.6
+</td>
+<td style="text-align:right;">
+122
+</td>
+<td style="text-align:right;">
+0.674
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:right;">
+117
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1493
+</td>
+<td style="text-align:right;">
+868
+</td>
+<td style="text-align:right;">
+919
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+249
+</td>
+<td style="text-align:right;">
+784
+</td>
+<td style="text-align:right;">
+650
+</td>
+<td style="text-align:right;">
+74
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10402
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+MALE
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+41
+</td>
+<td style="text-align:right;">
+17.3
+</td>
+<td style="text-align:right;">
+45
+</td>
+<td style="text-align:right;">
+19.0
+</td>
+<td style="text-align:right;">
+86
+</td>
+<td style="text-align:right;">
+36.3
+</td>
+<td style="text-align:right;">
+146
+</td>
+<td style="text-align:right;">
+0.616
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:right;">
+117
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1493
+</td>
+<td style="text-align:right;">
+868
+</td>
+<td style="text-align:right;">
+919
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+249
+</td>
+<td style="text-align:right;">
+784
+</td>
+<td style="text-align:right;">
+650
+</td>
+<td style="text-align:right;">
+74
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10402
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+<td style="text-align:left;">
+MIDDLE/HIGH
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+19.8
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
+24.4
+</td>
+<td style="text-align:right;">
+58
+</td>
+<td style="text-align:right;">
+44.3
+</td>
+<td style="text-align:right;">
+73
+</td>
+<td style="text-align:right;">
+0.557
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:right;">
+117
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1493
+</td>
+<td style="text-align:right;">
+868
+</td>
+<td style="text-align:right;">
+919
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+249
+</td>
+<td style="text-align:right;">
+784
+</td>
+<td style="text-align:right;">
+650
+</td>
+<td style="text-align:right;">
+74
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10402
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+MALE
+</td>
+<td style="text-align:left;">
+MIDDLE/HIGH
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+14.0
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+26.5
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+40.4
+</td>
+<td style="text-align:right;">
+81
+</td>
+<td style="text-align:right;">
+0.596
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:right;">
+117
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1493
+</td>
+<td style="text-align:right;">
+868
+</td>
+<td style="text-align:right;">
+919
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+249
+</td>
+<td style="text-align:right;">
+784
+</td>
+<td style="text-align:right;">
+650
+</td>
+<td style="text-align:right;">
+74
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10500
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+36
+</td>
+<td style="text-align:right;">
+19.4
+</td>
+<td style="text-align:right;">
+37
+</td>
+<td style="text-align:right;">
+19.9
+</td>
+<td style="text-align:right;">
+73
+</td>
+<td style="text-align:right;">
+39.2
+</td>
+<td style="text-align:right;">
+100
+</td>
+<td style="text-align:right;">
+0.538
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+164
+</td>
+<td style="text-align:right;">
+133
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1443
+</td>
+<td style="text-align:right;">
+910
+</td>
+<td style="text-align:right;">
+951
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+97
+</td>
+<td style="text-align:right;">
+282
+</td>
+<td style="text-align:right;">
+1271
+</td>
+<td style="text-align:right;">
+1097
+</td>
+<td style="text-align:right;">
+94
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10500
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+MALE
+</td>
+<td style="text-align:left;">
+ELEMENTARY
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:right;">
+14.4
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:right;">
+24.2
+</td>
+<td style="text-align:right;">
+83
+</td>
+<td style="text-align:right;">
+38.6
+</td>
+<td style="text-align:right;">
+113
+</td>
+<td style="text-align:right;">
+0.526
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+164
+</td>
+<td style="text-align:right;">
+133
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1443
+</td>
+<td style="text-align:right;">
+910
+</td>
+<td style="text-align:right;">
+951
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+97
+</td>
+<td style="text-align:right;">
+282
+</td>
+<td style="text-align:right;">
+1271
+</td>
+<td style="text-align:right;">
+1097
+</td>
+<td style="text-align:right;">
+94
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10500
+</td>
+<td style="text-align:left;">
+ALBANY
+</td>
+<td style="text-align:right;">
+2015
+</td>
+<td style="text-align:left;">
+FEMALE
+</td>
+<td style="text-align:left;">
+MIDDLE/HIGH
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+16.5
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+26.8
+</td>
+<td style="text-align:right;">
+42
+</td>
+<td style="text-align:right;">
+43.3
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+0.567
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+164
+</td>
+<td style="text-align:right;">
+133
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+1443
+</td>
+<td style="text-align:right;">
+910
+</td>
+<td style="text-align:right;">
+951
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:right;">
+97
+</td>
+<td style="text-align:right;">
+282
+</td>
+<td style="text-align:right;">
+1271
+</td>
+<td style="text-align:right;">
+1097
+</td>
+<td style="text-align:right;">
+94
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="exploratory-analysis" class="section level1">
 <h1>Exploratory Analysis</h1>
@@ -440,8 +1917,8 @@ visualizations to examine the trends in average overweight percentages
 among New York State students from 2015 to 2019. We do that by
 calculating the county-level average overweight percent and plot results
 as a spaghetti plot. Legends are dropped to help visualization.</p>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-b91fa087855e8218cf96" style="width:90%;height:345.6px;"></div>
-<script type="application/json" data-for="htmlwidget-b91fa087855e8218cf96">{"x":{"visdat":{"11e471ea33e34":["function () ","plotlyVisDat"]},"cur_data":"11e471ea33e34","attrs":{"11e471ea33e34":{"x":{},"y":{},"mode":"lines+markers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Average Overweight Percentage Over Time","xaxis":{"domain":[0,1],"automargin":true,"title":"Year"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Average Overweight Percentage"},"showlegend":false,"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[2012,2013,2014,2015,2016,2017],"y":[17.129545454545454,17.128458567415731,17.128458567415731,17.128458567415731,17.128458567415731,16.810654775874209],"mode":"lines+markers","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-1f8a41a0b01c21ae3255" style="width:90%;height:345.6px;"></div>
+<script type="application/json" data-for="htmlwidget-1f8a41a0b01c21ae3255">{"x":{"visdat":{"dce73183238":["function () ","plotlyVisDat"]},"cur_data":"dce73183238","attrs":{"dce73183238":{"x":{},"y":{},"mode":"lines+markers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Average Overweight Percentage Over Time","xaxis":{"domain":[0,1],"automargin":true,"title":"Year","tickmode":"array","tickvals":[2015,2016,2017,2018,2019]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Average Overweight Percentage"},"showlegend":false,"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[2015,2016,2017,2018,2019],"y":[17.013234005258546,17.265066666666666,16.751046511627905,16.844009489916964,16.783995186522262],"mode":"lines+markers","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>The percentage of students classified as overweight in the state of
 New York remained relatively constant from 2015 to 2019. Despite
 apparent fluctuations in the depicted data, such as a surge in 2016 and
@@ -452,8 +1929,8 @@ ranging only between 16.7% and 17.3%.</p>
 <div id="county-level-percent-of-overweightobesehealthy-students"
 class="section level2">
 <h2>2. County-level percent of overweight/obese/healthy students</h2>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-d9715327ece95af0775a" style="width:90%;height:345.6px;"></div>
-<script type="application/json" data-for="htmlwidget-d9715327ece95af0775a">{"x":{"visdat":{"11e47174505c2":["function () ","plotlyVisDat"]},"cur_data":"11e47174505c2","attrs":{"11e47174505c2":{"y":{},"x":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Percentage Overweight by County","xaxis":{"domain":[0,1],"automargin":true,"title":"County","type":"category","categoryorder":"array","categoryarray":["WESTCHESTER","SCHENECTADY","SCHUYLER","TOMPKINS","ROCKLAND","PUTNAM","MONROE","NASSAU","ONONDAGA","SARATOGA","ONTARIO","ERIE","COLUMBIA","ONEIDA","DUTCHESS","FULTON","NIAGARA","LIVINGSTON","ULSTER","BROOME","MONTGOMERY","SULLIVAN","SUFFOLK","ORANGE","CAYUGA","STEUBEN","SENECA","YATES","WARREN","WAYNE","ALBANY","DELAWARE","RENSSELAER","WYOMING","CHAUTAUQUA","TIOGA","ST. LAWRENCE","GENESEE","CLINTON","MADISON","HERKIMER","CATTARAUGUS","ORLEANS","CHENANGO","FRANKLIN","JEFFERSON","ALLEGANY","OTSEGO","SCHOHARIE","GREENE","CHEMUNG","OSWEGO","WASHINGTON","CORTLAND","ESSEX","LEWIS"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Average Percentage Overweight"},"showlegend":false,"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"y":[14.987087912087913],"x":["WESTCHESTER"],"type":"bar","name":"WESTCHESTER","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[15.433333333333334],"x":["SCHENECTADY"],"type":"bar","name":"SCHENECTADY","marker":{"color":"rgba(133,189,156,1)","line":{"color":"rgba(133,189,156,1)"}},"textfont":{"color":"rgba(133,189,156,1)"},"error_y":{"color":"rgba(133,189,156,1)"},"error_x":{"color":"rgba(133,189,156,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[15.435714285714285],"x":["SCHUYLER"],"type":"bar","name":"SCHUYLER","marker":{"color":"rgba(156,183,148,1)","line":{"color":"rgba(156,183,148,1)"}},"textfont":{"color":"rgba(156,183,148,1)"},"error_y":{"color":"rgba(156,183,148,1)"},"error_x":{"color":"rgba(156,183,148,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[15.513372093023255],"x":["TOMPKINS"],"type":"bar","name":"TOMPKINS","marker":{"color":"rgba(177,177,139,1)","line":{"color":"rgba(177,177,139,1)"}},"textfont":{"color":"rgba(177,177,139,1)"},"error_y":{"color":"rgba(177,177,139,1)"},"error_x":{"color":"rgba(177,177,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.036249999999999],"x":["ROCKLAND"],"type":"bar","name":"ROCKLAND","marker":{"color":"rgba(195,171,131,1)","line":{"color":"rgba(195,171,131,1)"}},"textfont":{"color":"rgba(195,171,131,1)"},"error_y":{"color":"rgba(195,171,131,1)"},"error_x":{"color":"rgba(195,171,131,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.108333333333334],"x":["PUTNAM"],"type":"bar","name":"PUTNAM","marker":{"color":"rgba(211,164,122,1)","line":{"color":"rgba(211,164,122,1)"}},"textfont":{"color":"rgba(211,164,122,1)"},"error_y":{"color":"rgba(211,164,122,1)"},"error_x":{"color":"rgba(211,164,122,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.132000000000001],"x":["MONROE"],"type":"bar","name":"MONROE","marker":{"color":"rgba(226,157,114,1)","line":{"color":"rgba(226,157,114,1)"}},"textfont":{"color":"rgba(226,157,114,1)"},"error_y":{"color":"rgba(226,157,114,1)"},"error_x":{"color":"rgba(226,157,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.179211469534049],"x":["NASSAU"],"type":"bar","name":"NASSAU","marker":{"color":"rgba(240,149,105,1)","line":{"color":"rgba(240,149,105,1)"}},"textfont":{"color":"rgba(240,149,105,1)"},"error_y":{"color":"rgba(240,149,105,1)"},"error_x":{"color":"rgba(240,149,105,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.197470817120625],"x":["ONONDAGA"],"type":"bar","name":"ONONDAGA","marker":{"color":"rgba(251,141,100,1)","line":{"color":"rgba(251,141,100,1)"}},"textfont":{"color":"rgba(251,141,100,1)"},"error_y":{"color":"rgba(251,141,100,1)"},"error_x":{"color":"rgba(251,141,100,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.367586206896551],"x":["SARATOGA"],"type":"bar","name":"SARATOGA","marker":{"color":"rgba(240,144,114,1)","line":{"color":"rgba(240,144,114,1)"}},"textfont":{"color":"rgba(240,144,114,1)"},"error_y":{"color":"rgba(240,144,114,1)"},"error_x":{"color":"rgba(240,144,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.384410646387831],"x":["ONTARIO"],"type":"bar","name":"ONTARIO","marker":{"color":"rgba(229,147,127,1)","line":{"color":"rgba(229,147,127,1)"}},"textfont":{"color":"rgba(229,147,127,1)"},"error_y":{"color":"rgba(229,147,127,1)"},"error_x":{"color":"rgba(229,147,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.503673723536739],"x":["ERIE"],"type":"bar","name":"ERIE","marker":{"color":"rgba(217,150,141,1)","line":{"color":"rgba(217,150,141,1)"}},"textfont":{"color":"rgba(217,150,141,1)"},"error_y":{"color":"rgba(217,150,141,1)"},"error_x":{"color":"rgba(217,150,141,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.543356643356645],"x":["COLUMBIA"],"type":"bar","name":"COLUMBIA","marker":{"color":"rgba(204,152,154,1)","line":{"color":"rgba(204,152,154,1)"}},"textfont":{"color":"rgba(204,152,154,1)"},"error_y":{"color":"rgba(204,152,154,1)"},"error_x":{"color":"rgba(204,152,154,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.664116828929068],"x":["ONEIDA"],"type":"bar","name":"ONEIDA","marker":{"color":"rgba(190,154,167,1)","line":{"color":"rgba(190,154,167,1)"}},"textfont":{"color":"rgba(190,154,167,1)"},"error_y":{"color":"rgba(190,154,167,1)"},"error_x":{"color":"rgba(190,154,167,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.709282700421941],"x":["DUTCHESS"],"type":"bar","name":"DUTCHESS","marker":{"color":"rgba(174,156,180,1)","line":{"color":"rgba(174,156,180,1)"}},"textfont":{"color":"rgba(174,156,180,1)"},"error_y":{"color":"rgba(174,156,180,1)"},"error_x":{"color":"rgba(174,156,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.723206751054853],"x":["FULTON"],"type":"bar","name":"FULTON","marker":{"color":"rgba(156,159,194,1)","line":{"color":"rgba(156,159,194,1)"}},"textfont":{"color":"rgba(156,159,194,1)"},"error_y":{"color":"rgba(156,159,194,1)"},"error_x":{"color":"rgba(156,159,194,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.929772329246934],"x":["NIAGARA"],"type":"bar","name":"NIAGARA","marker":{"color":"rgba(145,159,203,1)","line":{"color":"rgba(145,159,203,1)"}},"textfont":{"color":"rgba(145,159,203,1)"},"error_y":{"color":"rgba(145,159,203,1)"},"error_x":{"color":"rgba(145,159,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.935038363171355],"x":["LIVINGSTON"],"type":"bar","name":"LIVINGSTON","marker":{"color":"rgba(158,157,202,1)","line":{"color":"rgba(158,157,202,1)"}},"textfont":{"color":"rgba(158,157,202,1)"},"error_y":{"color":"rgba(158,157,202,1)"},"error_x":{"color":"rgba(158,157,202,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.047407407407409],"x":["ULSTER"],"type":"bar","name":"ULSTER","marker":{"color":"rgba(171,155,201,1)","line":{"color":"rgba(171,155,201,1)"}},"textfont":{"color":"rgba(171,155,201,1)"},"error_y":{"color":"rgba(171,155,201,1)"},"error_x":{"color":"rgba(171,155,201,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.06204379562044],"x":["BROOME"],"type":"bar","name":"BROOME","marker":{"color":"rgba(183,152,200,1)","line":{"color":"rgba(183,152,200,1)"}},"textfont":{"color":"rgba(183,152,200,1)"},"error_y":{"color":"rgba(183,152,200,1)"},"error_x":{"color":"rgba(183,152,200,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.087387387387388],"x":["MONTGOMERY"],"type":"bar","name":"MONTGOMERY","marker":{"color":"rgba(194,150,199,1)","line":{"color":"rgba(194,150,199,1)"}},"textfont":{"color":"rgba(194,150,199,1)"},"error_y":{"color":"rgba(194,150,199,1)"},"error_x":{"color":"rgba(194,150,199,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.146384039900248],"x":["SULLIVAN"],"type":"bar","name":"SULLIVAN","marker":{"color":"rgba(205,147,198,1)","line":{"color":"rgba(205,147,198,1)"}},"textfont":{"color":"rgba(205,147,198,1)"},"error_y":{"color":"rgba(205,147,198,1)"},"error_x":{"color":"rgba(205,147,198,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.148801742919392],"x":["SUFFOLK"],"type":"bar","name":"SUFFOLK","marker":{"color":"rgba(215,144,197,1)","line":{"color":"rgba(215,144,197,1)"}},"textfont":{"color":"rgba(215,144,197,1)"},"error_y":{"color":"rgba(215,144,197,1)"},"error_x":{"color":"rgba(215,144,197,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.218103448275862],"x":["ORANGE"],"type":"bar","name":"ORANGE","marker":{"color":"rgba(225,140,196,1)","line":{"color":"rgba(225,140,196,1)"}},"textfont":{"color":"rgba(225,140,196,1)"},"error_y":{"color":"rgba(225,140,196,1)"},"error_x":{"color":"rgba(225,140,196,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.241191709844561],"x":["CAYUGA"],"type":"bar","name":"CAYUGA","marker":{"color":"rgba(229,143,190,1)","line":{"color":"rgba(229,143,190,1)"}},"textfont":{"color":"rgba(229,143,190,1)"},"error_y":{"color":"rgba(229,143,190,1)"},"error_x":{"color":"rgba(229,143,190,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.331703204047219],"x":["STEUBEN"],"type":"bar","name":"STEUBEN","marker":{"color":"rgba(223,155,177,1)","line":{"color":"rgba(223,155,177,1)"}},"textfont":{"color":"rgba(223,155,177,1)"},"error_y":{"color":"rgba(223,155,177,1)"},"error_x":{"color":"rgba(223,155,177,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.488479262672811],"x":["SENECA"],"type":"bar","name":"SENECA","marker":{"color":"rgba(216,165,164,1)","line":{"color":"rgba(216,165,164,1)"}},"textfont":{"color":"rgba(216,165,164,1)"},"error_y":{"color":"rgba(216,165,164,1)"},"error_x":{"color":"rgba(216,165,164,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.515000000000001],"x":["YATES"],"type":"bar","name":"YATES","marker":{"color":"rgba(209,176,151,1)","line":{"color":"rgba(209,176,151,1)"}},"textfont":{"color":"rgba(209,176,151,1)"},"error_y":{"color":"rgba(209,176,151,1)"},"error_x":{"color":"rgba(209,176,151,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.534615384615385],"x":["WARREN"],"type":"bar","name":"WARREN","marker":{"color":"rgba(201,185,137,1)","line":{"color":"rgba(201,185,137,1)"}},"textfont":{"color":"rgba(201,185,137,1)"},"error_y":{"color":"rgba(201,185,137,1)"},"error_x":{"color":"rgba(201,185,137,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.539024390243902],"x":["WAYNE"],"type":"bar","name":"WAYNE","marker":{"color":"rgba(192,195,123,1)","line":{"color":"rgba(192,195,123,1)"}},"textfont":{"color":"rgba(192,195,123,1)"},"error_y":{"color":"rgba(192,195,123,1)"},"error_x":{"color":"rgba(192,195,123,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.587123745819397],"x":["ALBANY"],"type":"bar","name":"ALBANY","marker":{"color":"rgba(182,204,108,1)","line":{"color":"rgba(182,204,108,1)"}},"textfont":{"color":"rgba(182,204,108,1)"},"error_y":{"color":"rgba(182,204,108,1)"},"error_x":{"color":"rgba(182,204,108,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.609157509157509],"x":["DELAWARE"],"type":"bar","name":"DELAWARE","marker":{"color":"rgba(171,212,92,1)","line":{"color":"rgba(171,212,92,1)"}},"textfont":{"color":"rgba(171,212,92,1)"},"error_y":{"color":"rgba(171,212,92,1)"},"error_x":{"color":"rgba(171,212,92,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.682707993474715],"x":["RENSSELAER"],"type":"bar","name":"RENSSELAER","marker":{"color":"rgba(173,216,82,1)","line":{"color":"rgba(173,216,82,1)"}},"textfont":{"color":"rgba(173,216,82,1)"},"error_y":{"color":"rgba(173,216,82,1)"},"error_x":{"color":"rgba(173,216,82,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.768095238095238],"x":["WYOMING"],"type":"bar","name":"WYOMING","marker":{"color":"rgba(186,217,78,1)","line":{"color":"rgba(186,217,78,1)"}},"textfont":{"color":"rgba(186,217,78,1)"},"error_y":{"color":"rgba(186,217,78,1)"},"error_x":{"color":"rgba(186,217,78,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.801248581157775],"x":["CHAUTAUQUA"],"type":"bar","name":"CHAUTAUQUA","marker":{"color":"rgba(197,217,74,1)","line":{"color":"rgba(197,217,74,1)"}},"textfont":{"color":"rgba(197,217,74,1)"},"error_y":{"color":"rgba(197,217,74,1)"},"error_x":{"color":"rgba(197,217,74,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.869374999999998],"x":["TIOGA"],"type":"bar","name":"TIOGA","marker":{"color":"rgba(209,217,69,1)","line":{"color":"rgba(209,217,69,1)"}},"textfont":{"color":"rgba(209,217,69,1)"},"error_y":{"color":"rgba(209,217,69,1)"},"error_x":{"color":"rgba(209,217,69,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.912643678160922],"x":["ST. LAWRENCE"],"type":"bar","name":"ST. LAWRENCE","marker":{"color":"rgba(220,217,65,1)","line":{"color":"rgba(220,217,65,1)"}},"textfont":{"color":"rgba(220,217,65,1)"},"error_y":{"color":"rgba(220,217,65,1)"},"error_x":{"color":"rgba(220,217,65,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.966921119592875],"x":["GENESEE"],"type":"bar","name":"GENESEE","marker":{"color":"rgba(231,217,60,1)","line":{"color":"rgba(231,217,60,1)"}},"textfont":{"color":"rgba(231,217,60,1)"},"error_y":{"color":"rgba(231,217,60,1)"},"error_x":{"color":"rgba(231,217,60,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.973963133640552],"x":["CLINTON"],"type":"bar","name":"CLINTON","marker":{"color":"rgba(242,217,55,1)","line":{"color":"rgba(242,217,55,1)"}},"textfont":{"color":"rgba(242,217,55,1)"},"error_y":{"color":"rgba(242,217,55,1)"},"error_x":{"color":"rgba(242,217,55,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.975296912114015],"x":["MADISON"],"type":"bar","name":"MADISON","marker":{"color":"rgba(252,217,49,1)","line":{"color":"rgba(252,217,49,1)"}},"textfont":{"color":"rgba(252,217,49,1)"},"error_y":{"color":"rgba(252,217,49,1)"},"error_x":{"color":"rgba(252,217,49,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.054864864864868],"x":["HERKIMER"],"type":"bar","name":"HERKIMER","marker":{"color":"rgba(253,215,61,1)","line":{"color":"rgba(253,215,61,1)"}},"textfont":{"color":"rgba(253,215,61,1)"},"error_y":{"color":"rgba(253,215,61,1)"},"error_x":{"color":"rgba(253,215,61,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.254285714285714],"x":["CATTARAUGUS"],"type":"bar","name":"CATTARAUGUS","marker":{"color":"rgba(250,212,77,1)","line":{"color":"rgba(250,212,77,1)"}},"textfont":{"color":"rgba(250,212,77,1)"},"error_y":{"color":"rgba(250,212,77,1)"},"error_x":{"color":"rgba(250,212,77,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.303921568627452],"x":["ORLEANS"],"type":"bar","name":"ORLEANS","marker":{"color":"rgba(247,210,90,1)","line":{"color":"rgba(247,210,90,1)"}},"textfont":{"color":"rgba(247,210,90,1)"},"error_y":{"color":"rgba(247,210,90,1)"},"error_x":{"color":"rgba(247,210,90,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.307788944723619],"x":["CHENANGO"],"type":"bar","name":"CHENANGO","marker":{"color":"rgba(244,207,103,1)","line":{"color":"rgba(244,207,103,1)"}},"textfont":{"color":"rgba(244,207,103,1)"},"error_y":{"color":"rgba(244,207,103,1)"},"error_x":{"color":"rgba(244,207,103,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.560298507462687],"x":["FRANKLIN"],"type":"bar","name":"FRANKLIN","marker":{"color":"rgba(241,204,114,1)","line":{"color":"rgba(241,204,114,1)"}},"textfont":{"color":"rgba(241,204,114,1)"},"error_y":{"color":"rgba(241,204,114,1)"},"error_x":{"color":"rgba(241,204,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.612947189097106],"x":["JEFFERSON"],"type":"bar","name":"JEFFERSON","marker":{"color":"rgba(237,202,125,1)","line":{"color":"rgba(237,202,125,1)"}},"textfont":{"color":"rgba(237,202,125,1)"},"error_y":{"color":"rgba(237,202,125,1)"},"error_x":{"color":"rgba(237,202,125,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.66358695652174],"x":["ALLEGANY"],"type":"bar","name":"ALLEGANY","marker":{"color":"rgba(234,199,136,1)","line":{"color":"rgba(234,199,136,1)"}},"textfont":{"color":"rgba(234,199,136,1)"},"error_y":{"color":"rgba(234,199,136,1)"},"error_x":{"color":"rgba(234,199,136,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.716839378238344],"x":["OTSEGO"],"type":"bar","name":"OTSEGO","marker":{"color":"rgba(230,196,147,1)","line":{"color":"rgba(230,196,147,1)"}},"textfont":{"color":"rgba(230,196,147,1)"},"error_y":{"color":"rgba(230,196,147,1)"},"error_x":{"color":"rgba(230,196,147,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.817721518987341],"x":["SCHOHARIE"],"type":"bar","name":"SCHOHARIE","marker":{"color":"rgba(224,194,152,1)","line":{"color":"rgba(224,194,152,1)"}},"textfont":{"color":"rgba(224,194,152,1)"},"error_y":{"color":"rgba(224,194,152,1)"},"error_x":{"color":"rgba(224,194,152,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.850632911392406],"x":["GREENE"],"type":"bar","name":"GREENE","marker":{"color":"rgba(218,192,156,1)","line":{"color":"rgba(218,192,156,1)"}},"textfont":{"color":"rgba(218,192,156,1)"},"error_y":{"color":"rgba(218,192,156,1)"},"error_x":{"color":"rgba(218,192,156,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.919999999999998],"x":["CHEMUNG"],"type":"bar","name":"CHEMUNG","marker":{"color":"rgba(212,190,160,1)","line":{"color":"rgba(212,190,160,1)"}},"textfont":{"color":"rgba(212,190,160,1)"},"error_y":{"color":"rgba(212,190,160,1)"},"error_x":{"color":"rgba(212,190,160,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[19.027173913043477],"x":["OSWEGO"],"type":"bar","name":"OSWEGO","marker":{"color":"rgba(206,188,164,1)","line":{"color":"rgba(206,188,164,1)"}},"textfont":{"color":"rgba(206,188,164,1)"},"error_y":{"color":"rgba(206,188,164,1)"},"error_x":{"color":"rgba(206,188,164,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[19.063882063882062],"x":["WASHINGTON"],"type":"bar","name":"WASHINGTON","marker":{"color":"rgba(199,185,167,1)","line":{"color":"rgba(199,185,167,1)"}},"textfont":{"color":"rgba(199,185,167,1)"},"error_y":{"color":"rgba(199,185,167,1)"},"error_x":{"color":"rgba(199,185,167,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[19.078189300411523],"x":["CORTLAND"],"type":"bar","name":"CORTLAND","marker":{"color":"rgba(193,183,171,1)","line":{"color":"rgba(193,183,171,1)"}},"textfont":{"color":"rgba(193,183,171,1)"},"error_y":{"color":"rgba(193,183,171,1)"},"error_x":{"color":"rgba(193,183,171,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[20.100000000000001],"x":["ESSEX"],"type":"bar","name":"ESSEX","marker":{"color":"rgba(186,181,175,1)","line":{"color":"rgba(186,181,175,1)"}},"textfont":{"color":"rgba(186,181,175,1)"},"error_y":{"color":"rgba(186,181,175,1)"},"error_x":{"color":"rgba(186,181,175,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[20.436254980079681],"x":["LEWIS"],"type":"bar","name":"LEWIS","marker":{"color":"rgba(179,179,179,1)","line":{"color":"rgba(179,179,179,1)"}},"textfont":{"color":"rgba(179,179,179,1)"},"error_y":{"color":"rgba(179,179,179,1)"},"error_x":{"color":"rgba(179,179,179,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-1c89e22e9e04ab4b2bf0" style="width:90%;height:345.6px;"></div>
+<script type="application/json" data-for="htmlwidget-1c89e22e9e04ab4b2bf0">{"x":{"visdat":{"dce760602adf":["function () ","plotlyVisDat"]},"cur_data":"dce760602adf","attrs":{"dce760602adf":{"y":{},"x":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Percentage Overweight by County","xaxis":{"domain":[0,1],"automargin":true,"title":"County","type":"category","categoryorder":"array","categoryarray":["WESTCHESTER","TOMPKINS","SCHUYLER","SCHENECTADY","FULTON","ROCKLAND","PUTNAM","MONROE","NASSAU","SARATOGA","ONONDAGA","COLUMBIA","ONTARIO","ONEIDA","ERIE","DUTCHESS","SULLIVAN","ULSTER","NIAGARA","MONTGOMERY","WARREN","DELAWARE","SUFFOLK","ORANGE","BROOME","CAYUGA","SENECA","LIVINGSTON","ST. LAWRENCE","WAYNE","WYOMING","STEUBEN","RENSSELAER","MADISON","ALBANY","YATES","SCHOHARIE","CHAUTAUQUA","CLINTON","CORTLAND","GENESEE","TIOGA","HERKIMER","CATTARAUGUS","JEFFERSON","ORLEANS","CHENANGO","OTSEGO","FRANKLIN","WASHINGTON","GREENE","CHEMUNG","OSWEGO","ALLEGANY","ESSEX","LEWIS"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Average Percentage Overweight"},"showlegend":false,"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"y":[15.002686567164179],"x":["WESTCHESTER"],"type":"bar","name":"WESTCHESTER","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[15.148214285714285],"x":["TOMPKINS"],"type":"bar","name":"TOMPKINS","marker":{"color":"rgba(133,189,156,1)","line":{"color":"rgba(133,189,156,1)"}},"textfont":{"color":"rgba(133,189,156,1)"},"error_y":{"color":"rgba(133,189,156,1)"},"error_x":{"color":"rgba(133,189,156,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[15.435714285714285],"x":["SCHUYLER"],"type":"bar","name":"SCHUYLER","marker":{"color":"rgba(156,183,148,1)","line":{"color":"rgba(156,183,148,1)"}},"textfont":{"color":"rgba(156,183,148,1)"},"error_y":{"color":"rgba(156,183,148,1)"},"error_x":{"color":"rgba(156,183,148,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[15.523636363636363],"x":["SCHENECTADY"],"type":"bar","name":"SCHENECTADY","marker":{"color":"rgba(177,177,139,1)","line":{"color":"rgba(177,177,139,1)"}},"textfont":{"color":"rgba(177,177,139,1)"},"error_y":{"color":"rgba(177,177,139,1)"},"error_x":{"color":"rgba(177,177,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[15.956250000000001],"x":["FULTON"],"type":"bar","name":"FULTON","marker":{"color":"rgba(195,171,131,1)","line":{"color":"rgba(195,171,131,1)"}},"textfont":{"color":"rgba(195,171,131,1)"},"error_y":{"color":"rgba(195,171,131,1)"},"error_x":{"color":"rgba(195,171,131,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.036249999999999],"x":["ROCKLAND"],"type":"bar","name":"ROCKLAND","marker":{"color":"rgba(211,164,122,1)","line":{"color":"rgba(211,164,122,1)"}},"textfont":{"color":"rgba(211,164,122,1)"},"error_y":{"color":"rgba(211,164,122,1)"},"error_x":{"color":"rgba(211,164,122,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.108333333333334],"x":["PUTNAM"],"type":"bar","name":"PUTNAM","marker":{"color":"rgba(226,157,114,1)","line":{"color":"rgba(226,157,114,1)"}},"textfont":{"color":"rgba(226,157,114,1)"},"error_y":{"color":"rgba(226,157,114,1)"},"error_x":{"color":"rgba(226,157,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.132000000000001],"x":["MONROE"],"type":"bar","name":"MONROE","marker":{"color":"rgba(240,149,105,1)","line":{"color":"rgba(240,149,105,1)"}},"textfont":{"color":"rgba(240,149,105,1)"},"error_y":{"color":"rgba(240,149,105,1)"},"error_x":{"color":"rgba(240,149,105,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.161004784688995],"x":["NASSAU"],"type":"bar","name":"NASSAU","marker":{"color":"rgba(251,141,100,1)","line":{"color":"rgba(251,141,100,1)"}},"textfont":{"color":"rgba(251,141,100,1)"},"error_y":{"color":"rgba(251,141,100,1)"},"error_x":{"color":"rgba(251,141,100,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.17530864197531],"x":["SARATOGA"],"type":"bar","name":"SARATOGA","marker":{"color":"rgba(240,144,114,1)","line":{"color":"rgba(240,144,114,1)"}},"textfont":{"color":"rgba(240,144,114,1)"},"error_y":{"color":"rgba(240,144,114,1)"},"error_x":{"color":"rgba(240,144,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.198823529411765],"x":["ONONDAGA"],"type":"bar","name":"ONONDAGA","marker":{"color":"rgba(229,147,127,1)","line":{"color":"rgba(229,147,127,1)"}},"textfont":{"color":"rgba(229,147,127,1)"},"error_y":{"color":"rgba(229,147,127,1)"},"error_x":{"color":"rgba(229,147,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.215217391304346],"x":["COLUMBIA"],"type":"bar","name":"COLUMBIA","marker":{"color":"rgba(217,150,141,1)","line":{"color":"rgba(217,150,141,1)"}},"textfont":{"color":"rgba(217,150,141,1)"},"error_y":{"color":"rgba(217,150,141,1)"},"error_x":{"color":"rgba(217,150,141,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.303896103896104],"x":["ONTARIO"],"type":"bar","name":"ONTARIO","marker":{"color":"rgba(204,152,154,1)","line":{"color":"rgba(204,152,154,1)"}},"textfont":{"color":"rgba(204,152,154,1)"},"error_y":{"color":"rgba(204,152,154,1)"},"error_x":{"color":"rgba(204,152,154,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.321276595744681],"x":["ONEIDA"],"type":"bar","name":"ONEIDA","marker":{"color":"rgba(190,154,167,1)","line":{"color":"rgba(190,154,167,1)"}},"textfont":{"color":"rgba(190,154,167,1)"},"error_y":{"color":"rgba(190,154,167,1)"},"error_x":{"color":"rgba(190,154,167,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.558113207547169],"x":["ERIE"],"type":"bar","name":"ERIE","marker":{"color":"rgba(174,156,180,1)","line":{"color":"rgba(174,156,180,1)"}},"textfont":{"color":"rgba(174,156,180,1)"},"error_y":{"color":"rgba(174,156,180,1)"},"error_x":{"color":"rgba(174,156,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.617021276595743],"x":["DUTCHESS"],"type":"bar","name":"DUTCHESS","marker":{"color":"rgba(156,159,194,1)","line":{"color":"rgba(156,159,194,1)"}},"textfont":{"color":"rgba(156,159,194,1)"},"error_y":{"color":"rgba(156,159,194,1)"},"error_x":{"color":"rgba(156,159,194,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.860344827586207],"x":["SULLIVAN"],"type":"bar","name":"SULLIVAN","marker":{"color":"rgba(145,159,203,1)","line":{"color":"rgba(145,159,203,1)"}},"textfont":{"color":"rgba(145,159,203,1)"},"error_y":{"color":"rgba(145,159,203,1)"},"error_x":{"color":"rgba(145,159,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.890476190476189],"x":["ULSTER"],"type":"bar","name":"ULSTER","marker":{"color":"rgba(158,157,202,1)","line":{"color":"rgba(158,157,202,1)"}},"textfont":{"color":"rgba(158,157,202,1)"},"error_y":{"color":"rgba(158,157,202,1)"},"error_x":{"color":"rgba(158,157,202,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.907777777777778],"x":["NIAGARA"],"type":"bar","name":"NIAGARA","marker":{"color":"rgba(171,155,201,1)","line":{"color":"rgba(171,155,201,1)"}},"textfont":{"color":"rgba(171,155,201,1)"},"error_y":{"color":"rgba(171,155,201,1)"},"error_x":{"color":"rgba(171,155,201,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.944444444444443],"x":["MONTGOMERY"],"type":"bar","name":"MONTGOMERY","marker":{"color":"rgba(183,152,200,1)","line":{"color":"rgba(183,152,200,1)"}},"textfont":{"color":"rgba(183,152,200,1)"},"error_y":{"color":"rgba(183,152,200,1)"},"error_x":{"color":"rgba(183,152,200,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[16.993877551020407],"x":["WARREN"],"type":"bar","name":"WARREN","marker":{"color":"rgba(194,150,199,1)","line":{"color":"rgba(194,150,199,1)"}},"textfont":{"color":"rgba(194,150,199,1)"},"error_y":{"color":"rgba(194,150,199,1)"},"error_x":{"color":"rgba(194,150,199,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.068000000000001],"x":["DELAWARE"],"type":"bar","name":"DELAWARE","marker":{"color":"rgba(205,147,198,1)","line":{"color":"rgba(205,147,198,1)"}},"textfont":{"color":"rgba(205,147,198,1)"},"error_y":{"color":"rgba(205,147,198,1)"},"error_x":{"color":"rgba(205,147,198,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.079835390946503],"x":["SUFFOLK"],"type":"bar","name":"SUFFOLK","marker":{"color":"rgba(215,144,197,1)","line":{"color":"rgba(215,144,197,1)"}},"textfont":{"color":"rgba(215,144,197,1)"},"error_y":{"color":"rgba(215,144,197,1)"},"error_x":{"color":"rgba(215,144,197,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.167826086956524],"x":["ORANGE"],"type":"bar","name":"ORANGE","marker":{"color":"rgba(225,140,196,1)","line":{"color":"rgba(225,140,196,1)"}},"textfont":{"color":"rgba(225,140,196,1)"},"error_y":{"color":"rgba(225,140,196,1)"},"error_x":{"color":"rgba(225,140,196,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.178504672897198],"x":["BROOME"],"type":"bar","name":"BROOME","marker":{"color":"rgba(229,143,190,1)","line":{"color":"rgba(229,143,190,1)"}},"textfont":{"color":"rgba(229,143,190,1)"},"error_y":{"color":"rgba(229,143,190,1)"},"error_x":{"color":"rgba(229,143,190,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.263636363636362],"x":["CAYUGA"],"type":"bar","name":"CAYUGA","marker":{"color":"rgba(223,155,177,1)","line":{"color":"rgba(223,155,177,1)"}},"textfont":{"color":"rgba(223,155,177,1)"},"error_y":{"color":"rgba(223,155,177,1)"},"error_x":{"color":"rgba(223,155,177,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.27741935483871],"x":["SENECA"],"type":"bar","name":"SENECA","marker":{"color":"rgba(216,165,164,1)","line":{"color":"rgba(216,165,164,1)"}},"textfont":{"color":"rgba(216,165,164,1)"},"error_y":{"color":"rgba(216,165,164,1)"},"error_x":{"color":"rgba(216,165,164,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.279545454545456],"x":["LIVINGSTON"],"type":"bar","name":"LIVINGSTON","marker":{"color":"rgba(209,176,151,1)","line":{"color":"rgba(209,176,151,1)"}},"textfont":{"color":"rgba(209,176,151,1)"},"error_y":{"color":"rgba(209,176,151,1)"},"error_x":{"color":"rgba(209,176,151,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.375824175824174],"x":["ST. LAWRENCE"],"type":"bar","name":"ST. LAWRENCE","marker":{"color":"rgba(201,185,137,1)","line":{"color":"rgba(201,185,137,1)"}},"textfont":{"color":"rgba(201,185,137,1)"},"error_y":{"color":"rgba(201,185,137,1)"},"error_x":{"color":"rgba(201,185,137,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.396052631578947],"x":["WAYNE"],"type":"bar","name":"WAYNE","marker":{"color":"rgba(192,195,123,1)","line":{"color":"rgba(192,195,123,1)"}},"textfont":{"color":"rgba(192,195,123,1)"},"error_y":{"color":"rgba(192,195,123,1)"},"error_x":{"color":"rgba(192,195,123,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.419354838709676],"x":["WYOMING"],"type":"bar","name":"WYOMING","marker":{"color":"rgba(182,204,108,1)","line":{"color":"rgba(182,204,108,1)"}},"textfont":{"color":"rgba(182,204,108,1)"},"error_y":{"color":"rgba(182,204,108,1)"},"error_x":{"color":"rgba(182,204,108,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.428235294117648],"x":["STEUBEN"],"type":"bar","name":"STEUBEN","marker":{"color":"rgba(171,212,92,1)","line":{"color":"rgba(171,212,92,1)"}},"textfont":{"color":"rgba(171,212,92,1)"},"error_y":{"color":"rgba(171,212,92,1)"},"error_x":{"color":"rgba(171,212,92,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.436470588235295],"x":["RENSSELAER"],"type":"bar","name":"RENSSELAER","marker":{"color":"rgba(173,216,82,1)","line":{"color":"rgba(173,216,82,1)"}},"textfont":{"color":"rgba(173,216,82,1)"},"error_y":{"color":"rgba(173,216,82,1)"},"error_x":{"color":"rgba(173,216,82,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.485454545454544],"x":["MADISON"],"type":"bar","name":"MADISON","marker":{"color":"rgba(186,217,78,1)","line":{"color":"rgba(186,217,78,1)"}},"textfont":{"color":"rgba(186,217,78,1)"},"error_y":{"color":"rgba(186,217,78,1)"},"error_x":{"color":"rgba(186,217,78,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.506122448979593],"x":["ALBANY"],"type":"bar","name":"ALBANY","marker":{"color":"rgba(197,217,74,1)","line":{"color":"rgba(197,217,74,1)"}},"textfont":{"color":"rgba(197,217,74,1)"},"error_y":{"color":"rgba(197,217,74,1)"},"error_x":{"color":"rgba(197,217,74,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.515000000000001],"x":["YATES"],"type":"bar","name":"YATES","marker":{"color":"rgba(209,217,69,1)","line":{"color":"rgba(209,217,69,1)"}},"textfont":{"color":"rgba(209,217,69,1)"},"error_y":{"color":"rgba(209,217,69,1)"},"error_x":{"color":"rgba(209,217,69,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.527272727272727],"x":["SCHOHARIE"],"type":"bar","name":"SCHOHARIE","marker":{"color":"rgba(220,217,65,1)","line":{"color":"rgba(220,217,65,1)"}},"textfont":{"color":"rgba(220,217,65,1)"},"error_y":{"color":"rgba(220,217,65,1)"},"error_x":{"color":"rgba(220,217,65,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.706015037593986],"x":["CHAUTAUQUA"],"type":"bar","name":"CHAUTAUQUA","marker":{"color":"rgba(231,217,60,1)","line":{"color":"rgba(231,217,60,1)"}},"textfont":{"color":"rgba(231,217,60,1)"},"error_y":{"color":"rgba(231,217,60,1)"},"error_x":{"color":"rgba(231,217,60,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[17.840624999999999],"x":["CLINTON"],"type":"bar","name":"CLINTON","marker":{"color":"rgba(242,217,55,1)","line":{"color":"rgba(242,217,55,1)"}},"textfont":{"color":"rgba(242,217,55,1)"},"error_y":{"color":"rgba(242,217,55,1)"},"error_x":{"color":"rgba(242,217,55,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.027272727272727],"x":["CORTLAND"],"type":"bar","name":"CORTLAND","marker":{"color":"rgba(252,217,49,1)","line":{"color":"rgba(252,217,49,1)"}},"textfont":{"color":"rgba(252,217,49,1)"},"error_y":{"color":"rgba(252,217,49,1)"},"error_x":{"color":"rgba(252,217,49,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.080851063829787],"x":["GENESEE"],"type":"bar","name":"GENESEE","marker":{"color":"rgba(253,215,61,1)","line":{"color":"rgba(253,215,61,1)"}},"textfont":{"color":"rgba(253,215,61,1)"},"error_y":{"color":"rgba(253,215,61,1)"},"error_x":{"color":"rgba(253,215,61,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.086274509803921],"x":["TIOGA"],"type":"bar","name":"TIOGA","marker":{"color":"rgba(250,212,77,1)","line":{"color":"rgba(250,212,77,1)"}},"textfont":{"color":"rgba(250,212,77,1)"},"error_y":{"color":"rgba(250,212,77,1)"},"error_x":{"color":"rgba(250,212,77,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.228571428571428],"x":["HERKIMER"],"type":"bar","name":"HERKIMER","marker":{"color":"rgba(247,210,90,1)","line":{"color":"rgba(247,210,90,1)"}},"textfont":{"color":"rgba(247,210,90,1)"},"error_y":{"color":"rgba(247,210,90,1)"},"error_x":{"color":"rgba(247,210,90,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.254285714285714],"x":["CATTARAUGUS"],"type":"bar","name":"CATTARAUGUS","marker":{"color":"rgba(244,207,103,1)","line":{"color":"rgba(244,207,103,1)"}},"textfont":{"color":"rgba(244,207,103,1)"},"error_y":{"color":"rgba(244,207,103,1)"},"error_x":{"color":"rgba(244,207,103,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.294318181818181],"x":["JEFFERSON"],"type":"bar","name":"JEFFERSON","marker":{"color":"rgba(241,204,114,1)","line":{"color":"rgba(241,204,114,1)"}},"textfont":{"color":"rgba(241,204,114,1)"},"error_y":{"color":"rgba(241,204,114,1)"},"error_x":{"color":"rgba(241,204,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.325531914893617],"x":["ORLEANS"],"type":"bar","name":"ORLEANS","marker":{"color":"rgba(237,202,125,1)","line":{"color":"rgba(237,202,125,1)"}},"textfont":{"color":"rgba(237,202,125,1)"},"error_y":{"color":"rgba(237,202,125,1)"},"error_x":{"color":"rgba(237,202,125,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.365625000000001],"x":["CHENANGO"],"type":"bar","name":"CHENANGO","marker":{"color":"rgba(234,199,136,1)","line":{"color":"rgba(234,199,136,1)"}},"textfont":{"color":"rgba(234,199,136,1)"},"error_y":{"color":"rgba(234,199,136,1)"},"error_x":{"color":"rgba(234,199,136,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.510416666666668],"x":["OTSEGO"],"type":"bar","name":"OTSEGO","marker":{"color":"rgba(230,196,147,1)","line":{"color":"rgba(230,196,147,1)"}},"textfont":{"color":"rgba(230,196,147,1)"},"error_y":{"color":"rgba(230,196,147,1)"},"error_x":{"color":"rgba(230,196,147,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.559090909090909],"x":["FRANKLIN"],"type":"bar","name":"FRANKLIN","marker":{"color":"rgba(224,194,152,1)","line":{"color":"rgba(224,194,152,1)"}},"textfont":{"color":"rgba(224,194,152,1)"},"error_y":{"color":"rgba(224,194,152,1)"},"error_x":{"color":"rgba(224,194,152,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.597727272727273],"x":["WASHINGTON"],"type":"bar","name":"WASHINGTON","marker":{"color":"rgba(218,192,156,1)","line":{"color":"rgba(218,192,156,1)"}},"textfont":{"color":"rgba(218,192,156,1)"},"error_y":{"color":"rgba(218,192,156,1)"},"error_x":{"color":"rgba(218,192,156,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.866666666666667],"x":["GREENE"],"type":"bar","name":"GREENE","marker":{"color":"rgba(212,190,160,1)","line":{"color":"rgba(212,190,160,1)"}},"textfont":{"color":"rgba(212,190,160,1)"},"error_y":{"color":"rgba(212,190,160,1)"},"error_x":{"color":"rgba(212,190,160,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[18.919999999999998],"x":["CHEMUNG"],"type":"bar","name":"CHEMUNG","marker":{"color":"rgba(206,188,164,1)","line":{"color":"rgba(206,188,164,1)"}},"textfont":{"color":"rgba(206,188,164,1)"},"error_y":{"color":"rgba(206,188,164,1)"},"error_x":{"color":"rgba(206,188,164,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[19.027173913043477],"x":["OSWEGO"],"type":"bar","name":"OSWEGO","marker":{"color":"rgba(199,185,167,1)","line":{"color":"rgba(199,185,167,1)"}},"textfont":{"color":"rgba(199,185,167,1)"},"error_y":{"color":"rgba(199,185,167,1)"},"error_x":{"color":"rgba(199,185,167,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[19.240909090909092],"x":["ALLEGANY"],"type":"bar","name":"ALLEGANY","marker":{"color":"rgba(193,183,171,1)","line":{"color":"rgba(193,183,171,1)"}},"textfont":{"color":"rgba(193,183,171,1)"},"error_y":{"color":"rgba(193,183,171,1)"},"error_x":{"color":"rgba(193,183,171,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[20.170588235294119],"x":["ESSEX"],"type":"bar","name":"ESSEX","marker":{"color":"rgba(186,181,175,1)","line":{"color":"rgba(186,181,175,1)"}},"textfont":{"color":"rgba(186,181,175,1)"},"error_y":{"color":"rgba(186,181,175,1)"},"error_x":{"color":"rgba(186,181,175,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[21.604166666666668],"x":["LEWIS"],"type":"bar","name":"LEWIS","marker":{"color":"rgba(179,179,179,1)","line":{"color":"rgba(179,179,179,1)"}},"textfont":{"color":"rgba(179,179,179,1)"},"error_y":{"color":"rgba(179,179,179,1)"},"error_x":{"color":"rgba(179,179,179,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <table>
 <caption>
 Three Counties with Highest Overweight Percent
@@ -474,7 +1951,7 @@ ave_overweight_percent
 LEWIS
 </td>
 <td style="text-align:right;">
-20.43625
+21.60417
 </td>
 </tr>
 <tr>
@@ -482,23 +1959,15 @@ LEWIS
 ESSEX
 </td>
 <td style="text-align:right;">
-20.10000
+20.17059
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-CORTLAND
+ALLEGANY
 </td>
 <td style="text-align:right;">
-19.07819
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-WASHINGTON
-</td>
-<td style="text-align:right;">
-19.06388
+19.24091
 </td>
 </tr>
 <tr>
@@ -509,10 +1978,18 @@ OSWEGO
 19.02717
 </td>
 </tr>
+<tr>
+<td style="text-align:left;">
+CHEMUNG
+</td>
+<td style="text-align:right;">
+18.92000
+</td>
+</tr>
 </tbody>
 </table>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-e8ef06faa7e9cc1a8f0f" style="width:90%;height:345.6px;"></div>
-<script type="application/json" data-for="htmlwidget-e8ef06faa7e9cc1a8f0f">{"x":{"visdat":{"11e47347d0f7d":["function () ","plotlyVisDat"]},"cur_data":"11e47347d0f7d","attrs":{"11e47347d0f7d":{"x":{},"y":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Percentage Obese by County","xaxis":{"domain":[0,1],"automargin":true,"title":"County","type":"category","categoryorder":"array","categoryarray":["WESTCHESTER","SCHUYLER","NASSAU","ROCKLAND","MONROE","PUTNAM","SARATOGA","ERIE","TOMPKINS","SUFFOLK","ALBANY","ONONDAGA","ONTARIO","DUTCHESS","SCHENECTADY","ORANGE","FULTON","WYOMING","BROOME","NIAGARA","COLUMBIA","RENSSELAER","LIVINGSTON","WARREN","CAYUGA","ALLEGANY","ULSTER","CHAUTAUQUA","HERKIMER","OTSEGO","ONEIDA","TIOGA","CATTARAUGUS","GENESEE","WAYNE","CORTLAND","JEFFERSON","DELAWARE","CHEMUNG","WASHINGTON","MADISON","ORLEANS","STEUBEN","MONTGOMERY","ESSEX","SULLIVAN","GREENE","LEWIS","SCHOHARIE","CLINTON","CHENANGO","SENECA","FRANKLIN","YATES","ST. LAWRENCE","OSWEGO"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Average Percentage Obese"},"showlegend":false,"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["WESTCHESTER"],"y":[12.283516483516483],"type":"bar","name":"WESTCHESTER","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SCHUYLER"],"y":[14.621428571428572],"type":"bar","name":"SCHUYLER","marker":{"color":"rgba(133,189,156,1)","line":{"color":"rgba(133,189,156,1)"}},"textfont":{"color":"rgba(133,189,156,1)"},"error_y":{"color":"rgba(133,189,156,1)"},"error_x":{"color":"rgba(133,189,156,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["NASSAU"],"y":[14.783189964157707],"type":"bar","name":"NASSAU","marker":{"color":"rgba(156,183,148,1)","line":{"color":"rgba(156,183,148,1)"}},"textfont":{"color":"rgba(156,183,148,1)"},"error_y":{"color":"rgba(156,183,148,1)"},"error_x":{"color":"rgba(156,183,148,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ROCKLAND"],"y":[15.251250000000001],"type":"bar","name":"ROCKLAND","marker":{"color":"rgba(177,177,139,1)","line":{"color":"rgba(177,177,139,1)"}},"textfont":{"color":"rgba(177,177,139,1)"},"error_y":{"color":"rgba(177,177,139,1)"},"error_x":{"color":"rgba(177,177,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["MONROE"],"y":[15.645714285714284],"type":"bar","name":"MONROE","marker":{"color":"rgba(195,171,131,1)","line":{"color":"rgba(195,171,131,1)"}},"textfont":{"color":"rgba(195,171,131,1)"},"error_y":{"color":"rgba(195,171,131,1)"},"error_x":{"color":"rgba(195,171,131,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["PUTNAM"],"y":[15.727083333333333],"type":"bar","name":"PUTNAM","marker":{"color":"rgba(211,164,122,1)","line":{"color":"rgba(211,164,122,1)"}},"textfont":{"color":"rgba(211,164,122,1)"},"error_y":{"color":"rgba(211,164,122,1)"},"error_x":{"color":"rgba(211,164,122,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SARATOGA"],"y":[15.84948275862069],"type":"bar","name":"SARATOGA","marker":{"color":"rgba(226,157,114,1)","line":{"color":"rgba(226,157,114,1)"}},"textfont":{"color":"rgba(226,157,114,1)"},"error_y":{"color":"rgba(226,157,114,1)"},"error_x":{"color":"rgba(226,157,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ERIE"],"y":[16.107783312577833],"type":"bar","name":"ERIE","marker":{"color":"rgba(240,149,105,1)","line":{"color":"rgba(240,149,105,1)"}},"textfont":{"color":"rgba(240,149,105,1)"},"error_y":{"color":"rgba(240,149,105,1)"},"error_x":{"color":"rgba(240,149,105,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["TOMPKINS"],"y":[16.777616279069768],"type":"bar","name":"TOMPKINS","marker":{"color":"rgba(251,141,100,1)","line":{"color":"rgba(251,141,100,1)"}},"textfont":{"color":"rgba(251,141,100,1)"},"error_y":{"color":"rgba(251,141,100,1)"},"error_x":{"color":"rgba(251,141,100,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SUFFOLK"],"y":[17.128229069405542],"type":"bar","name":"SUFFOLK","marker":{"color":"rgba(240,144,114,1)","line":{"color":"rgba(240,144,114,1)"}},"textfont":{"color":"rgba(240,144,114,1)"},"error_y":{"color":"rgba(240,144,114,1)"},"error_x":{"color":"rgba(240,144,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ALBANY"],"y":[17.338963210702342],"type":"bar","name":"ALBANY","marker":{"color":"rgba(229,147,127,1)","line":{"color":"rgba(229,147,127,1)"}},"textfont":{"color":"rgba(229,147,127,1)"},"error_y":{"color":"rgba(229,147,127,1)"},"error_x":{"color":"rgba(229,147,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ONONDAGA"],"y":[17.58035019455253],"type":"bar","name":"ONONDAGA","marker":{"color":"rgba(217,150,141,1)","line":{"color":"rgba(217,150,141,1)"}},"textfont":{"color":"rgba(217,150,141,1)"},"error_y":{"color":"rgba(217,150,141,1)"},"error_x":{"color":"rgba(217,150,141,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ONTARIO"],"y":[17.643536121673005],"type":"bar","name":"ONTARIO","marker":{"color":"rgba(204,152,154,1)","line":{"color":"rgba(204,152,154,1)"}},"textfont":{"color":"rgba(204,152,154,1)"},"error_y":{"color":"rgba(204,152,154,1)"},"error_x":{"color":"rgba(204,152,154,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["DUTCHESS"],"y":[17.753164556962027],"type":"bar","name":"DUTCHESS","marker":{"color":"rgba(190,154,167,1)","line":{"color":"rgba(190,154,167,1)"}},"textfont":{"color":"rgba(190,154,167,1)"},"error_y":{"color":"rgba(190,154,167,1)"},"error_x":{"color":"rgba(190,154,167,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SCHENECTADY"],"y":[17.829824561403509],"type":"bar","name":"SCHENECTADY","marker":{"color":"rgba(174,156,180,1)","line":{"color":"rgba(174,156,180,1)"}},"textfont":{"color":"rgba(174,156,180,1)"},"error_y":{"color":"rgba(174,156,180,1)"},"error_x":{"color":"rgba(174,156,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ORANGE"],"y":[17.854433497536949],"type":"bar","name":"ORANGE","marker":{"color":"rgba(156,159,194,1)","line":{"color":"rgba(156,159,194,1)"}},"textfont":{"color":"rgba(156,159,194,1)"},"error_y":{"color":"rgba(156,159,194,1)"},"error_x":{"color":"rgba(156,159,194,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["FULTON"],"y":[18.626160337552744],"type":"bar","name":"FULTON","marker":{"color":"rgba(145,159,203,1)","line":{"color":"rgba(145,159,203,1)"}},"textfont":{"color":"rgba(145,159,203,1)"},"error_y":{"color":"rgba(145,159,203,1)"},"error_x":{"color":"rgba(145,159,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WYOMING"],"y":[18.877142857142857],"type":"bar","name":"WYOMING","marker":{"color":"rgba(158,157,202,1)","line":{"color":"rgba(158,157,202,1)"}},"textfont":{"color":"rgba(158,157,202,1)"},"error_y":{"color":"rgba(158,157,202,1)"},"error_x":{"color":"rgba(158,157,202,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["BROOME"],"y":[19.009051094890509],"type":"bar","name":"BROOME","marker":{"color":"rgba(171,155,201,1)","line":{"color":"rgba(171,155,201,1)"}},"textfont":{"color":"rgba(171,155,201,1)"},"error_y":{"color":"rgba(171,155,201,1)"},"error_x":{"color":"rgba(171,155,201,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["NIAGARA"],"y":[19.063747810858143],"type":"bar","name":"NIAGARA","marker":{"color":"rgba(183,152,200,1)","line":{"color":"rgba(183,152,200,1)"}},"textfont":{"color":"rgba(183,152,200,1)"},"error_y":{"color":"rgba(183,152,200,1)"},"error_x":{"color":"rgba(183,152,200,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["COLUMBIA"],"y":[19.095104895104896],"type":"bar","name":"COLUMBIA","marker":{"color":"rgba(194,150,199,1)","line":{"color":"rgba(194,150,199,1)"}},"textfont":{"color":"rgba(194,150,199,1)"},"error_y":{"color":"rgba(194,150,199,1)"},"error_x":{"color":"rgba(194,150,199,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["RENSSELAER"],"y":[19.46867862969005],"type":"bar","name":"RENSSELAER","marker":{"color":"rgba(205,147,198,1)","line":{"color":"rgba(205,147,198,1)"}},"textfont":{"color":"rgba(205,147,198,1)"},"error_y":{"color":"rgba(205,147,198,1)"},"error_x":{"color":"rgba(205,147,198,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["LIVINGSTON"],"y":[19.50537084398977],"type":"bar","name":"LIVINGSTON","marker":{"color":"rgba(215,144,197,1)","line":{"color":"rgba(215,144,197,1)"}},"textfont":{"color":"rgba(215,144,197,1)"},"error_y":{"color":"rgba(215,144,197,1)"},"error_x":{"color":"rgba(215,144,197,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WARREN"],"y":[19.540109890109889],"type":"bar","name":"WARREN","marker":{"color":"rgba(225,140,196,1)","line":{"color":"rgba(225,140,196,1)"}},"textfont":{"color":"rgba(225,140,196,1)"},"error_y":{"color":"rgba(225,140,196,1)"},"error_x":{"color":"rgba(225,140,196,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CAYUGA"],"y":[19.62823834196891],"type":"bar","name":"CAYUGA","marker":{"color":"rgba(229,143,190,1)","line":{"color":"rgba(229,143,190,1)"}},"textfont":{"color":"rgba(229,143,190,1)"},"error_y":{"color":"rgba(229,143,190,1)"},"error_x":{"color":"rgba(229,143,190,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ALLEGANY"],"y":[19.714130434782611],"type":"bar","name":"ALLEGANY","marker":{"color":"rgba(223,155,177,1)","line":{"color":"rgba(223,155,177,1)"}},"textfont":{"color":"rgba(223,155,177,1)"},"error_y":{"color":"rgba(223,155,177,1)"},"error_x":{"color":"rgba(223,155,177,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ULSTER"],"y":[19.746851851851854],"type":"bar","name":"ULSTER","marker":{"color":"rgba(216,165,164,1)","line":{"color":"rgba(216,165,164,1)"}},"textfont":{"color":"rgba(216,165,164,1)"},"error_y":{"color":"rgba(216,165,164,1)"},"error_x":{"color":"rgba(216,165,164,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CHAUTAUQUA"],"y":[19.831895573212257],"type":"bar","name":"CHAUTAUQUA","marker":{"color":"rgba(209,176,151,1)","line":{"color":"rgba(209,176,151,1)"}},"textfont":{"color":"rgba(209,176,151,1)"},"error_y":{"color":"rgba(209,176,151,1)"},"error_x":{"color":"rgba(209,176,151,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["HERKIMER"],"y":[19.924864864864865],"type":"bar","name":"HERKIMER","marker":{"color":"rgba(201,185,137,1)","line":{"color":"rgba(201,185,137,1)"}},"textfont":{"color":"rgba(201,185,137,1)"},"error_y":{"color":"rgba(201,185,137,1)"},"error_x":{"color":"rgba(201,185,137,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["OTSEGO"],"y":[20.273575129533683],"type":"bar","name":"OTSEGO","marker":{"color":"rgba(192,195,123,1)","line":{"color":"rgba(192,195,123,1)"}},"textfont":{"color":"rgba(192,195,123,1)"},"error_y":{"color":"rgba(192,195,123,1)"},"error_x":{"color":"rgba(192,195,123,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ONEIDA"],"y":[20.29874826147427],"type":"bar","name":"ONEIDA","marker":{"color":"rgba(182,204,108,1)","line":{"color":"rgba(182,204,108,1)"}},"textfont":{"color":"rgba(182,204,108,1)"},"error_y":{"color":"rgba(182,204,108,1)"},"error_x":{"color":"rgba(182,204,108,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["TIOGA"],"y":[20.353437499999998],"type":"bar","name":"TIOGA","marker":{"color":"rgba(171,212,92,1)","line":{"color":"rgba(171,212,92,1)"}},"textfont":{"color":"rgba(171,212,92,1)"},"error_y":{"color":"rgba(171,212,92,1)"},"error_x":{"color":"rgba(171,212,92,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CATTARAUGUS"],"y":[20.359047619047619],"type":"bar","name":"CATTARAUGUS","marker":{"color":"rgba(173,216,82,1)","line":{"color":"rgba(173,216,82,1)"}},"textfont":{"color":"rgba(173,216,82,1)"},"error_y":{"color":"rgba(173,216,82,1)"},"error_x":{"color":"rgba(173,216,82,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["GENESEE"],"y":[20.655216284987276],"type":"bar","name":"GENESEE","marker":{"color":"rgba(186,217,78,1)","line":{"color":"rgba(186,217,78,1)"}},"textfont":{"color":"rgba(186,217,78,1)"},"error_y":{"color":"rgba(186,217,78,1)"},"error_x":{"color":"rgba(186,217,78,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WAYNE"],"y":[20.787630662020906],"type":"bar","name":"WAYNE","marker":{"color":"rgba(197,217,74,1)","line":{"color":"rgba(197,217,74,1)"}},"textfont":{"color":"rgba(197,217,74,1)"},"error_y":{"color":"rgba(197,217,74,1)"},"error_x":{"color":"rgba(197,217,74,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CORTLAND"],"y":[21.116460905349793],"type":"bar","name":"CORTLAND","marker":{"color":"rgba(209,217,69,1)","line":{"color":"rgba(209,217,69,1)"}},"textfont":{"color":"rgba(209,217,69,1)"},"error_y":{"color":"rgba(209,217,69,1)"},"error_x":{"color":"rgba(209,217,69,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["JEFFERSON"],"y":[21.186371379897786],"type":"bar","name":"JEFFERSON","marker":{"color":"rgba(220,217,65,1)","line":{"color":"rgba(220,217,65,1)"}},"textfont":{"color":"rgba(220,217,65,1)"},"error_y":{"color":"rgba(220,217,65,1)"},"error_x":{"color":"rgba(220,217,65,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["DELAWARE"],"y":[21.467399267399266],"type":"bar","name":"DELAWARE","marker":{"color":"rgba(231,217,60,1)","line":{"color":"rgba(231,217,60,1)"}},"textfont":{"color":"rgba(231,217,60,1)"},"error_y":{"color":"rgba(231,217,60,1)"},"error_x":{"color":"rgba(231,217,60,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CHEMUNG"],"y":[21.672000000000001],"type":"bar","name":"CHEMUNG","marker":{"color":"rgba(242,217,55,1)","line":{"color":"rgba(242,217,55,1)"}},"textfont":{"color":"rgba(242,217,55,1)"},"error_y":{"color":"rgba(242,217,55,1)"},"error_x":{"color":"rgba(242,217,55,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WASHINGTON"],"y":[21.733660933660932],"type":"bar","name":"WASHINGTON","marker":{"color":"rgba(252,217,49,1)","line":{"color":"rgba(252,217,49,1)"}},"textfont":{"color":"rgba(252,217,49,1)"},"error_y":{"color":"rgba(252,217,49,1)"},"error_x":{"color":"rgba(252,217,49,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["MADISON"],"y":[21.860332541567693],"type":"bar","name":"MADISON","marker":{"color":"rgba(253,215,61,1)","line":{"color":"rgba(253,215,61,1)"}},"textfont":{"color":"rgba(253,215,61,1)"},"error_y":{"color":"rgba(253,215,61,1)"},"error_x":{"color":"rgba(253,215,61,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ORLEANS"],"y":[21.96078431372549],"type":"bar","name":"ORLEANS","marker":{"color":"rgba(250,212,77,1)","line":{"color":"rgba(250,212,77,1)"}},"textfont":{"color":"rgba(250,212,77,1)"},"error_y":{"color":"rgba(250,212,77,1)"},"error_x":{"color":"rgba(250,212,77,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["STEUBEN"],"y":[22.023946037099492],"type":"bar","name":"STEUBEN","marker":{"color":"rgba(247,210,90,1)","line":{"color":"rgba(247,210,90,1)"}},"textfont":{"color":"rgba(247,210,90,1)"},"error_y":{"color":"rgba(247,210,90,1)"},"error_x":{"color":"rgba(247,210,90,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["MONTGOMERY"],"y":[22.096396396396397],"type":"bar","name":"MONTGOMERY","marker":{"color":"rgba(244,207,103,1)","line":{"color":"rgba(244,207,103,1)"}},"textfont":{"color":"rgba(244,207,103,1)"},"error_y":{"color":"rgba(244,207,103,1)"},"error_x":{"color":"rgba(244,207,103,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ESSEX"],"y":[22.103125000000002],"type":"bar","name":"ESSEX","marker":{"color":"rgba(241,204,114,1)","line":{"color":"rgba(241,204,114,1)"}},"textfont":{"color":"rgba(241,204,114,1)"},"error_y":{"color":"rgba(241,204,114,1)"},"error_x":{"color":"rgba(241,204,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SULLIVAN"],"y":[22.161097256857854],"type":"bar","name":"SULLIVAN","marker":{"color":"rgba(237,202,125,1)","line":{"color":"rgba(237,202,125,1)"}},"textfont":{"color":"rgba(237,202,125,1)"},"error_y":{"color":"rgba(237,202,125,1)"},"error_x":{"color":"rgba(237,202,125,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["GREENE"],"y":[22.241772151898736],"type":"bar","name":"GREENE","marker":{"color":"rgba(234,199,136,1)","line":{"color":"rgba(234,199,136,1)"}},"textfont":{"color":"rgba(234,199,136,1)"},"error_y":{"color":"rgba(234,199,136,1)"},"error_x":{"color":"rgba(234,199,136,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["LEWIS"],"y":[22.402390438247014],"type":"bar","name":"LEWIS","marker":{"color":"rgba(230,196,147,1)","line":{"color":"rgba(230,196,147,1)"}},"textfont":{"color":"rgba(230,196,147,1)"},"error_y":{"color":"rgba(230,196,147,1)"},"error_x":{"color":"rgba(230,196,147,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SCHOHARIE"],"y":[22.758860759493672],"type":"bar","name":"SCHOHARIE","marker":{"color":"rgba(224,194,152,1)","line":{"color":"rgba(224,194,152,1)"}},"textfont":{"color":"rgba(224,194,152,1)"},"error_y":{"color":"rgba(224,194,152,1)"},"error_x":{"color":"rgba(224,194,152,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CLINTON"],"y":[22.810138248847927],"type":"bar","name":"CLINTON","marker":{"color":"rgba(218,192,156,1)","line":{"color":"rgba(218,192,156,1)"}},"textfont":{"color":"rgba(218,192,156,1)"},"error_y":{"color":"rgba(218,192,156,1)"},"error_x":{"color":"rgba(218,192,156,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CHENANGO"],"y":[23.186934673366835],"type":"bar","name":"CHENANGO","marker":{"color":"rgba(212,190,160,1)","line":{"color":"rgba(212,190,160,1)"}},"textfont":{"color":"rgba(212,190,160,1)"},"error_y":{"color":"rgba(212,190,160,1)"},"error_x":{"color":"rgba(212,190,160,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SENECA"],"y":[23.245161290322581],"type":"bar","name":"SENECA","marker":{"color":"rgba(206,188,164,1)","line":{"color":"rgba(206,188,164,1)"}},"textfont":{"color":"rgba(206,188,164,1)"},"error_y":{"color":"rgba(206,188,164,1)"},"error_x":{"color":"rgba(206,188,164,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["FRANKLIN"],"y":[23.271044776119403],"type":"bar","name":"FRANKLIN","marker":{"color":"rgba(199,185,167,1)","line":{"color":"rgba(199,185,167,1)"}},"textfont":{"color":"rgba(199,185,167,1)"},"error_y":{"color":"rgba(199,185,167,1)"},"error_x":{"color":"rgba(199,185,167,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["YATES"],"y":[23.425000000000001],"type":"bar","name":"YATES","marker":{"color":"rgba(193,183,171,1)","line":{"color":"rgba(193,183,171,1)"}},"textfont":{"color":"rgba(193,183,171,1)"},"error_y":{"color":"rgba(193,183,171,1)"},"error_x":{"color":"rgba(193,183,171,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ST. LAWRENCE"],"y":[24.10043103448276],"type":"bar","name":"ST. LAWRENCE","marker":{"color":"rgba(186,181,175,1)","line":{"color":"rgba(186,181,175,1)"}},"textfont":{"color":"rgba(186,181,175,1)"},"error_y":{"color":"rgba(186,181,175,1)"},"error_x":{"color":"rgba(186,181,175,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["OSWEGO"],"y":[24.819565217391304],"type":"bar","name":"OSWEGO","marker":{"color":"rgba(179,179,179,1)","line":{"color":"rgba(179,179,179,1)"}},"textfont":{"color":"rgba(179,179,179,1)"},"error_y":{"color":"rgba(179,179,179,1)"},"error_x":{"color":"rgba(179,179,179,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-790e5ac7fb7b1075f406" style="width:90%;height:345.6px;"></div>
+<script type="application/json" data-for="htmlwidget-790e5ac7fb7b1075f406">{"x":{"visdat":{"dce7499ec7e7":["function () ","plotlyVisDat"]},"cur_data":"dce7499ec7e7","attrs":{"dce7499ec7e7":{"x":{},"y":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Percentage Obese by County","xaxis":{"domain":[0,1],"automargin":true,"title":"County","type":"category","categoryorder":"array","categoryarray":["WESTCHESTER","SCHUYLER","NASSAU","ROCKLAND","SARATOGA","MONROE","PUTNAM","ERIE","TOMPKINS","ALBANY","SUFFOLK","ONONDAGA","DUTCHESS","ORANGE","ONTARIO","SCHENECTADY","WYOMING","DELAWARE","FULTON","BROOME","COLUMBIA","NIAGARA","LIVINGSTON","RENSSELAER","CAYUGA","ULSTER","WARREN","ALLEGANY","CHAUTAUQUA","ONEIDA","HERKIMER","CATTARAUGUS","SCHOHARIE","WAYNE","GENESEE","TIOGA","OTSEGO","JEFFERSON","MADISON","STEUBEN","CORTLAND","CHEMUNG","GREENE","ORLEANS","LEWIS","WASHINGTON","ESSEX","MONTGOMERY","SENECA","SULLIVAN","CLINTON","CHENANGO","YATES","ST. LAWRENCE","FRANKLIN","OSWEGO"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Average Percentage Obese"},"showlegend":false,"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["WESTCHESTER"],"y":[12.473731343283582],"type":"bar","name":"WESTCHESTER","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SCHUYLER"],"y":[14.621428571428572],"type":"bar","name":"SCHUYLER","marker":{"color":"rgba(133,189,156,1)","line":{"color":"rgba(133,189,156,1)"}},"textfont":{"color":"rgba(133,189,156,1)"},"error_y":{"color":"rgba(133,189,156,1)"},"error_x":{"color":"rgba(133,189,156,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["NASSAU"],"y":[14.714593301435407],"type":"bar","name":"NASSAU","marker":{"color":"rgba(156,183,148,1)","line":{"color":"rgba(156,183,148,1)"}},"textfont":{"color":"rgba(156,183,148,1)"},"error_y":{"color":"rgba(156,183,148,1)"},"error_x":{"color":"rgba(156,183,148,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ROCKLAND"],"y":[15.251250000000001],"type":"bar","name":"ROCKLAND","marker":{"color":"rgba(177,177,139,1)","line":{"color":"rgba(177,177,139,1)"}},"textfont":{"color":"rgba(177,177,139,1)"},"error_y":{"color":"rgba(177,177,139,1)"},"error_x":{"color":"rgba(177,177,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SARATOGA"],"y":[15.527160493827161],"type":"bar","name":"SARATOGA","marker":{"color":"rgba(195,171,131,1)","line":{"color":"rgba(195,171,131,1)"}},"textfont":{"color":"rgba(195,171,131,1)"},"error_y":{"color":"rgba(195,171,131,1)"},"error_x":{"color":"rgba(195,171,131,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["MONROE"],"y":[15.645714285714286],"type":"bar","name":"MONROE","marker":{"color":"rgba(211,164,122,1)","line":{"color":"rgba(211,164,122,1)"}},"textfont":{"color":"rgba(211,164,122,1)"},"error_y":{"color":"rgba(211,164,122,1)"},"error_x":{"color":"rgba(211,164,122,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["PUTNAM"],"y":[15.727083333333333],"type":"bar","name":"PUTNAM","marker":{"color":"rgba(226,157,114,1)","line":{"color":"rgba(226,157,114,1)"}},"textfont":{"color":"rgba(226,157,114,1)"},"error_y":{"color":"rgba(226,157,114,1)"},"error_x":{"color":"rgba(226,157,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ERIE"],"y":[16.197358490566039],"type":"bar","name":"ERIE","marker":{"color":"rgba(240,149,105,1)","line":{"color":"rgba(240,149,105,1)"}},"textfont":{"color":"rgba(240,149,105,1)"},"error_y":{"color":"rgba(240,149,105,1)"},"error_x":{"color":"rgba(240,149,105,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["TOMPKINS"],"y":[16.219642857142858],"type":"bar","name":"TOMPKINS","marker":{"color":"rgba(251,141,100,1)","line":{"color":"rgba(251,141,100,1)"}},"textfont":{"color":"rgba(251,141,100,1)"},"error_y":{"color":"rgba(251,141,100,1)"},"error_x":{"color":"rgba(251,141,100,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ALBANY"],"y":[17.119387755102039],"type":"bar","name":"ALBANY","marker":{"color":"rgba(240,144,114,1)","line":{"color":"rgba(240,144,114,1)"}},"textfont":{"color":"rgba(240,144,114,1)"},"error_y":{"color":"rgba(240,144,114,1)"},"error_x":{"color":"rgba(240,144,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SUFFOLK"],"y":[17.189506172839508],"type":"bar","name":"SUFFOLK","marker":{"color":"rgba(229,147,127,1)","line":{"color":"rgba(229,147,127,1)"}},"textfont":{"color":"rgba(229,147,127,1)"},"error_y":{"color":"rgba(229,147,127,1)"},"error_x":{"color":"rgba(229,147,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ONONDAGA"],"y":[17.611764705882354],"type":"bar","name":"ONONDAGA","marker":{"color":"rgba(217,150,141,1)","line":{"color":"rgba(217,150,141,1)"}},"textfont":{"color":"rgba(217,150,141,1)"},"error_y":{"color":"rgba(217,150,141,1)"},"error_x":{"color":"rgba(217,150,141,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["DUTCHESS"],"y":[17.723404255319149],"type":"bar","name":"DUTCHESS","marker":{"color":"rgba(204,152,154,1)","line":{"color":"rgba(204,152,154,1)"}},"textfont":{"color":"rgba(204,152,154,1)"},"error_y":{"color":"rgba(204,152,154,1)"},"error_x":{"color":"rgba(204,152,154,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ORANGE"],"y":[17.754782608695653],"type":"bar","name":"ORANGE","marker":{"color":"rgba(190,154,167,1)","line":{"color":"rgba(190,154,167,1)"}},"textfont":{"color":"rgba(190,154,167,1)"},"error_y":{"color":"rgba(190,154,167,1)"},"error_x":{"color":"rgba(190,154,167,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ONTARIO"],"y":[17.755844155844155],"type":"bar","name":"ONTARIO","marker":{"color":"rgba(174,156,180,1)","line":{"color":"rgba(174,156,180,1)"}},"textfont":{"color":"rgba(174,156,180,1)"},"error_y":{"color":"rgba(174,156,180,1)"},"error_x":{"color":"rgba(174,156,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SCHENECTADY"],"y":[17.796363636363637],"type":"bar","name":"SCHENECTADY","marker":{"color":"rgba(156,159,194,1)","line":{"color":"rgba(156,159,194,1)"}},"textfont":{"color":"rgba(156,159,194,1)"},"error_y":{"color":"rgba(156,159,194,1)"},"error_x":{"color":"rgba(156,159,194,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WYOMING"],"y":[18.358064516129033],"type":"bar","name":"WYOMING","marker":{"color":"rgba(145,159,203,1)","line":{"color":"rgba(145,159,203,1)"}},"textfont":{"color":"rgba(145,159,203,1)"},"error_y":{"color":"rgba(145,159,203,1)"},"error_x":{"color":"rgba(145,159,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["DELAWARE"],"y":[18.596],"type":"bar","name":"DELAWARE","marker":{"color":"rgba(158,157,202,1)","line":{"color":"rgba(158,157,202,1)"}},"textfont":{"color":"rgba(158,157,202,1)"},"error_y":{"color":"rgba(158,157,202,1)"},"error_x":{"color":"rgba(158,157,202,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["FULTON"],"y":[18.646875000000001],"type":"bar","name":"FULTON","marker":{"color":"rgba(171,155,201,1)","line":{"color":"rgba(171,155,201,1)"}},"textfont":{"color":"rgba(171,155,201,1)"},"error_y":{"color":"rgba(171,155,201,1)"},"error_x":{"color":"rgba(171,155,201,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["BROOME"],"y":[18.822429906542055],"type":"bar","name":"BROOME","marker":{"color":"rgba(183,152,200,1)","line":{"color":"rgba(183,152,200,1)"}},"textfont":{"color":"rgba(183,152,200,1)"},"error_y":{"color":"rgba(183,152,200,1)"},"error_x":{"color":"rgba(183,152,200,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["COLUMBIA"],"y":[18.949999999999999],"type":"bar","name":"COLUMBIA","marker":{"color":"rgba(194,150,199,1)","line":{"color":"rgba(194,150,199,1)"}},"textfont":{"color":"rgba(194,150,199,1)"},"error_y":{"color":"rgba(194,150,199,1)"},"error_x":{"color":"rgba(194,150,199,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["NIAGARA"],"y":[18.998888888888889],"type":"bar","name":"NIAGARA","marker":{"color":"rgba(205,147,198,1)","line":{"color":"rgba(205,147,198,1)"}},"textfont":{"color":"rgba(205,147,198,1)"},"error_y":{"color":"rgba(205,147,198,1)"},"error_x":{"color":"rgba(205,147,198,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["LIVINGSTON"],"y":[19.015909090909091],"type":"bar","name":"LIVINGSTON","marker":{"color":"rgba(215,144,197,1)","line":{"color":"rgba(215,144,197,1)"}},"textfont":{"color":"rgba(215,144,197,1)"},"error_y":{"color":"rgba(215,144,197,1)"},"error_x":{"color":"rgba(215,144,197,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["RENSSELAER"],"y":[19.162352941176472],"type":"bar","name":"RENSSELAER","marker":{"color":"rgba(225,140,196,1)","line":{"color":"rgba(225,140,196,1)"}},"textfont":{"color":"rgba(225,140,196,1)"},"error_y":{"color":"rgba(225,140,196,1)"},"error_x":{"color":"rgba(225,140,196,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CAYUGA"],"y":[19.574545454545454],"type":"bar","name":"CAYUGA","marker":{"color":"rgba(229,143,190,1)","line":{"color":"rgba(229,143,190,1)"}},"textfont":{"color":"rgba(229,143,190,1)"},"error_y":{"color":"rgba(229,143,190,1)"},"error_x":{"color":"rgba(229,143,190,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ULSTER"],"y":[19.586904761904762],"type":"bar","name":"ULSTER","marker":{"color":"rgba(223,155,177,1)","line":{"color":"rgba(223,155,177,1)"}},"textfont":{"color":"rgba(223,155,177,1)"},"error_y":{"color":"rgba(223,155,177,1)"},"error_x":{"color":"rgba(223,155,177,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WARREN"],"y":[19.726530612244897],"type":"bar","name":"WARREN","marker":{"color":"rgba(216,165,164,1)","line":{"color":"rgba(216,165,164,1)"}},"textfont":{"color":"rgba(216,165,164,1)"},"error_y":{"color":"rgba(216,165,164,1)"},"error_x":{"color":"rgba(216,165,164,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ALLEGANY"],"y":[19.886363636363637],"type":"bar","name":"ALLEGANY","marker":{"color":"rgba(209,176,151,1)","line":{"color":"rgba(209,176,151,1)"}},"textfont":{"color":"rgba(209,176,151,1)"},"error_y":{"color":"rgba(209,176,151,1)"},"error_x":{"color":"rgba(209,176,151,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CHAUTAUQUA"],"y":[20.036842105263158],"type":"bar","name":"CHAUTAUQUA","marker":{"color":"rgba(201,185,137,1)","line":{"color":"rgba(201,185,137,1)"}},"textfont":{"color":"rgba(201,185,137,1)"},"error_y":{"color":"rgba(201,185,137,1)"},"error_x":{"color":"rgba(201,185,137,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ONEIDA"],"y":[20.071276595744681],"type":"bar","name":"ONEIDA","marker":{"color":"rgba(192,195,123,1)","line":{"color":"rgba(192,195,123,1)"}},"textfont":{"color":"rgba(192,195,123,1)"},"error_y":{"color":"rgba(192,195,123,1)"},"error_x":{"color":"rgba(192,195,123,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["HERKIMER"],"y":[20.078571428571429],"type":"bar","name":"HERKIMER","marker":{"color":"rgba(182,204,108,1)","line":{"color":"rgba(182,204,108,1)"}},"textfont":{"color":"rgba(182,204,108,1)"},"error_y":{"color":"rgba(182,204,108,1)"},"error_x":{"color":"rgba(182,204,108,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CATTARAUGUS"],"y":[20.359047619047619],"type":"bar","name":"CATTARAUGUS","marker":{"color":"rgba(171,212,92,1)","line":{"color":"rgba(171,212,92,1)"}},"textfont":{"color":"rgba(171,212,92,1)"},"error_y":{"color":"rgba(171,212,92,1)"},"error_x":{"color":"rgba(171,212,92,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SCHOHARIE"],"y":[20.436363636363637],"type":"bar","name":"SCHOHARIE","marker":{"color":"rgba(173,216,82,1)","line":{"color":"rgba(173,216,82,1)"}},"textfont":{"color":"rgba(173,216,82,1)"},"error_y":{"color":"rgba(173,216,82,1)"},"error_x":{"color":"rgba(173,216,82,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WAYNE"],"y":[20.538157894736841],"type":"bar","name":"WAYNE","marker":{"color":"rgba(186,217,78,1)","line":{"color":"rgba(186,217,78,1)"}},"textfont":{"color":"rgba(186,217,78,1)"},"error_y":{"color":"rgba(186,217,78,1)"},"error_x":{"color":"rgba(186,217,78,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["GENESEE"],"y":[20.546808510638296],"type":"bar","name":"GENESEE","marker":{"color":"rgba(197,217,74,1)","line":{"color":"rgba(197,217,74,1)"}},"textfont":{"color":"rgba(197,217,74,1)"},"error_y":{"color":"rgba(197,217,74,1)"},"error_x":{"color":"rgba(197,217,74,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["TIOGA"],"y":[20.560784313725492],"type":"bar","name":"TIOGA","marker":{"color":"rgba(209,217,69,1)","line":{"color":"rgba(209,217,69,1)"}},"textfont":{"color":"rgba(209,217,69,1)"},"error_y":{"color":"rgba(209,217,69,1)"},"error_x":{"color":"rgba(209,217,69,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["OTSEGO"],"y":[20.850000000000001],"type":"bar","name":"OTSEGO","marker":{"color":"rgba(220,217,65,1)","line":{"color":"rgba(220,217,65,1)"}},"textfont":{"color":"rgba(220,217,65,1)"},"error_y":{"color":"rgba(220,217,65,1)"},"error_x":{"color":"rgba(220,217,65,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["JEFFERSON"],"y":[20.865909090909092],"type":"bar","name":"JEFFERSON","marker":{"color":"rgba(231,217,60,1)","line":{"color":"rgba(231,217,60,1)"}},"textfont":{"color":"rgba(231,217,60,1)"},"error_y":{"color":"rgba(231,217,60,1)"},"error_x":{"color":"rgba(231,217,60,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["MADISON"],"y":[21.112727272727273],"type":"bar","name":"MADISON","marker":{"color":"rgba(242,217,55,1)","line":{"color":"rgba(242,217,55,1)"}},"textfont":{"color":"rgba(242,217,55,1)"},"error_y":{"color":"rgba(242,217,55,1)"},"error_x":{"color":"rgba(242,217,55,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["STEUBEN"],"y":[21.395294117647058],"type":"bar","name":"STEUBEN","marker":{"color":"rgba(252,217,49,1)","line":{"color":"rgba(252,217,49,1)"}},"textfont":{"color":"rgba(252,217,49,1)"},"error_y":{"color":"rgba(252,217,49,1)"},"error_x":{"color":"rgba(252,217,49,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CORTLAND"],"y":[21.522727272727273],"type":"bar","name":"CORTLAND","marker":{"color":"rgba(253,215,61,1)","line":{"color":"rgba(253,215,61,1)"}},"textfont":{"color":"rgba(253,215,61,1)"},"error_y":{"color":"rgba(253,215,61,1)"},"error_x":{"color":"rgba(253,215,61,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CHEMUNG"],"y":[21.672000000000001],"type":"bar","name":"CHEMUNG","marker":{"color":"rgba(250,212,77,1)","line":{"color":"rgba(250,212,77,1)"}},"textfont":{"color":"rgba(250,212,77,1)"},"error_y":{"color":"rgba(250,212,77,1)"},"error_x":{"color":"rgba(250,212,77,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["GREENE"],"y":[21.905555555555555],"type":"bar","name":"GREENE","marker":{"color":"rgba(247,210,90,1)","line":{"color":"rgba(247,210,90,1)"}},"textfont":{"color":"rgba(247,210,90,1)"},"error_y":{"color":"rgba(247,210,90,1)"},"error_x":{"color":"rgba(247,210,90,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ORLEANS"],"y":[22.065957446808511],"type":"bar","name":"ORLEANS","marker":{"color":"rgba(244,207,103,1)","line":{"color":"rgba(244,207,103,1)"}},"textfont":{"color":"rgba(244,207,103,1)"},"error_y":{"color":"rgba(244,207,103,1)"},"error_x":{"color":"rgba(244,207,103,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["LEWIS"],"y":[22.070833333333333],"type":"bar","name":"LEWIS","marker":{"color":"rgba(241,204,114,1)","line":{"color":"rgba(241,204,114,1)"}},"textfont":{"color":"rgba(241,204,114,1)"},"error_y":{"color":"rgba(241,204,114,1)"},"error_x":{"color":"rgba(241,204,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WASHINGTON"],"y":[22.168181818181818],"type":"bar","name":"WASHINGTON","marker":{"color":"rgba(237,202,125,1)","line":{"color":"rgba(237,202,125,1)"}},"textfont":{"color":"rgba(237,202,125,1)"},"error_y":{"color":"rgba(237,202,125,1)"},"error_x":{"color":"rgba(237,202,125,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ESSEX"],"y":[22.194117647058825],"type":"bar","name":"ESSEX","marker":{"color":"rgba(234,199,136,1)","line":{"color":"rgba(234,199,136,1)"}},"textfont":{"color":"rgba(234,199,136,1)"},"error_y":{"color":"rgba(234,199,136,1)"},"error_x":{"color":"rgba(234,199,136,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["MONTGOMERY"],"y":[22.325925925925926],"type":"bar","name":"MONTGOMERY","marker":{"color":"rgba(230,196,147,1)","line":{"color":"rgba(230,196,147,1)"}},"textfont":{"color":"rgba(230,196,147,1)"},"error_y":{"color":"rgba(230,196,147,1)"},"error_x":{"color":"rgba(230,196,147,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SENECA"],"y":[22.64516129032258],"type":"bar","name":"SENECA","marker":{"color":"rgba(224,194,152,1)","line":{"color":"rgba(224,194,152,1)"}},"textfont":{"color":"rgba(224,194,152,1)"},"error_y":{"color":"rgba(224,194,152,1)"},"error_x":{"color":"rgba(224,194,152,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SULLIVAN"],"y":[22.653448275862068],"type":"bar","name":"SULLIVAN","marker":{"color":"rgba(218,192,156,1)","line":{"color":"rgba(218,192,156,1)"}},"textfont":{"color":"rgba(218,192,156,1)"},"error_y":{"color":"rgba(218,192,156,1)"},"error_x":{"color":"rgba(218,192,156,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CLINTON"],"y":[22.859375],"type":"bar","name":"CLINTON","marker":{"color":"rgba(212,190,160,1)","line":{"color":"rgba(212,190,160,1)"}},"textfont":{"color":"rgba(212,190,160,1)"},"error_y":{"color":"rgba(212,190,160,1)"},"error_x":{"color":"rgba(212,190,160,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CHENANGO"],"y":[22.985937499999999],"type":"bar","name":"CHENANGO","marker":{"color":"rgba(206,188,164,1)","line":{"color":"rgba(206,188,164,1)"}},"textfont":{"color":"rgba(206,188,164,1)"},"error_y":{"color":"rgba(206,188,164,1)"},"error_x":{"color":"rgba(206,188,164,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["YATES"],"y":[23.425000000000001],"type":"bar","name":"YATES","marker":{"color":"rgba(199,185,167,1)","line":{"color":"rgba(199,185,167,1)"}},"textfont":{"color":"rgba(199,185,167,1)"},"error_y":{"color":"rgba(199,185,167,1)"},"error_x":{"color":"rgba(199,185,167,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ST. LAWRENCE"],"y":[23.94835164835165],"type":"bar","name":"ST. LAWRENCE","marker":{"color":"rgba(193,183,171,1)","line":{"color":"rgba(193,183,171,1)"}},"textfont":{"color":"rgba(193,183,171,1)"},"error_y":{"color":"rgba(193,183,171,1)"},"error_x":{"color":"rgba(193,183,171,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["FRANKLIN"],"y":[24.461363636363636],"type":"bar","name":"FRANKLIN","marker":{"color":"rgba(186,181,175,1)","line":{"color":"rgba(186,181,175,1)"}},"textfont":{"color":"rgba(186,181,175,1)"},"error_y":{"color":"rgba(186,181,175,1)"},"error_x":{"color":"rgba(186,181,175,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["OSWEGO"],"y":[24.819565217391304],"type":"bar","name":"OSWEGO","marker":{"color":"rgba(179,179,179,1)","line":{"color":"rgba(179,179,179,1)"}},"textfont":{"color":"rgba(179,179,179,1)"},"error_y":{"color":"rgba(179,179,179,1)"},"error_x":{"color":"rgba(179,179,179,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <table>
 <caption>
 Three Counties with Highest Obese Percent
@@ -538,10 +2015,18 @@ OSWEGO
 </tr>
 <tr>
 <td style="text-align:left;">
+FRANKLIN
+</td>
+<td style="text-align:right;">
+24.46136
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 ST. LAWRENCE
 </td>
 <td style="text-align:right;">
-24.10043
+23.94835
 </td>
 </tr>
 <tr>
@@ -554,24 +2039,16 @@ YATES
 </tr>
 <tr>
 <td style="text-align:left;">
-FRANKLIN
+CHENANGO
 </td>
 <td style="text-align:right;">
-23.27104
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-SENECA
-</td>
-<td style="text-align:right;">
-23.24516
+22.98594
 </td>
 </tr>
 </tbody>
 </table>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-3b1e434213e8eeea0da2" style="width:90%;height:345.6px;"></div>
-<script type="application/json" data-for="htmlwidget-3b1e434213e8eeea0da2">{"x":{"visdat":{"11e477e83f276":["function () ","plotlyVisDat"]},"cur_data":"11e477e83f276","attrs":{"11e477e83f276":{"x":{},"y":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Percentage Healthy by County","xaxis":{"domain":[0,1],"automargin":true,"title":"County","type":"category","categoryorder":"array","categoryarray":["OSWEGO","ST. LAWRENCE","LEWIS","FRANKLIN","CHEMUNG","GREENE","ESSEX","WASHINGTON","CHENANGO","CLINTON","SULLIVAN","SENECA","YATES","SCHOHARIE","MADISON","ORLEANS","JEFFERSON","MONTGOMERY","CORTLAND","ALLEGANY","CATTARAUGUS","STEUBEN","TIOGA","OTSEGO","DELAWARE","GENESEE","WAYNE","WYOMING","HERKIMER","ULSTER","CHAUTAUQUA","WARREN","RENSSELAER","COLUMBIA","ONEIDA","CAYUGA","BROOME","ALBANY","NIAGARA","ORANGE","SUFFOLK","LIVINGSTON","FULTON","DUTCHESS","ONTARIO","ONONDAGA","SCHENECTADY","ERIE","ROCKLAND","MONROE","SARATOGA","NASSAU","TOMPKINS","PUTNAM","SCHUYLER","WESTCHESTER"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Average Percentage Healthy"},"showlegend":false,"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["OSWEGO"],"y":[55.102173913043472],"type":"bar","name":"OSWEGO","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ST. LAWRENCE"],"y":[56.937212643678173],"type":"bar","name":"ST. LAWRENCE","marker":{"color":"rgba(133,189,156,1)","line":{"color":"rgba(133,189,156,1)"}},"textfont":{"color":"rgba(133,189,156,1)"},"error_y":{"color":"rgba(133,189,156,1)"},"error_x":{"color":"rgba(133,189,156,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["LEWIS"],"y":[57.086852589641438],"type":"bar","name":"LEWIS","marker":{"color":"rgba(156,183,148,1)","line":{"color":"rgba(156,183,148,1)"}},"textfont":{"color":"rgba(156,183,148,1)"},"error_y":{"color":"rgba(156,183,148,1)"},"error_x":{"color":"rgba(156,183,148,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["FRANKLIN"],"y":[57.160597014925372],"type":"bar","name":"FRANKLIN","marker":{"color":"rgba(177,177,139,1)","line":{"color":"rgba(177,177,139,1)"}},"textfont":{"color":"rgba(177,177,139,1)"},"error_y":{"color":"rgba(177,177,139,1)"},"error_x":{"color":"rgba(177,177,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CHEMUNG"],"y":[57.508000000000003],"type":"bar","name":"CHEMUNG","marker":{"color":"rgba(195,171,131,1)","line":{"color":"rgba(195,171,131,1)"}},"textfont":{"color":"rgba(195,171,131,1)"},"error_y":{"color":"rgba(195,171,131,1)"},"error_x":{"color":"rgba(195,171,131,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["GREENE"],"y":[57.521097046413502],"type":"bar","name":"GREENE","marker":{"color":"rgba(211,164,122,1)","line":{"color":"rgba(211,164,122,1)"}},"textfont":{"color":"rgba(211,164,122,1)"},"error_y":{"color":"rgba(211,164,122,1)"},"error_x":{"color":"rgba(211,164,122,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ESSEX"],"y":[57.59375],"type":"bar","name":"ESSEX","marker":{"color":"rgba(226,157,114,1)","line":{"color":"rgba(226,157,114,1)"}},"textfont":{"color":"rgba(226,157,114,1)"},"error_y":{"color":"rgba(226,157,114,1)"},"error_x":{"color":"rgba(226,157,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WASHINGTON"],"y":[57.985995085995093],"type":"bar","name":"WASHINGTON","marker":{"color":"rgba(240,149,105,1)","line":{"color":"rgba(240,149,105,1)"}},"textfont":{"color":"rgba(240,149,105,1)"},"error_y":{"color":"rgba(240,149,105,1)"},"error_x":{"color":"rgba(240,149,105,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CHENANGO"],"y":[58.075376884422113],"type":"bar","name":"CHENANGO","marker":{"color":"rgba(251,141,100,1)","line":{"color":"rgba(251,141,100,1)"}},"textfont":{"color":"rgba(251,141,100,1)"},"error_y":{"color":"rgba(251,141,100,1)"},"error_x":{"color":"rgba(251,141,100,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CLINTON"],"y":[58.093548387096774],"type":"bar","name":"CLINTON","marker":{"color":"rgba(240,144,114,1)","line":{"color":"rgba(240,144,114,1)"}},"textfont":{"color":"rgba(240,144,114,1)"},"error_y":{"color":"rgba(240,144,114,1)"},"error_x":{"color":"rgba(240,144,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SULLIVAN"],"y":[58.214214463840399],"type":"bar","name":"SULLIVAN","marker":{"color":"rgba(229,147,127,1)","line":{"color":"rgba(229,147,127,1)"}},"textfont":{"color":"rgba(229,147,127,1)"},"error_y":{"color":"rgba(229,147,127,1)"},"error_x":{"color":"rgba(229,147,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SENECA"],"y":[58.357603686635947],"type":"bar","name":"SENECA","marker":{"color":"rgba(217,150,141,1)","line":{"color":"rgba(217,150,141,1)"}},"textfont":{"color":"rgba(217,150,141,1)"},"error_y":{"color":"rgba(217,150,141,1)"},"error_x":{"color":"rgba(217,150,141,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["YATES"],"y":[58.384999999999998],"type":"bar","name":"YATES","marker":{"color":"rgba(204,152,154,1)","line":{"color":"rgba(204,152,154,1)"}},"textfont":{"color":"rgba(204,152,154,1)"},"error_y":{"color":"rgba(204,152,154,1)"},"error_x":{"color":"rgba(204,152,154,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SCHOHARIE"],"y":[58.417721518987342],"type":"bar","name":"SCHOHARIE","marker":{"color":"rgba(190,154,167,1)","line":{"color":"rgba(190,154,167,1)"}},"textfont":{"color":"rgba(190,154,167,1)"},"error_y":{"color":"rgba(190,154,167,1)"},"error_x":{"color":"rgba(190,154,167,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["MADISON"],"y":[58.500237529691212],"type":"bar","name":"MADISON","marker":{"color":"rgba(174,156,180,1)","line":{"color":"rgba(174,156,180,1)"}},"textfont":{"color":"rgba(174,156,180,1)"},"error_y":{"color":"rgba(174,156,180,1)"},"error_x":{"color":"rgba(174,156,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ORLEANS"],"y":[58.917647058823533],"type":"bar","name":"ORLEANS","marker":{"color":"rgba(156,159,194,1)","line":{"color":"rgba(156,159,194,1)"}},"textfont":{"color":"rgba(156,159,194,1)"},"error_y":{"color":"rgba(156,159,194,1)"},"error_x":{"color":"rgba(156,159,194,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["JEFFERSON"],"y":[59.220442930153325],"type":"bar","name":"JEFFERSON","marker":{"color":"rgba(145,159,203,1)","line":{"color":"rgba(145,159,203,1)"}},"textfont":{"color":"rgba(145,159,203,1)"},"error_y":{"color":"rgba(145,159,203,1)"},"error_x":{"color":"rgba(145,159,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["MONTGOMERY"],"y":[59.23468468468468],"type":"bar","name":"MONTGOMERY","marker":{"color":"rgba(158,157,202,1)","line":{"color":"rgba(158,157,202,1)"}},"textfont":{"color":"rgba(158,157,202,1)"},"error_y":{"color":"rgba(158,157,202,1)"},"error_x":{"color":"rgba(158,157,202,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CORTLAND"],"y":[59.442798353909467],"type":"bar","name":"CORTLAND","marker":{"color":"rgba(171,155,201,1)","line":{"color":"rgba(171,155,201,1)"}},"textfont":{"color":"rgba(171,155,201,1)"},"error_y":{"color":"rgba(171,155,201,1)"},"error_x":{"color":"rgba(171,155,201,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ALLEGANY"],"y":[59.598913043478262],"type":"bar","name":"ALLEGANY","marker":{"color":"rgba(183,152,200,1)","line":{"color":"rgba(183,152,200,1)"}},"textfont":{"color":"rgba(183,152,200,1)"},"error_y":{"color":"rgba(183,152,200,1)"},"error_x":{"color":"rgba(183,152,200,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CATTARAUGUS"],"y":[59.821904761904761],"type":"bar","name":"CATTARAUGUS","marker":{"color":"rgba(194,150,199,1)","line":{"color":"rgba(194,150,199,1)"}},"textfont":{"color":"rgba(194,150,199,1)"},"error_y":{"color":"rgba(194,150,199,1)"},"error_x":{"color":"rgba(194,150,199,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["STEUBEN"],"y":[59.867790893760542],"type":"bar","name":"STEUBEN","marker":{"color":"rgba(205,147,198,1)","line":{"color":"rgba(205,147,198,1)"}},"textfont":{"color":"rgba(205,147,198,1)"},"error_y":{"color":"rgba(205,147,198,1)"},"error_x":{"color":"rgba(205,147,198,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["TIOGA"],"y":[60.349687500000002],"type":"bar","name":"TIOGA","marker":{"color":"rgba(215,144,197,1)","line":{"color":"rgba(215,144,197,1)"}},"textfont":{"color":"rgba(215,144,197,1)"},"error_y":{"color":"rgba(215,144,197,1)"},"error_x":{"color":"rgba(215,144,197,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["OTSEGO"],"y":[60.476165803108806],"type":"bar","name":"OTSEGO","marker":{"color":"rgba(225,140,196,1)","line":{"color":"rgba(225,140,196,1)"}},"textfont":{"color":"rgba(225,140,196,1)"},"error_y":{"color":"rgba(225,140,196,1)"},"error_x":{"color":"rgba(225,140,196,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["DELAWARE"],"y":[60.839194139194142],"type":"bar","name":"DELAWARE","marker":{"color":"rgba(229,143,190,1)","line":{"color":"rgba(229,143,190,1)"}},"textfont":{"color":"rgba(229,143,190,1)"},"error_y":{"color":"rgba(229,143,190,1)"},"error_x":{"color":"rgba(229,143,190,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["GENESEE"],"y":[60.853689567430024],"type":"bar","name":"GENESEE","marker":{"color":"rgba(223,155,177,1)","line":{"color":"rgba(223,155,177,1)"}},"textfont":{"color":"rgba(223,155,177,1)"},"error_y":{"color":"rgba(223,155,177,1)"},"error_x":{"color":"rgba(223,155,177,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WAYNE"],"y":[60.992857142857147],"type":"bar","name":"WAYNE","marker":{"color":"rgba(216,165,164,1)","line":{"color":"rgba(216,165,164,1)"}},"textfont":{"color":"rgba(216,165,164,1)"},"error_y":{"color":"rgba(216,165,164,1)"},"error_x":{"color":"rgba(216,165,164,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WYOMING"],"y":[61.238095238095234],"type":"bar","name":"WYOMING","marker":{"color":"rgba(209,176,151,1)","line":{"color":"rgba(209,176,151,1)"}},"textfont":{"color":"rgba(209,176,151,1)"},"error_y":{"color":"rgba(209,176,151,1)"},"error_x":{"color":"rgba(209,176,151,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["HERKIMER"],"y":[61.253243243243247],"type":"bar","name":"HERKIMER","marker":{"color":"rgba(201,185,137,1)","line":{"color":"rgba(201,185,137,1)"}},"textfont":{"color":"rgba(201,185,137,1)"},"error_y":{"color":"rgba(201,185,137,1)"},"error_x":{"color":"rgba(201,185,137,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ULSTER"],"y":[61.348888888888887],"type":"bar","name":"ULSTER","marker":{"color":"rgba(192,195,123,1)","line":{"color":"rgba(192,195,123,1)"}},"textfont":{"color":"rgba(192,195,123,1)"},"error_y":{"color":"rgba(192,195,123,1)"},"error_x":{"color":"rgba(192,195,123,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CHAUTAUQUA"],"y":[61.366628830874006],"type":"bar","name":"CHAUTAUQUA","marker":{"color":"rgba(182,204,108,1)","line":{"color":"rgba(182,204,108,1)"}},"textfont":{"color":"rgba(182,204,108,1)"},"error_y":{"color":"rgba(182,204,108,1)"},"error_x":{"color":"rgba(182,204,108,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WARREN"],"y":[61.44532967032967],"type":"bar","name":"WARREN","marker":{"color":"rgba(171,212,92,1)","line":{"color":"rgba(171,212,92,1)"}},"textfont":{"color":"rgba(171,212,92,1)"},"error_y":{"color":"rgba(171,212,92,1)"},"error_x":{"color":"rgba(171,212,92,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["RENSSELAER"],"y":[61.558564437194129],"type":"bar","name":"RENSSELAER","marker":{"color":"rgba(173,216,82,1)","line":{"color":"rgba(173,216,82,1)"}},"textfont":{"color":"rgba(173,216,82,1)"},"error_y":{"color":"rgba(173,216,82,1)"},"error_x":{"color":"rgba(173,216,82,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["COLUMBIA"],"y":[61.751748251748253],"type":"bar","name":"COLUMBIA","marker":{"color":"rgba(186,217,78,1)","line":{"color":"rgba(186,217,78,1)"}},"textfont":{"color":"rgba(186,217,78,1)"},"error_y":{"color":"rgba(186,217,78,1)"},"error_x":{"color":"rgba(186,217,78,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ONEIDA"],"y":[61.835187760778851],"type":"bar","name":"ONEIDA","marker":{"color":"rgba(197,217,74,1)","line":{"color":"rgba(197,217,74,1)"}},"textfont":{"color":"rgba(197,217,74,1)"},"error_y":{"color":"rgba(197,217,74,1)"},"error_x":{"color":"rgba(197,217,74,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CAYUGA"],"y":[62.597927461139903],"type":"bar","name":"CAYUGA","marker":{"color":"rgba(209,217,69,1)","line":{"color":"rgba(209,217,69,1)"}},"textfont":{"color":"rgba(209,217,69,1)"},"error_y":{"color":"rgba(209,217,69,1)"},"error_x":{"color":"rgba(209,217,69,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["BROOME"],"y":[62.701313868613141],"type":"bar","name":"BROOME","marker":{"color":"rgba(220,217,65,1)","line":{"color":"rgba(220,217,65,1)"}},"textfont":{"color":"rgba(220,217,65,1)"},"error_y":{"color":"rgba(220,217,65,1)"},"error_x":{"color":"rgba(220,217,65,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ALBANY"],"y":[62.764381270903016],"type":"bar","name":"ALBANY","marker":{"color":"rgba(231,217,60,1)","line":{"color":"rgba(231,217,60,1)"}},"textfont":{"color":"rgba(231,217,60,1)"},"error_y":{"color":"rgba(231,217,60,1)"},"error_x":{"color":"rgba(231,217,60,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["NIAGARA"],"y":[62.838879159369533],"type":"bar","name":"NIAGARA","marker":{"color":"rgba(242,217,55,1)","line":{"color":"rgba(242,217,55,1)"}},"textfont":{"color":"rgba(242,217,55,1)"},"error_y":{"color":"rgba(242,217,55,1)"},"error_x":{"color":"rgba(242,217,55,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ORANGE"],"y":[62.993842364532014],"type":"bar","name":"ORANGE","marker":{"color":"rgba(252,217,49,1)","line":{"color":"rgba(252,217,49,1)"}},"textfont":{"color":"rgba(252,217,49,1)"},"error_y":{"color":"rgba(252,217,49,1)"},"error_x":{"color":"rgba(252,217,49,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SUFFOLK"],"y":[63.063274198568323],"type":"bar","name":"SUFFOLK","marker":{"color":"rgba(253,215,61,1)","line":{"color":"rgba(253,215,61,1)"}},"textfont":{"color":"rgba(253,215,61,1)"},"error_y":{"color":"rgba(253,215,61,1)"},"error_x":{"color":"rgba(253,215,61,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["LIVINGSTON"],"y":[63.082864450127872],"type":"bar","name":"LIVINGSTON","marker":{"color":"rgba(250,212,77,1)","line":{"color":"rgba(250,212,77,1)"}},"textfont":{"color":"rgba(250,212,77,1)"},"error_y":{"color":"rgba(250,212,77,1)"},"error_x":{"color":"rgba(250,212,77,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["FULTON"],"y":[63.285232067510542],"type":"bar","name":"FULTON","marker":{"color":"rgba(247,210,90,1)","line":{"color":"rgba(247,210,90,1)"}},"textfont":{"color":"rgba(247,210,90,1)"},"error_y":{"color":"rgba(247,210,90,1)"},"error_x":{"color":"rgba(247,210,90,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["DUTCHESS"],"y":[63.8690576652602],"type":"bar","name":"DUTCHESS","marker":{"color":"rgba(244,207,103,1)","line":{"color":"rgba(244,207,103,1)"}},"textfont":{"color":"rgba(244,207,103,1)"},"error_y":{"color":"rgba(244,207,103,1)"},"error_x":{"color":"rgba(244,207,103,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ONTARIO"],"y":[64.311596958174903],"type":"bar","name":"ONTARIO","marker":{"color":"rgba(241,204,114,1)","line":{"color":"rgba(241,204,114,1)"}},"textfont":{"color":"rgba(241,204,114,1)"},"error_y":{"color":"rgba(241,204,114,1)"},"error_x":{"color":"rgba(241,204,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ONONDAGA"],"y":[64.479863813229571],"type":"bar","name":"ONONDAGA","marker":{"color":"rgba(237,202,125,1)","line":{"color":"rgba(237,202,125,1)"}},"textfont":{"color":"rgba(237,202,125,1)"},"error_y":{"color":"rgba(237,202,125,1)"},"error_x":{"color":"rgba(237,202,125,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SCHENECTADY"],"y":[64.545614035087723],"type":"bar","name":"SCHENECTADY","marker":{"color":"rgba(234,199,136,1)","line":{"color":"rgba(234,199,136,1)"}},"textfont":{"color":"rgba(234,199,136,1)"},"error_y":{"color":"rgba(234,199,136,1)"},"error_x":{"color":"rgba(234,199,136,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ERIE"],"y":[65.098567870485681],"type":"bar","name":"ERIE","marker":{"color":"rgba(230,196,147,1)","line":{"color":"rgba(230,196,147,1)"}},"textfont":{"color":"rgba(230,196,147,1)"},"error_y":{"color":"rgba(230,196,147,1)"},"error_x":{"color":"rgba(230,196,147,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ROCKLAND"],"y":[65.813749999999999],"type":"bar","name":"ROCKLAND","marker":{"color":"rgba(224,194,152,1)","line":{"color":"rgba(224,194,152,1)"}},"textfont":{"color":"rgba(224,194,152,1)"},"error_y":{"color":"rgba(224,194,152,1)"},"error_x":{"color":"rgba(224,194,152,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["MONROE"],"y":[65.829142857142855],"type":"bar","name":"MONROE","marker":{"color":"rgba(218,192,156,1)","line":{"color":"rgba(218,192,156,1)"}},"textfont":{"color":"rgba(218,192,156,1)"},"error_y":{"color":"rgba(218,192,156,1)"},"error_x":{"color":"rgba(218,192,156,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SARATOGA"],"y":[65.995689655172413],"type":"bar","name":"SARATOGA","marker":{"color":"rgba(212,190,160,1)","line":{"color":"rgba(212,190,160,1)"}},"textfont":{"color":"rgba(212,190,160,1)"},"error_y":{"color":"rgba(212,190,160,1)"},"error_x":{"color":"rgba(212,190,160,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["NASSAU"],"y":[66.020537634408612],"type":"bar","name":"NASSAU","marker":{"color":"rgba(206,188,164,1)","line":{"color":"rgba(206,188,164,1)"}},"textfont":{"color":"rgba(206,188,164,1)"},"error_y":{"color":"rgba(206,188,164,1)"},"error_x":{"color":"rgba(206,188,164,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["TOMPKINS"],"y":[66.490988372093014],"type":"bar","name":"TOMPKINS","marker":{"color":"rgba(199,185,167,1)","line":{"color":"rgba(199,185,167,1)"}},"textfont":{"color":"rgba(199,185,167,1)"},"error_y":{"color":"rgba(199,185,167,1)"},"error_x":{"color":"rgba(199,185,167,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["PUTNAM"],"y":[66.518750000000011],"type":"bar","name":"PUTNAM","marker":{"color":"rgba(193,183,171,1)","line":{"color":"rgba(193,183,171,1)"}},"textfont":{"color":"rgba(193,183,171,1)"},"error_y":{"color":"rgba(193,183,171,1)"},"error_x":{"color":"rgba(193,183,171,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SCHUYLER"],"y":[69.328571428571422],"type":"bar","name":"SCHUYLER","marker":{"color":"rgba(186,181,175,1)","line":{"color":"rgba(186,181,175,1)"}},"textfont":{"color":"rgba(186,181,175,1)"},"error_y":{"color":"rgba(186,181,175,1)"},"error_x":{"color":"rgba(186,181,175,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WESTCHESTER"],"y":[69.564560439560438],"type":"bar","name":"WESTCHESTER","marker":{"color":"rgba(179,179,179,1)","line":{"color":"rgba(179,179,179,1)"}},"textfont":{"color":"rgba(179,179,179,1)"},"error_y":{"color":"rgba(179,179,179,1)"},"error_x":{"color":"rgba(179,179,179,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-42e668b09927225d3599" style="width:90%;height:345.6px;"></div>
+<script type="application/json" data-for="htmlwidget-42e668b09927225d3599">{"x":{"visdat":{"dce757563473":["function () ","plotlyVisDat"]},"cur_data":"dce757563473","attrs":{"dce757563473":{"x":{},"y":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Percentage Healthy by County","xaxis":{"domain":[0,1],"automargin":true,"title":"County","type":"category","categoryorder":"array","categoryarray":["OSWEGO","FRANKLIN","LEWIS","ESSEX","WASHINGTON","ST. LAWRENCE","CHEMUNG","GREENE","CHENANGO","YATES","MONTGOMERY","CLINTON","SULLIVAN","ALLEGANY","ORLEANS","SENECA","JEFFERSON","CATTARAUGUS","CORTLAND","TIOGA","OTSEGO","STEUBEN","HERKIMER","MADISON","GENESEE","CHAUTAUQUA","WARREN","WAYNE","ULSTER","RENSSELAER","WYOMING","SCHOHARIE","COLUMBIA","ONEIDA","CAYUGA","BROOME","NIAGARA","ALBANY","SUFFOLK","ORANGE","LIVINGSTON","FULTON","DUTCHESS","DELAWARE","ONTARIO","SCHENECTADY","ONONDAGA","ERIE","ROCKLAND","MONROE","NASSAU","SARATOGA","PUTNAM","TOMPKINS","SCHUYLER","WESTCHESTER"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Average Percentage Healthy"},"showlegend":false,"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["OSWEGO"],"y":[55.102173913043472],"type":"bar","name":"OSWEGO","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["FRANKLIN"],"y":[55.840909090909086],"type":"bar","name":"FRANKLIN","marker":{"color":"rgba(133,189,156,1)","line":{"color":"rgba(133,189,156,1)"}},"textfont":{"color":"rgba(133,189,156,1)"},"error_y":{"color":"rgba(133,189,156,1)"},"error_x":{"color":"rgba(133,189,156,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["LEWIS"],"y":[56.333333333333336],"type":"bar","name":"LEWIS","marker":{"color":"rgba(156,183,148,1)","line":{"color":"rgba(156,183,148,1)"}},"textfont":{"color":"rgba(156,183,148,1)"},"error_y":{"color":"rgba(156,183,148,1)"},"error_x":{"color":"rgba(156,183,148,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ESSEX"],"y":[57.264705882352942],"type":"bar","name":"ESSEX","marker":{"color":"rgba(177,177,139,1)","line":{"color":"rgba(177,177,139,1)"}},"textfont":{"color":"rgba(177,177,139,1)"},"error_y":{"color":"rgba(177,177,139,1)"},"error_x":{"color":"rgba(177,177,139,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WASHINGTON"],"y":[57.336363636363643],"type":"bar","name":"WASHINGTON","marker":{"color":"rgba(195,171,131,1)","line":{"color":"rgba(195,171,131,1)"}},"textfont":{"color":"rgba(195,171,131,1)"},"error_y":{"color":"rgba(195,171,131,1)"},"error_x":{"color":"rgba(195,171,131,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ST. LAWRENCE"],"y":[57.341758241758242],"type":"bar","name":"ST. LAWRENCE","marker":{"color":"rgba(211,164,122,1)","line":{"color":"rgba(211,164,122,1)"}},"textfont":{"color":"rgba(211,164,122,1)"},"error_y":{"color":"rgba(211,164,122,1)"},"error_x":{"color":"rgba(211,164,122,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CHEMUNG"],"y":[57.508000000000003],"type":"bar","name":"CHEMUNG","marker":{"color":"rgba(226,157,114,1)","line":{"color":"rgba(226,157,114,1)"}},"textfont":{"color":"rgba(226,157,114,1)"},"error_y":{"color":"rgba(226,157,114,1)"},"error_x":{"color":"rgba(226,157,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["GREENE"],"y":[58.102777777777781],"type":"bar","name":"GREENE","marker":{"color":"rgba(240,149,105,1)","line":{"color":"rgba(240,149,105,1)"}},"textfont":{"color":"rgba(240,149,105,1)"},"error_y":{"color":"rgba(240,149,105,1)"},"error_x":{"color":"rgba(240,149,105,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CHENANGO"],"y":[58.199999999999996],"type":"bar","name":"CHENANGO","marker":{"color":"rgba(251,141,100,1)","line":{"color":"rgba(251,141,100,1)"}},"textfont":{"color":"rgba(251,141,100,1)"},"error_y":{"color":"rgba(251,141,100,1)"},"error_x":{"color":"rgba(251,141,100,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["YATES"],"y":[58.384999999999998],"type":"bar","name":"YATES","marker":{"color":"rgba(240,144,114,1)","line":{"color":"rgba(240,144,114,1)"}},"textfont":{"color":"rgba(240,144,114,1)"},"error_y":{"color":"rgba(240,144,114,1)"},"error_x":{"color":"rgba(240,144,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["MONTGOMERY"],"y":[58.396296296296299],"type":"bar","name":"MONTGOMERY","marker":{"color":"rgba(229,147,127,1)","line":{"color":"rgba(229,147,127,1)"}},"textfont":{"color":"rgba(229,147,127,1)"},"error_y":{"color":"rgba(229,147,127,1)"},"error_x":{"color":"rgba(229,147,127,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CLINTON"],"y":[58.439062500000006],"type":"bar","name":"CLINTON","marker":{"color":"rgba(217,150,141,1)","line":{"color":"rgba(217,150,141,1)"}},"textfont":{"color":"rgba(217,150,141,1)"},"error_y":{"color":"rgba(217,150,141,1)"},"error_x":{"color":"rgba(217,150,141,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SULLIVAN"],"y":[58.544827586206893],"type":"bar","name":"SULLIVAN","marker":{"color":"rgba(204,152,154,1)","line":{"color":"rgba(204,152,154,1)"}},"textfont":{"color":"rgba(204,152,154,1)"},"error_y":{"color":"rgba(204,152,154,1)"},"error_x":{"color":"rgba(204,152,154,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ALLEGANY"],"y":[58.684090909090912],"type":"bar","name":"ALLEGANY","marker":{"color":"rgba(190,154,167,1)","line":{"color":"rgba(190,154,167,1)"}},"textfont":{"color":"rgba(190,154,167,1)"},"error_y":{"color":"rgba(190,154,167,1)"},"error_x":{"color":"rgba(190,154,167,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ORLEANS"],"y":[58.810638297872345],"type":"bar","name":"ORLEANS","marker":{"color":"rgba(174,156,180,1)","line":{"color":"rgba(174,156,180,1)"}},"textfont":{"color":"rgba(174,156,180,1)"},"error_y":{"color":"rgba(174,156,180,1)"},"error_x":{"color":"rgba(174,156,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SENECA"],"y":[59.012903225806454],"type":"bar","name":"SENECA","marker":{"color":"rgba(156,159,194,1)","line":{"color":"rgba(156,159,194,1)"}},"textfont":{"color":"rgba(156,159,194,1)"},"error_y":{"color":"rgba(156,159,194,1)"},"error_x":{"color":"rgba(156,159,194,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["JEFFERSON"],"y":[59.752272727272725],"type":"bar","name":"JEFFERSON","marker":{"color":"rgba(145,159,203,1)","line":{"color":"rgba(145,159,203,1)"}},"textfont":{"color":"rgba(145,159,203,1)"},"error_y":{"color":"rgba(145,159,203,1)"},"error_x":{"color":"rgba(145,159,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CATTARAUGUS"],"y":[59.821904761904761],"type":"bar","name":"CATTARAUGUS","marker":{"color":"rgba(158,157,202,1)","line":{"color":"rgba(158,157,202,1)"}},"textfont":{"color":"rgba(158,157,202,1)"},"error_y":{"color":"rgba(158,157,202,1)"},"error_x":{"color":"rgba(158,157,202,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CORTLAND"],"y":[59.854545454545452],"type":"bar","name":"CORTLAND","marker":{"color":"rgba(171,155,201,1)","line":{"color":"rgba(171,155,201,1)"}},"textfont":{"color":"rgba(171,155,201,1)"},"error_y":{"color":"rgba(171,155,201,1)"},"error_x":{"color":"rgba(171,155,201,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["TIOGA"],"y":[59.860784313725489],"type":"bar","name":"TIOGA","marker":{"color":"rgba(183,152,200,1)","line":{"color":"rgba(183,152,200,1)"}},"textfont":{"color":"rgba(183,152,200,1)"},"error_y":{"color":"rgba(183,152,200,1)"},"error_x":{"color":"rgba(183,152,200,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["OTSEGO"],"y":[60.081249999999997],"type":"bar","name":"OTSEGO","marker":{"color":"rgba(194,150,199,1)","line":{"color":"rgba(194,150,199,1)"}},"textfont":{"color":"rgba(194,150,199,1)"},"error_y":{"color":"rgba(194,150,199,1)"},"error_x":{"color":"rgba(194,150,199,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["STEUBEN"],"y":[60.325882352941171],"type":"bar","name":"STEUBEN","marker":{"color":"rgba(205,147,198,1)","line":{"color":"rgba(205,147,198,1)"}},"textfont":{"color":"rgba(205,147,198,1)"},"error_y":{"color":"rgba(205,147,198,1)"},"error_x":{"color":"rgba(205,147,198,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["HERKIMER"],"y":[60.430952380952384],"type":"bar","name":"HERKIMER","marker":{"color":"rgba(215,144,197,1)","line":{"color":"rgba(215,144,197,1)"}},"textfont":{"color":"rgba(215,144,197,1)"},"error_y":{"color":"rgba(215,144,197,1)"},"error_x":{"color":"rgba(215,144,197,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["MADISON"],"y":[60.607272727272729],"type":"bar","name":"MADISON","marker":{"color":"rgba(225,140,196,1)","line":{"color":"rgba(225,140,196,1)"}},"textfont":{"color":"rgba(225,140,196,1)"},"error_y":{"color":"rgba(225,140,196,1)"},"error_x":{"color":"rgba(225,140,196,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["GENESEE"],"y":[60.642553191489355],"type":"bar","name":"GENESEE","marker":{"color":"rgba(229,143,190,1)","line":{"color":"rgba(229,143,190,1)"}},"textfont":{"color":"rgba(229,143,190,1)"},"error_y":{"color":"rgba(229,143,190,1)"},"error_x":{"color":"rgba(229,143,190,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CHAUTAUQUA"],"y":[61.196992481203004],"type":"bar","name":"CHAUTAUQUA","marker":{"color":"rgba(223,155,177,1)","line":{"color":"rgba(223,155,177,1)"}},"textfont":{"color":"rgba(223,155,177,1)"},"error_y":{"color":"rgba(223,155,177,1)"},"error_x":{"color":"rgba(223,155,177,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WARREN"],"y":[61.481632653061226],"type":"bar","name":"WARREN","marker":{"color":"rgba(216,165,164,1)","line":{"color":"rgba(216,165,164,1)"}},"textfont":{"color":"rgba(216,165,164,1)"},"error_y":{"color":"rgba(216,165,164,1)"},"error_x":{"color":"rgba(216,165,164,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WAYNE"],"y":[61.502631578947366],"type":"bar","name":"WAYNE","marker":{"color":"rgba(209,176,151,1)","line":{"color":"rgba(209,176,151,1)"}},"textfont":{"color":"rgba(209,176,151,1)"},"error_y":{"color":"rgba(209,176,151,1)"},"error_x":{"color":"rgba(209,176,151,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ULSTER"],"y":[61.633333333333326],"type":"bar","name":"ULSTER","marker":{"color":"rgba(201,185,137,1)","line":{"color":"rgba(201,185,137,1)"}},"textfont":{"color":"rgba(201,185,137,1)"},"error_y":{"color":"rgba(201,185,137,1)"},"error_x":{"color":"rgba(201,185,137,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["RENSSELAER"],"y":[61.874117647058824],"type":"bar","name":"RENSSELAER","marker":{"color":"rgba(192,195,123,1)","line":{"color":"rgba(192,195,123,1)"}},"textfont":{"color":"rgba(192,195,123,1)"},"error_y":{"color":"rgba(192,195,123,1)"},"error_x":{"color":"rgba(192,195,123,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WYOMING"],"y":[61.906451612903226],"type":"bar","name":"WYOMING","marker":{"color":"rgba(182,204,108,1)","line":{"color":"rgba(182,204,108,1)"}},"textfont":{"color":"rgba(182,204,108,1)"},"error_y":{"color":"rgba(182,204,108,1)"},"error_x":{"color":"rgba(182,204,108,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SCHOHARIE"],"y":[62.036363636363632],"type":"bar","name":"SCHOHARIE","marker":{"color":"rgba(171,212,92,1)","line":{"color":"rgba(171,212,92,1)"}},"textfont":{"color":"rgba(171,212,92,1)"},"error_y":{"color":"rgba(171,212,92,1)"},"error_x":{"color":"rgba(171,212,92,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["COLUMBIA"],"y":[62.130434782608688],"type":"bar","name":"COLUMBIA","marker":{"color":"rgba(173,216,82,1)","line":{"color":"rgba(173,216,82,1)"}},"textfont":{"color":"rgba(173,216,82,1)"},"error_y":{"color":"rgba(173,216,82,1)"},"error_x":{"color":"rgba(173,216,82,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ONEIDA"],"y":[62.182978723404261],"type":"bar","name":"ONEIDA","marker":{"color":"rgba(186,217,78,1)","line":{"color":"rgba(186,217,78,1)"}},"textfont":{"color":"rgba(186,217,78,1)"},"error_y":{"color":"rgba(186,217,78,1)"},"error_x":{"color":"rgba(186,217,78,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["CAYUGA"],"y":[62.518181818181816],"type":"bar","name":"CAYUGA","marker":{"color":"rgba(197,217,74,1)","line":{"color":"rgba(197,217,74,1)"}},"textfont":{"color":"rgba(197,217,74,1)"},"error_y":{"color":"rgba(197,217,74,1)"},"error_x":{"color":"rgba(197,217,74,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["BROOME"],"y":[62.684112149532709],"type":"bar","name":"BROOME","marker":{"color":"rgba(209,217,69,1)","line":{"color":"rgba(209,217,69,1)"}},"textfont":{"color":"rgba(209,217,69,1)"},"error_y":{"color":"rgba(209,217,69,1)"},"error_x":{"color":"rgba(209,217,69,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["NIAGARA"],"y":[62.94777777777778],"type":"bar","name":"NIAGARA","marker":{"color":"rgba(220,217,65,1)","line":{"color":"rgba(220,217,65,1)"}},"textfont":{"color":"rgba(220,217,65,1)"},"error_y":{"color":"rgba(220,217,65,1)"},"error_x":{"color":"rgba(220,217,65,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ALBANY"],"y":[63.026530612244905],"type":"bar","name":"ALBANY","marker":{"color":"rgba(231,217,60,1)","line":{"color":"rgba(231,217,60,1)"}},"textfont":{"color":"rgba(231,217,60,1)"},"error_y":{"color":"rgba(231,217,60,1)"},"error_x":{"color":"rgba(231,217,60,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SUFFOLK"],"y":[63.059876543209882],"type":"bar","name":"SUFFOLK","marker":{"color":"rgba(242,217,55,1)","line":{"color":"rgba(242,217,55,1)"}},"textfont":{"color":"rgba(242,217,55,1)"},"error_y":{"color":"rgba(242,217,55,1)"},"error_x":{"color":"rgba(242,217,55,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ORANGE"],"y":[63.065217391304351],"type":"bar","name":"ORANGE","marker":{"color":"rgba(252,217,49,1)","line":{"color":"rgba(252,217,49,1)"}},"textfont":{"color":"rgba(252,217,49,1)"},"error_y":{"color":"rgba(252,217,49,1)"},"error_x":{"color":"rgba(252,217,49,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["LIVINGSTON"],"y":[63.406818181818181],"type":"bar","name":"LIVINGSTON","marker":{"color":"rgba(253,215,61,1)","line":{"color":"rgba(253,215,61,1)"}},"textfont":{"color":"rgba(253,215,61,1)"},"error_y":{"color":"rgba(253,215,61,1)"},"error_x":{"color":"rgba(253,215,61,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["FULTON"],"y":[63.865625000000001],"type":"bar","name":"FULTON","marker":{"color":"rgba(250,212,77,1)","line":{"color":"rgba(250,212,77,1)"}},"textfont":{"color":"rgba(250,212,77,1)"},"error_y":{"color":"rgba(250,212,77,1)"},"error_x":{"color":"rgba(250,212,77,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["DUTCHESS"],"y":[64.111702127659569],"type":"bar","name":"DUTCHESS","marker":{"color":"rgba(247,210,90,1)","line":{"color":"rgba(247,210,90,1)"}},"textfont":{"color":"rgba(247,210,90,1)"},"error_y":{"color":"rgba(247,210,90,1)"},"error_x":{"color":"rgba(247,210,90,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["DELAWARE"],"y":[64.335999999999999],"type":"bar","name":"DELAWARE","marker":{"color":"rgba(244,207,103,1)","line":{"color":"rgba(244,207,103,1)"}},"textfont":{"color":"rgba(244,207,103,1)"},"error_y":{"color":"rgba(244,207,103,1)"},"error_x":{"color":"rgba(244,207,103,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ONTARIO"],"y":[64.388311688311688],"type":"bar","name":"ONTARIO","marker":{"color":"rgba(241,204,114,1)","line":{"color":"rgba(241,204,114,1)"}},"textfont":{"color":"rgba(241,204,114,1)"},"error_y":{"color":"rgba(241,204,114,1)"},"error_x":{"color":"rgba(241,204,114,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SCHENECTADY"],"y":[64.409090909090907],"type":"bar","name":"SCHENECTADY","marker":{"color":"rgba(237,202,125,1)","line":{"color":"rgba(237,202,125,1)"}},"textfont":{"color":"rgba(237,202,125,1)"},"error_y":{"color":"rgba(237,202,125,1)"},"error_x":{"color":"rgba(237,202,125,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ONONDAGA"],"y":[64.433529411764695],"type":"bar","name":"ONONDAGA","marker":{"color":"rgba(234,199,136,1)","line":{"color":"rgba(234,199,136,1)"}},"textfont":{"color":"rgba(234,199,136,1)"},"error_y":{"color":"rgba(234,199,136,1)"},"error_x":{"color":"rgba(234,199,136,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ERIE"],"y":[64.946792452830195],"type":"bar","name":"ERIE","marker":{"color":"rgba(230,196,147,1)","line":{"color":"rgba(230,196,147,1)"}},"textfont":{"color":"rgba(230,196,147,1)"},"error_y":{"color":"rgba(230,196,147,1)"},"error_x":{"color":"rgba(230,196,147,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["ROCKLAND"],"y":[65.813749999999999],"type":"bar","name":"ROCKLAND","marker":{"color":"rgba(224,194,152,1)","line":{"color":"rgba(224,194,152,1)"}},"textfont":{"color":"rgba(224,194,152,1)"},"error_y":{"color":"rgba(224,194,152,1)"},"error_x":{"color":"rgba(224,194,152,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["MONROE"],"y":[65.829142857142855],"type":"bar","name":"MONROE","marker":{"color":"rgba(218,192,156,1)","line":{"color":"rgba(218,192,156,1)"}},"textfont":{"color":"rgba(218,192,156,1)"},"error_y":{"color":"rgba(218,192,156,1)"},"error_x":{"color":"rgba(218,192,156,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["NASSAU"],"y":[66.111961722488033],"type":"bar","name":"NASSAU","marker":{"color":"rgba(212,190,160,1)","line":{"color":"rgba(212,190,160,1)"}},"textfont":{"color":"rgba(212,190,160,1)"},"error_y":{"color":"rgba(212,190,160,1)"},"error_x":{"color":"rgba(212,190,160,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SARATOGA"],"y":[66.34691358024692],"type":"bar","name":"SARATOGA","marker":{"color":"rgba(206,188,164,1)","line":{"color":"rgba(206,188,164,1)"}},"textfont":{"color":"rgba(206,188,164,1)"},"error_y":{"color":"rgba(206,188,164,1)"},"error_x":{"color":"rgba(206,188,164,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["PUTNAM"],"y":[66.518750000000011],"type":"bar","name":"PUTNAM","marker":{"color":"rgba(199,185,167,1)","line":{"color":"rgba(199,185,167,1)"}},"textfont":{"color":"rgba(199,185,167,1)"},"error_y":{"color":"rgba(199,185,167,1)"},"error_x":{"color":"rgba(199,185,167,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["TOMPKINS"],"y":[67.358928571428564],"type":"bar","name":"TOMPKINS","marker":{"color":"rgba(193,183,171,1)","line":{"color":"rgba(193,183,171,1)"}},"textfont":{"color":"rgba(193,183,171,1)"},"error_y":{"color":"rgba(193,183,171,1)"},"error_x":{"color":"rgba(193,183,171,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["SCHUYLER"],"y":[69.328571428571422],"type":"bar","name":"SCHUYLER","marker":{"color":"rgba(186,181,175,1)","line":{"color":"rgba(186,181,175,1)"}},"textfont":{"color":"rgba(186,181,175,1)"},"error_y":{"color":"rgba(186,181,175,1)"},"error_x":{"color":"rgba(186,181,175,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["WESTCHESTER"],"y":[69.344477611940306],"type":"bar","name":"WESTCHESTER","marker":{"color":"rgba(179,179,179,1)","line":{"color":"rgba(179,179,179,1)"}},"textfont":{"color":"rgba(179,179,179,1)"},"error_y":{"color":"rgba(179,179,179,1)"},"error_x":{"color":"rgba(179,179,179,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <table>
 <caption>
 Three Counties with Highest Healthy Percent
@@ -592,7 +2069,7 @@ ave_healthy_percent
 WESTCHESTER
 </td>
 <td style="text-align:right;">
-69.56456
+69.34448
 </td>
 </tr>
 <tr>
@@ -605,6 +2082,14 @@ SCHUYLER
 </tr>
 <tr>
 <td style="text-align:left;">
+TOMPKINS
+</td>
+<td style="text-align:right;">
+67.35893
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
 PUTNAM
 </td>
 <td style="text-align:right;">
@@ -613,18 +2098,10 @@ PUTNAM
 </tr>
 <tr>
 <td style="text-align:left;">
-TOMPKINS
+SARATOGA
 </td>
 <td style="text-align:right;">
-66.49099
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-NASSAU
-</td>
-<td style="text-align:right;">
-66.02054
+66.34691
 </td>
 </tr>
 </tbody>
@@ -642,7 +2119,7 @@ class="section level2">
 <p>We also want to look at the change of the percent of overweight
 students in two different grade levels to guide our variable selection
 process in later regression model fitting step.
-<img src="Project_report_files/figure-html/unnamed-chunk-4-1.png" width="90%" /></p>
+<img src="Project_report_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
 <p>Our visual comparisons between elementary and middle school students
 across counties indicated a general trend of higher overweight
 percentages among middle school students, which tells us that this
@@ -653,7 +2130,7 @@ class="section level2">
 <h2>4. Change of percent of overweight students in two sex groups</h2>
 <p>Next, we want to see if sex affects students’ overweight percentage
 for each school district over the five years of data record.
-<img src="Project_report_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
+<img src="Project_report_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
 <p>The plot indicates that the likelihood of female students having a
 higher percentage of overweight cases compared to male students is
 noticeable. This pattern may be influenced by a complex interplay of
@@ -670,16 +2147,16 @@ cleaned data, there is a hypothesis that various racial groups may
 exhibit distinct probabilities of experiencing overweight conditions.
 Therefore, our analysis will commence by examining the distribution of
 different racial groups among students for each year.</p>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-9f9b0a0692f5e8c09cd9" style="width:90%;height:345.6px;"></div>
-<script type="application/json" data-for="htmlwidget-9f9b0a0692f5e8c09cd9">{"x":{"visdat":{"11e471550b69f":["function () ","plotlyVisDat"]},"cur_data":"11e471550b69f","attrs":{"11e471550b69f":{"labels":{},"values":{},"hole":0.20000000000000001,"textinfo":"number","textposition":"inside","marker":{"colors":["pink","orange","brown","blue","green"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Distribution of Races in 2015","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["asian","white","american_indian","black","hispanic"],"values":[77741,1018007,7107,164430,254298],"hole":0.20000000000000001,"textinfo":"number","textposition":["inside","inside","inside","inside","inside"],"marker":{"color":"rgba(31,119,180,1)","colors":["pink","orange","brown","blue","green"],"line":{"color":"rgba(255,255,255,1)"}},"type":"pie","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-c7e1805f42eb7b8d8887" style="width:90%;height:345.6px;"></div>
-<script type="application/json" data-for="htmlwidget-c7e1805f42eb7b8d8887">{"x":{"visdat":{"11e4766058ba7":["function () ","plotlyVisDat"]},"cur_data":"11e4766058ba7","attrs":{"11e4766058ba7":{"labels":{},"values":{},"hole":0.20000000000000001,"textinfo":"number","textposition":"inside","marker":{"colors":["pink","orange","brown","blue","green"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Distribution of Races in 2016","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["asian","white","american_indian","black","hispanic"],"values":[79816,993840,6941,160741,265611],"hole":0.20000000000000001,"textinfo":"number","textposition":["inside","inside","inside","inside","inside"],"marker":{"color":"rgba(31,119,180,1)","colors":["pink","orange","brown","blue","green"],"line":{"color":"rgba(255,255,255,1)"}},"type":"pie","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-c680ff994a762650340b" style="width:90%;height:345.6px;"></div>
-<script type="application/json" data-for="htmlwidget-c680ff994a762650340b">{"x":{"visdat":{"11e477613b544":["function () ","plotlyVisDat"]},"cur_data":"11e477613b544","attrs":{"11e477613b544":{"labels":{},"values":{},"hole":0.20000000000000001,"textinfo":"number","textposition":"inside","marker":{"colors":["pink","orange","brown","blue","green"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Distribution of Races in 2017","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["asian","white","american_indian","black","hispanic"],"values":[77968,857164,6894,156809,262698],"hole":0.20000000000000001,"textinfo":"number","textposition":["inside","inside","inside","inside","inside"],"marker":{"color":"rgba(31,119,180,1)","colors":["pink","orange","brown","blue","green"],"line":{"color":"rgba(255,255,255,1)"}},"type":"pie","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-bedd56c0cdfb344c6921" style="width:90%;height:345.6px;"></div>
-<script type="application/json" data-for="htmlwidget-bedd56c0cdfb344c6921">{"x":{"visdat":{"11e477e1bfec":["function () ","plotlyVisDat"]},"cur_data":"11e477e1bfec","attrs":{"11e477e1bfec":{"labels":{},"values":{},"hole":0.20000000000000001,"textinfo":"number","textposition":"inside","marker":{"colors":["pink","orange","brown","blue","green"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Distribution of Races in 2018","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"hole":0.20000000000000001,"textinfo":"number","textposition":"inside","marker":{"color":"rgba(31,119,180,1)","colors":["pink","orange","brown","blue","green"],"line":{"color":"rgba(255,255,255,1)"}},"type":"pie","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-8edae13d3cce52cdc331" style="width:90%;height:345.6px;"></div>
-<script type="application/json" data-for="htmlwidget-8edae13d3cce52cdc331">{"x":{"visdat":{"11e4775ff22fe":["function () ","plotlyVisDat"]},"cur_data":"11e4775ff22fe","attrs":{"11e4775ff22fe":{"labels":{},"values":{},"hole":0.20000000000000001,"textinfo":"number","textposition":"inside","marker":{"colors":["pink","orange","brown","blue","green"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Distribution of Races in 2019","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"hole":0.20000000000000001,"textinfo":"number","textposition":"inside","marker":{"color":"rgba(31,119,180,1)","colors":["pink","orange","brown","blue","green"],"line":{"color":"rgba(255,255,255,1)"}},"type":"pie","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-ddb7f35114a4324fd648" style="width:90%;height:345.6px;"></div>
+<script type="application/json" data-for="htmlwidget-ddb7f35114a4324fd648">{"x":{"visdat":{"dce73dcf8f79":["function () ","plotlyVisDat"]},"cur_data":"dce73dcf8f79","attrs":{"dce73dcf8f79":{"labels":{},"values":{},"hole":0.20000000000000001,"textinfo":"number","textposition":"inside","marker":{"colors":["pink","orange","brown","blue","green"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Distribution of Races in 2015","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["asian","white","american_indian","black","hispanic"],"values":[39139,511082,3585,63778,102482],"hole":0.20000000000000001,"textinfo":"number","textposition":["inside","inside","inside","inside","inside"],"marker":{"color":"rgba(31,119,180,1)","colors":["pink","orange","brown","blue","green"],"line":{"color":"rgba(255,255,255,1)"}},"type":"pie","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-2f339acb66c2c82d48df" style="width:90%;height:345.6px;"></div>
+<script type="application/json" data-for="htmlwidget-2f339acb66c2c82d48df">{"x":{"visdat":{"dce75d470a3":["function () ","plotlyVisDat"]},"cur_data":"dce75d470a3","attrs":{"dce75d470a3":{"labels":{},"values":{},"hole":0.20000000000000001,"textinfo":"number","textposition":"inside","marker":{"colors":["pink","orange","brown","blue","green"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Distribution of Races in 2016","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["asian","white","american_indian","black","hispanic"],"values":[39069,479389,3478,97809,157220],"hole":0.20000000000000001,"textinfo":"number","textposition":["inside","inside","inside","inside","inside"],"marker":{"color":"rgba(31,119,180,1)","colors":["pink","orange","brown","blue","green"],"line":{"color":"rgba(255,255,255,1)"}},"type":"pie","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-f1f195a1f0e25244d63c" style="width:90%;height:345.6px;"></div>
+<script type="application/json" data-for="htmlwidget-f1f195a1f0e25244d63c">{"x":{"visdat":{"dce73e2ee052":["function () ","plotlyVisDat"]},"cur_data":"dce73e2ee052","attrs":{"dce73e2ee052":{"labels":{},"values":{},"hole":0.20000000000000001,"textinfo":"number","textposition":"inside","marker":{"colors":["pink","orange","brown","blue","green"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Distribution of Races in 2017","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["asian","white","american_indian","black","hispanic"],"values":[37929,433077,3398,60777,104878],"hole":0.20000000000000001,"textinfo":"number","textposition":["inside","inside","inside","inside","inside"],"marker":{"color":"rgba(31,119,180,1)","colors":["pink","orange","brown","blue","green"],"line":{"color":"rgba(255,255,255,1)"}},"type":"pie","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-ded89c1e5e0b1b3fa4e5" style="width:90%;height:345.6px;"></div>
+<script type="application/json" data-for="htmlwidget-ded89c1e5e0b1b3fa4e5">{"x":{"visdat":{"dce777894762":["function () ","plotlyVisDat"]},"cur_data":"dce777894762","attrs":{"dce777894762":{"labels":{},"values":{},"hole":0.20000000000000001,"textinfo":"number","textposition":"inside","marker":{"colors":["pink","orange","brown","blue","green"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Distribution of Races in 2018","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["asian","white","american_indian","black","hispanic"],"values":[38374,399386,3112,92948,162393],"hole":0.20000000000000001,"textinfo":"number","textposition":["inside","inside","inside","inside","inside"],"marker":{"color":"rgba(31,119,180,1)","colors":["pink","orange","brown","blue","green"],"line":{"color":"rgba(255,255,255,1)"}},"type":"pie","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-cd8259b1d767526b0b2f" style="width:90%;height:345.6px;"></div>
+<script type="application/json" data-for="htmlwidget-cd8259b1d767526b0b2f">{"x":{"visdat":{"dce755adb03d":["function () ","plotlyVisDat"]},"cur_data":"dce755adb03d","attrs":{"dce755adb03d":{"labels":{},"values":{},"hole":0.20000000000000001,"textinfo":"number","textposition":"inside","marker":{"colors":["pink","orange","brown","blue","green"]},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"pie"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Distribution of Races in 2019","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"labels":["asian","white","american_indian","black","hispanic"],"values":[40396,403593,3612,58615,111506],"hole":0.20000000000000001,"textinfo":"number","textposition":["inside","inside","inside","inside","inside"],"marker":{"color":"rgba(31,119,180,1)","colors":["pink","orange","brown","blue","green"],"line":{"color":"rgba(255,255,255,1)"}},"type":"pie","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>The pie charts reveal that approximately 60% of the student
 population is white, while around 20% identifies as Hispanic. There are
 smaller proportions of Asian, American Indian, and Black students.</p>
@@ -687,7 +2164,7 @@ smaller proportions of Asian, American Indian, and Black students.</p>
 county-level average distribution of racial groups and the corresponding
 average percentage of overweight individuals to guide out variable
 selection in linear models.</p>
-<p><img src="Project_report_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+<p><img src="Project_report_files/figure-html/unnamed-chunk-12-1.png" width="90%" /></p>
 <p>In the five scatterplots presented above, a noticeable trend emerges
 where an increase in the percentage of Asian, Black, and Hispanic
 students is associated with a decrease in the percentage of overweight
