@@ -13,10 +13,10 @@
 
 <title>regression.knit</title>
 
-<script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -37,7 +37,7 @@
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <script src="site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
-<script src="site_libs/plotly-binding-4.10.2/plotly.js"></script>
+<script src="site_libs/plotly-binding-4.10.3/plotly.js"></script>
 <script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
 <link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
 <script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
@@ -528,13 +528,13 @@ p
 1
 </td>
 <td style="text-align:right;">
-4798
+32719
 </td>
 <td style="text-align:right;">
-1.916216
+14.11696
 </td>
 <td style="text-align:right;">
-0.1663388
+0.0001721
 </td>
 </tr>
 </tbody>
@@ -563,16 +563,16 @@ p
 <tbody>
 <tr>
 <td style="text-align:right;">
-1
+3
 </td>
 <td style="text-align:right;">
-4798
+32717
 </td>
 <td style="text-align:right;">
-0.5853365
+8.829417
 </td>
 <td style="text-align:right;">
-0.4442658
+7.6e-06
 </td>
 </tr>
 </tbody>
@@ -594,13 +594,13 @@ print(t_test_result)</code></pre>
 ##  Two Sample t-test
 ## 
 ## data:  elementary_data and middle_high_data
-## t = 5.8472, df = 2390, p-value = 5.684e-09
+## t = 13.204, df = 16299, p-value &lt; 2.2e-16
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  0.1259737 0.2531050
+##  0.1409575 0.1901009
 ## sample estimates:
 ## mean of x mean of y 
-##  3.435272  3.245732</code></pre>
+##  3.345541  3.180011</code></pre>
 <p>The test results suggest that there is a statistically significant
 difference in the mean log number of female overweight students between
 elementary and middle/high schools, with elementary schools having a
@@ -621,13 +621,13 @@ print(t_test_result)</code></pre>
 ##  Two Sample t-test
 ## 
 ## data:  elementary_data and middle_high_data
-## t = 7.368, df = 2406, p-value = 2.367e-13
+## t = 17.849, df = 16408, p-value &lt; 2.2e-16
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  0.1773483 0.3059834
+##  0.2017759 0.2515608
 ## sample estimates:
 ## mean of x mean of y 
-##  3.437084  3.195418</code></pre>
+##  3.348104  3.121436</code></pre>
 <p>There is a statistically significant difference between the mean log
 number of male overweight students in elementary schools compared to
 middle/high schools, with elementary schools having a higher mean on the
@@ -651,13 +651,13 @@ print(t_test_result)</code></pre>
 ##  Two Sample t-test
 ## 
 ## data:  male and female
-## t = 0.055614, df = 2479, p-value = 0.9557
+## t = 0.20392, df = 17052, p-value = 0.8384
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  -0.06210400  0.06572951
+##  -0.02207995  0.02720753
 ## sample estimates:
 ## mean of x mean of y 
-##  3.437084  3.435272</code></pre>
+##  3.348104  3.345541</code></pre>
 <p>The t-test results suggest that there is no significant difference in
 the mean log number of overweight students in elementary school students
 between male and female sex groups, given that p-value 0.9557 is greater
@@ -679,13 +679,13 @@ print(t_test_result)</code></pre>
 ##  Two Sample t-test
 ## 
 ## data:  male and female
-## t = -1.5459, df = 2317, p-value = 0.1223
+## t = -4.6404, df = 15655, p-value = 3.506e-06
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  -0.11413683  0.01350927
+##  -0.08331779 -0.03383302
 ## sample estimates:
 ## mean of x mean of y 
-##  3.195418  3.245732</code></pre>
+##  3.121436  3.180011</code></pre>
 <p>The t-test results also suggest that there is no significant
 difference in the mean log number of overweight students in middle/high
 school students between male and female sex groups, given that p-value
@@ -716,8 +716,8 @@ school students between male and female sex groups, given that p-value
     title = &quot;Distribution of Percent Overweight at Finer School Level&quot;)
 
 ggplotly(school_level_dist)</code></pre>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-1d603b8c25a502fa80c5" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-1d603b8c25a502fa80c5">{"x":{"data":[{"orientation":"v","width":[2.0965517241379308,2.0965517241379317,2.0965517241379299,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379246,2.0965517241379317,2.0965517241379317,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[2.0965517241379308,4.1931034482758616,6.2896551724137924,8.3862068965517231,10.482758620689655,12.579310344827586,14.675862068965515,16.772413793103446,18.868965517241378,20.96551724137931,23.062068965517241,25.158620689655169,27.255172413793101,29.351724137931029,31.448275862068961,33.544827586206893,35.641379310344817,37.737931034482756,39.83448275862068,41.931034482758619,44.027586206896544,46.124137931034468,48.220689655172407,50.317241379310332,52.41379310344827,54.510344827586195,56.606896551724134,58.703448275862058,60.799999999999983,62.896551724137922],"y":[2,2,15,93,271,619,967,1061,794,483,232,111,62,36,19,17,6,5,1,1,0,1,1,0,0,0,0,0,0,1],"text":["count:    2<br />percent_overweight:  2.096552","count:    2<br />percent_overweight:  4.193103","count:   15<br />percent_overweight:  6.289655","count:   93<br />percent_overweight:  8.386207","count:  271<br />percent_overweight: 10.482759","count:  619<br />percent_overweight: 12.579310","count:  967<br />percent_overweight: 14.675862","count: 1061<br />percent_overweight: 16.772414","count:  794<br />percent_overweight: 18.868966","count:  483<br />percent_overweight: 20.965517","count:  232<br />percent_overweight: 23.062069","count:  111<br />percent_overweight: 25.158621","count:   62<br />percent_overweight: 27.255172","count:   36<br />percent_overweight: 29.351724","count:   19<br />percent_overweight: 31.448276","count:   17<br />percent_overweight: 33.544828","count:    6<br />percent_overweight: 35.641379","count:    5<br />percent_overweight: 37.737931","count:    1<br />percent_overweight: 39.834483","count:    1<br />percent_overweight: 41.931034","count:    0<br />percent_overweight: 44.027586","count:    1<br />percent_overweight: 46.124138","count:    1<br />percent_overweight: 48.220690","count:    0<br />percent_overweight: 50.317241","count:    0<br />percent_overweight: 52.413793","count:    0<br />percent_overweight: 54.510345","count:    0<br />percent_overweight: 56.606897","count:    0<br />percent_overweight: 58.703448","count:    0<br />percent_overweight: 60.800000","count:    1<br />percent_overweight: 62.896552"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(89,89,89,0.8)","line":{"width":1.8897637795275593,"color":"rgba(255,255,255,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Percent Overweight at Finer School Level","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.0965517241379308,67.089655172413785],"tickmode":"array","ticktext":["0","20","40","60"],"tickvals":[0,20,39.999999999999993,60],"categoryorder":"array","categoryarray":["0","20","40","60"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Percent Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-53.050000000000004,1114.05],"tickmode":"array","ticktext":["0","300","600","900"],"tickvals":[0,300,600,900],"categoryorder":"array","categoryarray":["0","300","600","900"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"10f2f71867dd2":{"x":{},"type":"bar"}},"cur_data":"10f2f71867dd2","visdat":{"10f2f71867dd2":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-4dfaeed2fd56d655abcc" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-4dfaeed2fd56d655abcc">{"x":{"data":[{"orientation":"v","width":[2.0965517241379308,2.0965517241379317,2.0965517241379299,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379246,2.0965517241379317,2.0965517241379317,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[2.0965517241379308,4.1931034482758616,6.2896551724137924,8.3862068965517231,10.482758620689655,12.579310344827586,14.675862068965515,16.772413793103446,18.868965517241378,20.96551724137931,23.062068965517241,25.158620689655169,27.255172413793101,29.351724137931029,31.448275862068961,33.544827586206893,35.641379310344817,37.737931034482756,39.83448275862068,41.931034482758619,44.027586206896544,46.124137931034468,48.220689655172407,50.317241379310332,52.41379310344827,54.510344827586195,56.606896551724134,58.703448275862058,60.799999999999983,62.896551724137922],"y":[12,12,104,684,1793,4191,6414,7111,5363,3272,1669,857,533,312,137,124,52,33,21,11,0,5,5,0,0,0,0,0,0,6],"text":["count:   12<br />percent_overweight:  2.096552","count:   12<br />percent_overweight:  4.193103","count:  104<br />percent_overweight:  6.289655","count:  684<br />percent_overweight:  8.386207","count: 1793<br />percent_overweight: 10.482759","count: 4191<br />percent_overweight: 12.579310","count: 6414<br />percent_overweight: 14.675862","count: 7111<br />percent_overweight: 16.772414","count: 5363<br />percent_overweight: 18.868966","count: 3272<br />percent_overweight: 20.965517","count: 1669<br />percent_overweight: 23.062069","count:  857<br />percent_overweight: 25.158621","count:  533<br />percent_overweight: 27.255172","count:  312<br />percent_overweight: 29.351724","count:  137<br />percent_overweight: 31.448276","count:  124<br />percent_overweight: 33.544828","count:   52<br />percent_overweight: 35.641379","count:   33<br />percent_overweight: 37.737931","count:   21<br />percent_overweight: 39.834483","count:   11<br />percent_overweight: 41.931034","count:    0<br />percent_overweight: 44.027586","count:    5<br />percent_overweight: 46.124138","count:    5<br />percent_overweight: 48.220690","count:    0<br />percent_overweight: 50.317241","count:    0<br />percent_overweight: 52.413793","count:    0<br />percent_overweight: 54.510345","count:    0<br />percent_overweight: 56.606897","count:    0<br />percent_overweight: 58.703448","count:    0<br />percent_overweight: 60.800000","count:    6<br />percent_overweight: 62.896552"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(89,89,89,0.8)","line":{"width":1.8897637795275593,"color":"rgba(255,255,255,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":48.949771689497723},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Percent Overweight at Finer School Level","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.0965517241379308,67.089655172413785],"tickmode":"array","ticktext":["0","20","40","60"],"tickvals":[0,20,39.999999999999993,60],"categoryorder":"array","categoryarray":["0","20","40","60"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Percent Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-355.55000000000001,7466.5500000000002],"tickmode":"array","ticktext":["0","2000","4000","6000"],"tickvals":[0,2000.0000000000002,4000,6000],"categoryorder":"array","categoryarray":["0","2000","4000","6000"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"cfaa5ffd390b":{"x":{},"type":"bar"}},"cur_data":"cfaa5ffd390b","visdat":{"cfaa5ffd390b":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>The outcome is roughly normal, so no transformation needed.</p>
 <p>Check for normality of residuals.</p>
 <pre class="r"><code>model1 = lm(percent_overweight ~ sex, data = train_data)
@@ -762,13 +762,13 @@ p.value
 (Intercept)
 </td>
 <td style="text-align:right;">
-17.546446
+17.698245
 </td>
 <td style="text-align:right;">
-0.0892055
+0.0352511
 </td>
 <td style="text-align:right;">
-196.696951
+502.06230
 </td>
 <td style="text-align:right;">
 0
@@ -779,13 +779,13 @@ p.value
 sex
 </td>
 <td style="text-align:right;">
--1.177219
+-1.217539
 </td>
 <td style="text-align:right;">
-0.1259459
+0.0497622
 </td>
 <td style="text-align:right;">
--9.347023
+-24.46716
 </td>
 <td style="text-align:right;">
 0
@@ -849,13 +849,13 @@ p.value
 (Intercept)
 </td>
 <td style="text-align:right;">
-16.126602
+16.239979
 </td>
 <td style="text-align:right;">
-0.0866902
+0.0341128
 </td>
 <td style="text-align:right;">
-186.02569
+476.06768
 </td>
 <td style="text-align:right;">
 0
@@ -866,13 +866,13 @@ p.value
 grade_level
 </td>
 <td style="text-align:right;">
-1.716477
+1.769576
 </td>
 <td style="text-align:right;">
-0.1247212
+0.0492989
 </td>
 <td style="text-align:right;">
-13.76251
+35.89485
 </td>
 <td style="text-align:right;">
 0
@@ -926,13 +926,13 @@ p.value
 (Intercept)
 </td>
 <td style="text-align:right;">
-16.717571
+16.851964
 </td>
 <td style="text-align:right;">
-0.1058518
+0.0416825
 </td>
 <td style="text-align:right;">
-157.933676
+404.29335
 </td>
 <td style="text-align:right;">
 0
@@ -943,13 +943,13 @@ p.value
 grade_level
 </td>
 <td style="text-align:right;">
-1.718086
+1.773623
 </td>
 <td style="text-align:right;">
-0.1235648
+0.0488329
 </td>
 <td style="text-align:right;">
-13.904326
+36.32024
 </td>
 <td style="text-align:right;">
 0
@@ -960,13 +960,13 @@ grade_level
 sex
 </td>
 <td style="text-align:right;">
--1.179560
+-1.223396
 </td>
 <td style="text-align:right;">
-0.1234951
+0.0487894
 </td>
 <td style="text-align:right;">
--9.551469
+-25.07505
 </td>
 <td style="text-align:right;">
 0
@@ -987,10 +987,10 @@ more preferrable than MLR.</p>
 ## Model 1: percent_overweight ~ sex
 ## Model 2: percent_overweight ~ grade_level
 ## Model 3: percent_overweight ~ grade_level + sex
-##   Res.Df   RSS Df Sum of Sq      F    Pr(&gt;F)    
-## 1   4798 91328                                  
-## 2   4798 89460  0    1868.5                     
-## 3   4797 87790  1    1669.6 91.231 &lt; 2.2e-16 ***
+##   Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1  32719 662765                                  
+## 2  32719 649322  0     13443                     
+## 3  32718 637078  1     12243 628.76 &lt; 2.2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>So, MLR is more preferrable than SLR here because the p-value is &lt;
@@ -1032,8 +1032,8 @@ district_level_data =
     title = &quot;Distribution of Median Percent of Overweight&quot;)
 
 ggplotly(overweight_dist)</code></pre>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-acf7cfa7a317e939a377" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-acf7cfa7a317e939a377">{"x":{"data":[{"orientation":"v","width":[1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896591,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896484,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[8.9793103448275868,10.262068965517242,11.544827586206896,12.827586206896552,14.110344827586207,15.393103448275863,16.675862068965518,17.958620689655174,19.241379310344829,20.524137931034485,21.80689655172414,23.089655172413796,24.372413793103451,25.655172413793107,26.937931034482762,28.220689655172418,29.503448275862073,30.786206896551729,32.068965517241381,33.351724137931043,34.634482758620692,35.917241379310354,37.200000000000003,38.482758620689658,39.765517241379314,41.048275862068962,42.331034482758625,43.613793103448273,44.896551724137936,46.179310344827584],"y":[8,13,30,83,154,228,276,228,107,79,30,17,12,4,3,4,2,2,1,1,1,0,0,0,0,0,0,0,0,1],"text":["count:   8<br />med_overweight:  8.97931","count:  13<br />med_overweight: 10.26207","count:  30<br />med_overweight: 11.54483","count:  83<br />med_overweight: 12.82759","count: 154<br />med_overweight: 14.11034","count: 228<br />med_overweight: 15.39310","count: 276<br />med_overweight: 16.67586","count: 228<br />med_overweight: 17.95862","count: 107<br />med_overweight: 19.24138","count:  79<br />med_overweight: 20.52414","count:  30<br />med_overweight: 21.80690","count:  17<br />med_overweight: 23.08966","count:  12<br />med_overweight: 24.37241","count:   4<br />med_overweight: 25.65517","count:   3<br />med_overweight: 26.93793","count:   4<br />med_overweight: 28.22069","count:   2<br />med_overweight: 29.50345","count:   2<br />med_overweight: 30.78621","count:   1<br />med_overweight: 32.06897","count:   1<br />med_overweight: 33.35172","count:   1<br />med_overweight: 34.63448","count:   0<br />med_overweight: 35.91724","count:   0<br />med_overweight: 37.20000","count:   0<br />med_overweight: 38.48276","count:   0<br />med_overweight: 39.76552","count:   0<br />med_overweight: 41.04828","count:   0<br />med_overweight: 42.33103","count:   0<br />med_overweight: 43.61379","count:   0<br />med_overweight: 44.89655","count:   1<br />med_overweight: 46.17931"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(89,89,89,0.8)","line":{"width":1.8897637795275593,"color":"rgba(255,255,255,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Median Percent of Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[6.4137931034482758,48.744827586206895],"tickmode":"array","ticktext":["10","20","30","40"],"tickvals":[10,20,29.999999999999993,40],"categoryorder":"array","categoryarray":["10","20","30","40"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Median Percent of Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-13.800000000000001,289.80000000000001],"tickmode":"array","ticktext":["0","100","200"],"tickvals":[0,100,200],"categoryorder":"array","categoryarray":["0","100","200"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"10f2f5eab9c48":{"x":{},"type":"bar"}},"cur_data":"10f2f5eab9c48","visdat":{"10f2f5eab9c48":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-620ae6079075ad7f11e5" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-620ae6079075ad7f11e5">{"x":{"data":[{"orientation":"v","width":[1.1637931034482776,1.1637931034482776,1.1637931034482776,1.1637931034482776,1.1637931034482776,1.1637931034482776,1.1637931034482776,1.1637931034482705,1.1637931034482705,1.1637931034482776,1.1637931034482776,1.1637931034482705,1.1637931034482705,1.1637931034482776,1.1637931034482705,1.1637931034482776,1.1637931034482776,1.1637931034482705,1.1637931034482705,1.1637931034482847,1.1637931034482705,1.1637931034482847,1.1637931034482847,1.1637931034482705,1.1637931034482847,1.1637931034482705,1.1637931034482705,1.1637931034482847,1.1637931034482705,1.1637931034482705],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[9.3103448275862064,10.47413793103448,11.637931034482758,12.801724137931032,13.96551724137931,15.129310344827584,16.293103448275861,17.456896551724135,18.620689655172413,19.784482758620687,20.948275862068964,22.112068965517238,23.275862068965516,24.43965517241379,25.603448275862064,26.767241379310342,27.931034482758619,29.094827586206897,30.258620689655167,31.422413793103445,32.586206896551722,33.75,34.91379310344827,36.077586206896548,37.241379310344826,38.405172413793103,39.568965517241374,40.732758620689651,41.896551724137929,43.060344827586199],"y":[5,24,63,156,340,504,751,731,522,256,136,70,20,41,10,5,5,15,5,5,0,0,0,0,0,0,0,0,0,5],"text":["count:   5<br />med_overweight:  9.310345","count:  24<br />med_overweight: 10.474138","count:  63<br />med_overweight: 11.637931","count: 156<br />med_overweight: 12.801724","count: 340<br />med_overweight: 13.965517","count: 504<br />med_overweight: 15.129310","count: 751<br />med_overweight: 16.293103","count: 731<br />med_overweight: 17.456897","count: 522<br />med_overweight: 18.620690","count: 256<br />med_overweight: 19.784483","count: 136<br />med_overweight: 20.948276","count:  70<br />med_overweight: 22.112069","count:  20<br />med_overweight: 23.275862","count:  41<br />med_overweight: 24.439655","count:  10<br />med_overweight: 25.603448","count:   5<br />med_overweight: 26.767241","count:   5<br />med_overweight: 27.931034","count:  15<br />med_overweight: 29.094828","count:   5<br />med_overweight: 30.258621","count:   5<br />med_overweight: 31.422414","count:   0<br />med_overweight: 32.586207","count:   0<br />med_overweight: 33.750000","count:   0<br />med_overweight: 34.913793","count:   0<br />med_overweight: 36.077586","count:   0<br />med_overweight: 37.241379","count:   0<br />med_overweight: 38.405172","count:   0<br />med_overweight: 39.568966","count:   0<br />med_overweight: 40.732759","count:   0<br />med_overweight: 41.896552","count:   5<br />med_overweight: 43.060345"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(89,89,89,0.8)","line":{"width":1.8897637795275593,"color":"rgba(255,255,255,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Median Percent of Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[6.9827586206896539,45.387931034482747],"tickmode":"array","ticktext":["10","20","30","40"],"tickvals":[10,20,30,40],"categoryorder":"array","categoryarray":["10","20","30","40"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Median Percent of Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-37.550000000000004,788.54999999999995],"tickmode":"array","ticktext":["0","200","400","600"],"tickvals":[0,200,400.00000000000006,600],"categoryorder":"array","categoryarray":["0","200","400","600"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"cfaaaab835":{"x":{},"type":"bar"}},"cur_data":"cfaaaab835","visdat":{"cfaaaab835":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>The outcome distribution is roughly normal, so no transformation is
 needed.</p>
 <p>Then, we will look at a correlation matrix to determine which
@@ -1086,16 +1086,16 @@ p.value
 (Intercept)
 </td>
 <td style="text-align:right;">
-204.6285368
+146.5031318
 </td>
 <td style="text-align:right;">
-119.2937283
+55.9810271
 </td>
 <td style="text-align:right;">
-1.715334
+2.617014
 </td>
 <td style="text-align:right;">
-0.0865267
+0.0089067
 </td>
 </tr>
 <tr>
@@ -1103,16 +1103,16 @@ p.value
 year
 </td>
 <td style="text-align:right;">
--0.0928606
+-0.0638961
 </td>
 <td style="text-align:right;">
-0.0591545
+0.0277910
 </td>
 <td style="text-align:right;">
--1.569797
+-2.299164
 </td>
 <td style="text-align:right;">
-0.1167100
+0.0215517
 </td>
 </tr>
 <tr>
@@ -1120,16 +1120,16 @@ year
 total_asian
 </td>
 <td style="text-align:right;">
--0.0014845
+-0.0015075
 </td>
 <td style="text-align:right;">
-0.0003005
+0.0001995
 </td>
 <td style="text-align:right;">
--4.940426
+-7.555289
 </td>
 <td style="text-align:right;">
-0.0000009
+0.0000000
 </td>
 </tr>
 <tr>
@@ -1137,16 +1137,16 @@ total_asian
 total_black
 </td>
 <td style="text-align:right;">
-0.0001223
+0.0001524
 </td>
 <td style="text-align:right;">
-0.0000984
+0.0000544
 </td>
 <td style="text-align:right;">
-1.242595
+2.801987
 </td>
 <td style="text-align:right;">
-0.2142454
+0.0051056
 </td>
 </tr>
 <tr>
@@ -1154,16 +1154,16 @@ total_black
 total_hisp
 </td>
 <td style="text-align:right;">
-0.0002993
+0.0002705
 </td>
 <td style="text-align:right;">
-0.0000816
+0.0000499
 </td>
 <td style="text-align:right;">
-3.667092
+5.421625
 </td>
 <td style="text-align:right;">
-0.0002554
+0.0000001
 </td>
 </tr>
 <tr>
@@ -1171,16 +1171,16 @@ total_hisp
 total_am_ind
 </td>
 <td style="text-align:right;">
-0.0037642
+0.0023140
 </td>
 <td style="text-align:right;">
-0.0014737
+0.0008861
 </td>
 <td style="text-align:right;">
-2.554306
+2.611519
 </td>
 <td style="text-align:right;">
-0.0107552
+0.0090509
 </td>
 </tr>
 <tr>
@@ -1188,16 +1188,16 @@ total_am_ind
 total_white
 </td>
 <td style="text-align:right;">
--0.0003124
+-0.0004473
 </td>
 <td style="text-align:right;">
-0.0000638
+0.0000348
 </td>
 <td style="text-align:right;">
--4.894690
+-12.849652
 </td>
 <td style="text-align:right;">
-0.0000011
+0.0000000
 </td>
 </tr>
 </tbody>
@@ -1282,16 +1282,16 @@ p.value
 (Intercept)
 </td>
 <td style="text-align:right;">
--2.390
+0.086
 </td>
 <td style="text-align:right;">
-1.176
+0.497
 </td>
 <td style="text-align:right;">
--2.033
+0.173
 </td>
 <td style="text-align:right;">
-0.042
+0.863
 </td>
 </tr>
 <tr>
@@ -1299,16 +1299,16 @@ p.value
 year
 </td>
 <td style="text-align:right;">
-0.001
+0.000
 </td>
 <td style="text-align:right;">
-0.001
+0.000
 </td>
 <td style="text-align:right;">
-2.009
+-0.042
 </td>
 <td style="text-align:right;">
-0.045
+0.967
 </td>
 </tr>
 <tr>
@@ -1322,7 +1322,7 @@ percent_obese
 0.000
 </td>
 <td style="text-align:right;">
--4068.880
+-8393.050
 </td>
 <td style="text-align:right;">
 0.000
@@ -1333,13 +1333,13 @@ percent_obese
 percent_overweight_or_obese
 </td>
 <td style="text-align:right;">
-1.000
+0.999
 </td>
 <td style="text-align:right;">
 0.000
 </td>
 <td style="text-align:right;">
-2710.705
+5605.985
 </td>
 <td style="text-align:right;">
 0.000
@@ -1350,16 +1350,16 @@ percent_overweight_or_obese
 percent_healthy_weight
 </td>
 <td style="text-align:right;">
-0.039
+-0.061
 </td>
 <td style="text-align:right;">
-0.035
+0.017
 </td>
 <td style="text-align:right;">
-1.121
+-3.600
 </td>
 <td style="text-align:right;">
-0.262
+0.000
 </td>
 </tr>
 </tbody>
@@ -1416,16 +1416,16 @@ p.value
 (Intercept)
 </td>
 <td style="text-align:right;">
-294.4593529
+565.4392923
 </td>
 <td style="text-align:right;">
-268.2056744
+172.9447918
 </td>
 <td style="text-align:right;">
-1.0978864
+3.269479
 </td>
 <td style="text-align:right;">
-0.2725683
+0.0010986
 </td>
 </tr>
 <tr>
@@ -1433,16 +1433,16 @@ p.value
 year
 </td>
 <td style="text-align:right;">
--0.1377206
+-0.2721140
 </td>
 <td style="text-align:right;">
-0.1330457
+0.0857911
 </td>
 <td style="text-align:right;">
--1.0351379
+-3.171821
 </td>
 <td style="text-align:right;">
-0.3009021
+0.0015414
 </td>
 </tr>
 <tr>
@@ -1450,16 +1450,16 @@ year
 total_num_free_lunch
 </td>
 <td style="text-align:right;">
-0.0000718
+0.0000723
 </td>
 <td style="text-align:right;">
-0.0000697
+0.0000402
 </td>
 <td style="text-align:right;">
-1.0289415
+1.797194
 </td>
 <td style="text-align:right;">
-0.3038030
+0.0724786
 </td>
 </tr>
 <tr>
@@ -1467,16 +1467,16 @@ total_num_free_lunch
 total_num_reduced_lunch
 </td>
 <td style="text-align:right;">
-0.0001812
+0.0000690
 </td>
 <td style="text-align:right;">
-0.0009498
+0.0005851
 </td>
 <td style="text-align:right;">
-0.1907815
+0.117926
 </td>
 <td style="text-align:right;">
-0.8487428
+0.9061400
 </td>
 </tr>
 </tbody>
