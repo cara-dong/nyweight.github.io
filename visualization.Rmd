@@ -149,6 +149,7 @@ ggplot(element_middle_data, aes(x = county, y = ave_overweight_percent, fill = g
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 70, hjust = 1, size = 6))
 ```
+<br>
 Observing this plot reveals that, in the majority of counties, elementary school students exhibit a lower percentage of overweight compared to their middle school counterparts. As a suggestion, it is recommended to first adjust the school lunch menu to incorporate healthier options, possibly including more fiber. Additionally, middle school students should ensure sufficient exercise by dedicating more time or classes to physical education.
 
 ```{r message = FALSE, echo = FALSE}
@@ -193,6 +194,7 @@ ggplot(sex_data, aes(x = year, y = ave_overweight_percent, color = sex)) +
        color = "Sex") +
   theme_minimal()
 ```
+<br>
 The plot indicates that the likelihood of female students having a higher percentage of overweight cases compared to male students is noticeable. This inclination may be influenced by a complex interplay of biological, behavioral, and socio-cultural factors. For instance, hormonal differences between males and females can affect the distribution of muscle and fat in their bodies. Therefore, it is suggested to incorporate additional biological education for students facing overweight issues to empower them to make informed choices and address their situation effectively.
 
 ## Racial Group and Overweight
