@@ -42,9 +42,12 @@ Our project aims to tackle the critical issue of obesity and overweight prevalen
 
 <h2 style="font-size: 24px; font-family: Times New Roman, sans-serif; font-weight: bold; margin-bottom: 20px;">Findings</h2>
 <ul style="font-size: 20px; font-family: Times New Roman, sans-serif;">
-    <li>
-    <li>
-    <li>
+    <li>Stable Overweight Trends: Overweight percentages among New York State students remained relatively stable from 2015 to 2019, indicating a persistent health challenge in student populations.
+    <li>Demographic Influences: Significant differences were found in overweight prevalence between male and female students, as well as between different educational levels. Male and elementary school students generally had lower overweight percentages.
+    <li>Grade Level Impact: Grade level significantly affected overweight rates, with middle/high school students exhibiting higher percentages of overweight compared to elementary students.
+    <li>Combined Effects of Sex and Grade Level: Multiple Linear Regression models revealed that both sex and grade level were significant determinants of overweight percentages, highlighting the need for interventions tailored to these demographic factors.
+    <li>Socio-Cultural Factors: Racial composition showed a statistically significant, albeit small, association with overweight percentages at the district level, suggesting the influence of socio-cultural factors on student health outcomes.
+    <li>Nutritional Factors: The analysis of lunch types (free or reduced) did not show statistically significant relationships with overweight percentages, pointing to a complex interaction between nutritional factors and student weight status.
 </ul>
 
 <h2 style="font-size: 24px; font-family: Times New Roman, sans-serif; font-weight: bold;">Contributors</h2>
