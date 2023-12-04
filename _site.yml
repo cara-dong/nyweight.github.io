@@ -17,4 +17,4 @@ navbar:
       href: https://github.com/cara-dong/nyweight.github.io
 output:
   html_document:
-    theme: journal
+    theme: cosmo
