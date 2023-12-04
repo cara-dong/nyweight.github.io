@@ -1,11 +1,38 @@
 ---
-title: "Regression"
 output: 
   html_document:
     toc: true
     toc_float: true
     code_folding: "hide"
 ---
+
+<style>
+
+.centered-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 30px;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 22px;
+}
+
+h3 {
+  font-weight: bold;
+  font-size: 14px;
+}
+</style>
+
+<div class="centered-title">Test and Regression</div>
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(plotly)
@@ -21,8 +48,8 @@ library(patchwork)
 cleaned_data = read_csv("cleaned_data.csv")
 ```
 
-## Two sample t-test
-### T-test for Means in Sex Groups
+# ---Two sample t-test
+## T-test for Means in Sex Groups
 First, we need to check for normality assumptions.
 ```{r message = FALSE, warning=FALSE}
 normality_check1 = cleaned_data |>
@@ -166,7 +193,7 @@ print(t_test_result)
 ```
 There is a statistically significant difference between the mean log number of male overweight students in elementary schools compared to middle/high schools, with elementary schools having a higher mean on the log scale, given the 2.367e-13 low p-value and the confidence interval that does not include zero.
 
-### T-test for Means in Grade Level
+## T-test for Means in Grade Level
 Next, we conduct a two-sample t-test to compare the average number of overweight elementary students across two different sex groups: male and female.
 ```{r message = FALSE}
 elementary = t_test_data[t_test_data$grade_level == 'ELEMENTARY', ]
@@ -196,8 +223,8 @@ print(t_test_result)
 The t-test results also suggest that there is no significant difference in the mean log number of overweight students in middle/high school students between male and female sex groups, given that p-value 0.1223 is greater than 0.05 at 95% confidence level.
 
 
-## Regression
-### SLR - Sex vs Percentage of Overweight
+# ---Regression
+## SLR - Sex vs Percentage of Overweight
 ```{r message=FALSE, warning=FALSE}
 train_data  = 
   cleaned_data |>
@@ -304,7 +331,7 @@ anova(sex_slr, grade_level_slr, mlr)
 So, MLR is more preferrable than SLR here because the p-value is < 2.2e-16, which is significant at 5% alpha level.
 
 
-### MLR - Student Demographic Info vs Percent of Overweight
+## MLR - Student Demographic Info vs Percent of Overweight
 ```{r message=FALSE, warning=FALSE}
 selected = 
   cleaned_data |>
@@ -409,7 +436,7 @@ The regression analysis indicates that demographic factors, specifically the rac
 However, the magnitude of these associations, as reflected by the estimated coefficients, is relatively small. It is important to note that while these effects are statistically significant for some racial groups, the small size of the coefficients suggests that the practical significance of these demographic variables on the median percentage of overweight students might be limited.
 
 
-### MLR - Other Weight Status vs Percent of Overweight
+## MLR - Other Weight Status vs Percent of Overweight
 ```{r message=FALSE, warning=FALSE}
 train_data = 
   train_data |> 
@@ -425,7 +452,7 @@ display_weight
 
 Holding all other variables constant, with one percent increase in healthy weight students, there is a 0.039 percent increase in overweight students. However, this is not very significant as the p-value (0.262) for the coefficient is greater than 0.05 at an 95% confidence level.
 
-### MLR - Lunch Type vs Percent of Overweight
+## MLR - Lunch Type vs Percent of Overweight
 This prediction is only available for a few years' data because some years do not contain the data record for free lunch and reduced lunch.
 ```{r message=FALSE, warning=FALSE}
 lunch = 

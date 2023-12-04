@@ -1,10 +1,36 @@
 ---
-title: "Data Visualization"
 output: 
   html_document:
     toc: true
     toc_float: true
 ---
+
+<style>
+
+.centered-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 30px;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 22px;
+}
+
+h3 {
+  font-weight: bold;
+  font-size: 14px;
+}
+</style>
+
+<div class="centered-title">Visualization</div>
 
 ```{r setup, include=FALSE} 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
@@ -34,7 +60,7 @@ scale_fill_disrete = scale_fill_viridis_d
 ```
 
 
-## Overweight Percentage Changes Over Year
+# Overweight Percentage Changes Over Year
 Firstly, we want to look at the county-level overweight percentage changes over years. We do that by calculating the county-level average overweight percent and plot results as a spaghetti plot. Legends are dropped to help visualization. 
 ```{r message = FALSE, echo = FALSE}
 # add up each county's percentage for each year
@@ -70,7 +96,7 @@ plot_ly(county_year_data, x = ~year, y = ~ave_overweight_percent, type = "scatte
 ```
 Upon examining two plots, the percentage of students classified as overweight in the state of New York remained relatively constant from 2015 to 2019. Despite apparent fluctuations in the depicted data, such as a surge in 2016 and a drop in 2017, these variations can be attributed to the confined range of the y-axis. Specifically, the values fluctuate within a limited span, ranging only between 16.7% and 17.3%.
 
-## County-level percent overweight/obese/healthy
+# County-level percent overweight/obese/healthy
 Then, we want to compare each counties' overweight, obesity, and healthy percentage. We did this comparison by plotting average percentage overweight/obese/healthy for each county as histograms. 
 ```{r message = FALSE, echo = FALSE}
 # calculate the average percentage of overweight/obsed/healthy for all years
@@ -172,7 +198,7 @@ ggplot(grade_level_data, aes(x = year, y = ave_overweight_percent, color = grade
   theme_minimal()
 ```
 
-## Sex and Overweight
+# Sex and Overweight
 What about sex? Does different sex affect students' overweight percentage? 
 ```{r message = FALSE, echo = FALSE}
 sex_data = 
@@ -197,7 +223,7 @@ ggplot(sex_data, aes(x = year, y = ave_overweight_percent, color = sex)) +
 
 The plot indicates that the likelihood of female students having a higher percentage of overweight cases compared to male students is noticeable. This inclination may be influenced by a complex interplay of biological, behavioral, and socio-cultural factors. For instance, hormonal differences between males and females can affect the distribution of muscle and fat in their bodies. Therefore, it is suggested to incorporate additional biological education for students facing overweight issues to empower them to make informed choices and address their situation effectively.
 
-## Racial Group and Overweight
+# Racial Group and Overweight
 Upon reviewing the cleaned data, there is a hypothesis that various racial groups may exhibit distinct probabilities of experiencing overweight conditions. Therefore, our analysis will commence by examining the distribution of different racial groups among students for each year.
 ```{r message = FALSE, echo = FALSE}
 # the distribution of racial group, first group by district zip code

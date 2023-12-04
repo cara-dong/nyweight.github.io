@@ -1,12 +1,38 @@
 ---
-title: "Data Sources & Cleaning"
 output: 
   html_document:
     toc: true
     toc_float: true
     code_folding: "hide"
 ---
-## Data Sourcess
+<style>
+
+.centered-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 30px;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 22px;
+}
+
+h3 {
+  font-weight: bold;
+  font-size: 14px;
+}
+</style>
+
+<div class="centered-title">Data Cleaning</div>
+
+# Data Source
 
 * **[Student Weight Status](https://health.data.ny.gov/Health/Student-Weight-Status-Category-Reporting-Results-B/es3k-2aus)**: The source is official health.data.ny.gov (NY state government). The data provides information about weight status category data (underweight, healthy weight, overweight or obese) and estimates of the percent of students overweight, obese and overweight or obese for all reportable grades within the county and/or region and by grade groups (elementary and middle/high).
 
@@ -17,8 +43,8 @@ library(tidyverse)
 library(readr)
 ```
 
-## Data Cleaning
-### Student Weight Data
+# Data Cleaning
+## Student Weight Data
 
 What we did: 
 
@@ -59,7 +85,7 @@ show_student_weight
 ```
 
 
-### Demographics Data
+## Demographics Data
 
 What we did: 
 
@@ -89,7 +115,7 @@ show_demographics
 ```
 
 
-### Join Demographics with Student Weight for Years 2015-2019
+## Join Demographics with Student Weight for Years 2015-2019
 
 ```{r message=FALSE}
 join_demo = function(year) {
@@ -224,7 +250,7 @@ show_cleaned_data =
 show_cleaned_data
 ```
 
-### Export to .csv for Use
+## Export to .csv for Use
 ```{r message=FALSE}
 write.csv(cleaned_data, file = "cleaned_data.csv", row.names = FALSE)
 ```

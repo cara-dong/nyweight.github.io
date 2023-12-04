@@ -9,7 +9,7 @@ navbar:
       href: data_cleaning.html  
     - text: "Visualization"
       href: visualization.html
-    - text: "Regression & T-Test"
+    - text: "Test & Regression"
       href: regression.html 
     - text: "About"
       href: about.html

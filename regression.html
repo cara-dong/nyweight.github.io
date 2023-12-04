@@ -11,7 +11,7 @@
 
 
 
-<title>Regression</title>
+<title>regression.knit</title>
 
 <script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -371,15 +371,41 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Regression</h1>
 
 </div>
 
 
-<div id="two-sample-t-test" class="section level2">
-<h2>Two sample t-test</h2>
-<div id="t-test-for-means-in-sex-groups" class="section level3">
-<h3>T-test for Means in Sex Groups</h3>
+<style>
+
+.centered-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 30px;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 22px;
+}
+
+h3 {
+  font-weight: bold;
+  font-size: 14px;
+}
+</style>
+<div class="centered-title">
+Test and Regression
+</div>
+<div id="two-sample-t-test" class="section level1">
+<h1>—Two sample t-test</h1>
+<div id="t-test-for-means-in-sex-groups" class="section level2">
+<h2>T-test for Means in Sex Groups</h2>
 <p>First, we need to check for normality assumptions.</p>
 <pre class="r"><code>normality_check1 = cleaned_data |&gt;
   filter(sex==&quot;FEMALE&quot;) |&gt;
@@ -481,35 +507,19 @@ combined_plot_layout</code></pre>
   knitr::kable(title = &quot;Test for Equality of Variances by Sex&quot;)</code></pre>
 <table>
 <thead>
-<tr>
-<th style="text-align:right;">
-df1
-</th>
-<th style="text-align:right;">
-df2
-</th>
-<th style="text-align:right;">
-statistic
-</th>
-<th style="text-align:right;">
-p
-</th>
+<tr class="header">
+<th align="right">df1</th>
+<th align="right">df2</th>
+<th align="right">statistic</th>
+<th align="right">p</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-4798
-</td>
-<td style="text-align:right;">
-1.916216
-</td>
-<td style="text-align:right;">
-0.1663388
-</td>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">4798</td>
+<td align="right">1.916216</td>
+<td align="right">0.1663388</td>
 </tr>
 </tbody>
 </table>
@@ -519,35 +529,19 @@ p
   knitr::kable(title=&quot;Test for Equality of Variances by Grade Level&quot;)</code></pre>
 <table>
 <thead>
-<tr>
-<th style="text-align:right;">
-df1
-</th>
-<th style="text-align:right;">
-df2
-</th>
-<th style="text-align:right;">
-statistic
-</th>
-<th style="text-align:right;">
-p
-</th>
+<tr class="header">
+<th align="right">df1</th>
+<th align="right">df2</th>
+<th align="right">statistic</th>
+<th align="right">p</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:right;">
-1
-</td>
-<td style="text-align:right;">
-4798
-</td>
-<td style="text-align:right;">
-0.5853365
-</td>
-<td style="text-align:right;">
-0.4442658
-</td>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">4798</td>
+<td align="right">0.5853365</td>
+<td align="right">0.4442658</td>
 </tr>
 </tbody>
 </table>
@@ -608,8 +602,8 @@ middle/high schools, with elementary schools having a higher mean on the
 log scale, given the 2.367e-13 low p-value and the confidence interval
 that does not include zero.</p>
 </div>
-<div id="t-test-for-means-in-grade-level" class="section level3">
-<h3>T-test for Means in Grade Level</h3>
+<div id="t-test-for-means-in-grade-level" class="section level2">
+<h2>T-test for Means in Grade Level</h2>
 <p>Next, we conduct a two-sample t-test to compare the average number of
 overweight elementary students across two different sex groups: male and
 female.</p>
@@ -666,10 +660,10 @@ school students between male and female sex groups, given that p-value
 0.1223 is greater than 0.05 at 95% confidence level.</p>
 </div>
 </div>
-<div id="regression" class="section level2">
-<h2>Regression</h2>
-<div id="slr---sex-vs-percentage-of-overweight" class="section level3">
-<h3>SLR - Sex vs Percentage of Overweight</h3>
+<div id="regression" class="section level1">
+<h1>—Regression</h1>
+<div id="slr---sex-vs-percentage-of-overweight" class="section level2">
+<h2>SLR - Sex vs Percentage of Overweight</h2>
 <pre class="r"><code>train_data  = 
   cleaned_data |&gt;
   select(year, sex, grade_level, 
@@ -690,8 +684,8 @@ school students between male and female sex groups, given that p-value
     title = &quot;Distribution of Percent Overweight at Finer School Level&quot;)
 
 ggplotly(school_level_dist)</code></pre>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-76b571266dc756b24aac" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-76b571266dc756b24aac">{"x":{"data":[{"orientation":"v","width":[2.0965517241379308,2.0965517241379317,2.0965517241379299,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379246,2.0965517241379317,2.0965517241379317,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[2.0965517241379308,4.1931034482758616,6.2896551724137924,8.3862068965517231,10.482758620689655,12.579310344827586,14.675862068965515,16.772413793103446,18.868965517241378,20.96551724137931,23.062068965517241,25.158620689655169,27.255172413793101,29.351724137931029,31.448275862068961,33.544827586206893,35.641379310344817,37.737931034482756,39.83448275862068,41.931034482758619,44.027586206896544,46.124137931034468,48.220689655172407,50.317241379310332,52.41379310344827,54.510344827586195,56.606896551724134,58.703448275862058,60.799999999999983,62.896551724137922],"y":[2,2,15,93,271,619,967,1061,794,483,232,111,62,36,19,17,6,5,1,1,0,1,1,0,0,0,0,0,0,1],"text":["count:    2<br />percent_overweight:  2.096552","count:    2<br />percent_overweight:  4.193103","count:   15<br />percent_overweight:  6.289655","count:   93<br />percent_overweight:  8.386207","count:  271<br />percent_overweight: 10.482759","count:  619<br />percent_overweight: 12.579310","count:  967<br />percent_overweight: 14.675862","count: 1061<br />percent_overweight: 16.772414","count:  794<br />percent_overweight: 18.868966","count:  483<br />percent_overweight: 20.965517","count:  232<br />percent_overweight: 23.062069","count:  111<br />percent_overweight: 25.158621","count:   62<br />percent_overweight: 27.255172","count:   36<br />percent_overweight: 29.351724","count:   19<br />percent_overweight: 31.448276","count:   17<br />percent_overweight: 33.544828","count:    6<br />percent_overweight: 35.641379","count:    5<br />percent_overweight: 37.737931","count:    1<br />percent_overweight: 39.834483","count:    1<br />percent_overweight: 41.931034","count:    0<br />percent_overweight: 44.027586","count:    1<br />percent_overweight: 46.124138","count:    1<br />percent_overweight: 48.220690","count:    0<br />percent_overweight: 50.317241","count:    0<br />percent_overweight: 52.413793","count:    0<br />percent_overweight: 54.510345","count:    0<br />percent_overweight: 56.606897","count:    0<br />percent_overweight: 58.703448","count:    0<br />percent_overweight: 60.800000","count:    1<br />percent_overweight: 62.896552"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(89,89,89,0.8)","line":{"width":1.8897637795275593,"color":"rgba(255,255,255,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Percent Overweight at Finer School Level","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.0965517241379308,67.089655172413785],"tickmode":"array","ticktext":["0","20","40","60"],"tickvals":[0,20,39.999999999999993,60],"categoryorder":"array","categoryarray":["0","20","40","60"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Percent Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-53.050000000000004,1114.05],"tickmode":"array","ticktext":["0","300","600","900"],"tickvals":[0,300,600,900],"categoryorder":"array","categoryarray":["0","300","600","900"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"1035b2bae2f84":{"x":{},"type":"bar"}},"cur_data":"1035b2bae2f84","visdat":{"1035b2bae2f84":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-1a1dd33c754b2098fe96" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-1a1dd33c754b2098fe96">{"x":{"data":[{"orientation":"v","width":[2.0965517241379308,2.0965517241379317,2.0965517241379299,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379317,2.0965517241379246,2.0965517241379317,2.0965517241379317,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246,2.0965517241379246],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[2.0965517241379308,4.1931034482758616,6.2896551724137924,8.3862068965517231,10.482758620689655,12.579310344827586,14.675862068965515,16.772413793103446,18.868965517241378,20.96551724137931,23.062068965517241,25.158620689655169,27.255172413793101,29.351724137931029,31.448275862068961,33.544827586206893,35.641379310344817,37.737931034482756,39.83448275862068,41.931034482758619,44.027586206896544,46.124137931034468,48.220689655172407,50.317241379310332,52.41379310344827,54.510344827586195,56.606896551724134,58.703448275862058,60.799999999999983,62.896551724137922],"y":[2,2,15,93,271,619,967,1061,794,483,232,111,62,36,19,17,6,5,1,1,0,1,1,0,0,0,0,0,0,1],"text":["count:    2<br />percent_overweight:  2.096552","count:    2<br />percent_overweight:  4.193103","count:   15<br />percent_overweight:  6.289655","count:   93<br />percent_overweight:  8.386207","count:  271<br />percent_overweight: 10.482759","count:  619<br />percent_overweight: 12.579310","count:  967<br />percent_overweight: 14.675862","count: 1061<br />percent_overweight: 16.772414","count:  794<br />percent_overweight: 18.868966","count:  483<br />percent_overweight: 20.965517","count:  232<br />percent_overweight: 23.062069","count:  111<br />percent_overweight: 25.158621","count:   62<br />percent_overweight: 27.255172","count:   36<br />percent_overweight: 29.351724","count:   19<br />percent_overweight: 31.448276","count:   17<br />percent_overweight: 33.544828","count:    6<br />percent_overweight: 35.641379","count:    5<br />percent_overweight: 37.737931","count:    1<br />percent_overweight: 39.834483","count:    1<br />percent_overweight: 41.931034","count:    0<br />percent_overweight: 44.027586","count:    1<br />percent_overweight: 46.124138","count:    1<br />percent_overweight: 48.220690","count:    0<br />percent_overweight: 50.317241","count:    0<br />percent_overweight: 52.413793","count:    0<br />percent_overweight: 54.510345","count:    0<br />percent_overweight: 56.606897","count:    0<br />percent_overweight: 58.703448","count:    0<br />percent_overweight: 60.800000","count:    1<br />percent_overweight: 62.896552"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(89,89,89,0.8)","line":{"width":1.8897637795275593,"color":"rgba(255,255,255,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Percent Overweight at Finer School Level","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2.0965517241379308,67.089655172413785],"tickmode":"array","ticktext":["0","20","40","60"],"tickvals":[0,20,39.999999999999993,60],"categoryorder":"array","categoryarray":["0","20","40","60"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Percent Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-53.050000000000004,1114.05],"tickmode":"array","ticktext":["0","300","600","900"],"tickvals":[0,300,600,900],"categoryorder":"array","categoryarray":["0","300","600","900"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"1092152cbbf14":{"x":{},"type":"bar"}},"cur_data":"1092152cbbf14","visdat":{"1092152cbbf14":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>The outcome is roughly normal, so no transformation needed.</p>
 <p>Check for normality of residuals.</p>
 <pre class="r"><code>model1 = lm(percent_overweight ~ sex, data = train_data)
@@ -712,58 +706,28 @@ sex_slr_df = sex_slr |&gt; broom::tidy()
 knitr::kable(sex_slr_df)</code></pre>
 <table>
 <thead>
-<tr>
-<th style="text-align:left;">
-term
-</th>
-<th style="text-align:right;">
-estimate
-</th>
-<th style="text-align:right;">
-std.error
-</th>
-<th style="text-align:right;">
-statistic
-</th>
-<th style="text-align:right;">
-p.value
-</th>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-(Intercept)
-</td>
-<td style="text-align:right;">
-17.546446
-</td>
-<td style="text-align:right;">
-0.0892055
-</td>
-<td style="text-align:right;">
-196.696951
-</td>
-<td style="text-align:right;">
-0
-</td>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">17.546446</td>
+<td align="right">0.0892055</td>
+<td align="right">196.696951</td>
+<td align="right">0</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-sex
-</td>
-<td style="text-align:right;">
--1.177219
-</td>
-<td style="text-align:right;">
-0.1259459
-</td>
-<td style="text-align:right;">
--9.347023
-</td>
-<td style="text-align:right;">
-0
-</td>
+<tr class="even">
+<td align="left">sex</td>
+<td align="right">-1.177219</td>
+<td align="right">0.1259459</td>
+<td align="right">-9.347023</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>
@@ -777,7 +741,6 @@ male students group in NY schools had lower percentage of overweight
 students compared to female students group. This corresponds to the line
 plot visualization displayed in the previous section, where the line for
 male students is always below that for female students.</p>
-</div>
 <div id="slr---grade-level-vs-percent-of-overweight"
 class="section level3">
 <h3>SLR - Grade Level vs Percent of Overweight</h3>
@@ -800,58 +763,28 @@ grade_level_slr_df = grade_level_slr |&gt; broom::tidy()
 knitr::kable(grade_level_slr_df)</code></pre>
 <table>
 <thead>
-<tr>
-<th style="text-align:left;">
-term
-</th>
-<th style="text-align:right;">
-estimate
-</th>
-<th style="text-align:right;">
-std.error
-</th>
-<th style="text-align:right;">
-statistic
-</th>
-<th style="text-align:right;">
-p.value
-</th>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-(Intercept)
-</td>
-<td style="text-align:right;">
-16.126602
-</td>
-<td style="text-align:right;">
-0.0866902
-</td>
-<td style="text-align:right;">
-186.02569
-</td>
-<td style="text-align:right;">
-0
-</td>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">16.126602</td>
+<td align="right">0.0866902</td>
+<td align="right">186.02569</td>
+<td align="right">0</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-grade_level
-</td>
-<td style="text-align:right;">
-1.716477
-</td>
-<td style="text-align:right;">
-0.1247212
-</td>
-<td style="text-align:right;">
-13.76251
-</td>
-<td style="text-align:right;">
-0
-</td>
+<tr class="even">
+<td align="left">grade_level</td>
+<td align="right">1.716477</td>
+<td align="right">0.1247212</td>
+<td align="right">13.76251</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>
@@ -877,75 +810,35 @@ mlr_df = mlr |&gt; broom::tidy()
 knitr::kable(mlr_df)</code></pre>
 <table>
 <thead>
-<tr>
-<th style="text-align:left;">
-term
-</th>
-<th style="text-align:right;">
-estimate
-</th>
-<th style="text-align:right;">
-std.error
-</th>
-<th style="text-align:right;">
-statistic
-</th>
-<th style="text-align:right;">
-p.value
-</th>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-(Intercept)
-</td>
-<td style="text-align:right;">
-16.717571
-</td>
-<td style="text-align:right;">
-0.1058518
-</td>
-<td style="text-align:right;">
-157.933676
-</td>
-<td style="text-align:right;">
-0
-</td>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">16.717571</td>
+<td align="right">0.1058518</td>
+<td align="right">157.933676</td>
+<td align="right">0</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-grade_level
-</td>
-<td style="text-align:right;">
-1.718086
-</td>
-<td style="text-align:right;">
-0.1235648
-</td>
-<td style="text-align:right;">
-13.904326
-</td>
-<td style="text-align:right;">
-0
-</td>
+<tr class="even">
+<td align="left">grade_level</td>
+<td align="right">1.718086</td>
+<td align="right">0.1235648</td>
+<td align="right">13.904326</td>
+<td align="right">0</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-sex
-</td>
-<td style="text-align:right;">
--1.179560
-</td>
-<td style="text-align:right;">
-0.1234951
-</td>
-<td style="text-align:right;">
--9.551469
-</td>
-<td style="text-align:right;">
-0
-</td>
+<tr class="odd">
+<td align="left">sex</td>
+<td align="right">-1.179560</td>
+<td align="right">0.1234951</td>
+<td align="right">-9.551469</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>
@@ -971,9 +864,10 @@ more preferrable than MLR.</p>
 <p>So, MLR is more preferrable than SLR here because the p-value is &lt;
 2.2e-16, which is significant at 5% alpha level.</p>
 </div>
+</div>
 <div id="mlr---student-demographic-info-vs-percent-of-overweight"
-class="section level3">
-<h3>MLR - Student Demographic Info vs Percent of Overweight</h3>
+class="section level2">
+<h2>MLR - Student Demographic Info vs Percent of Overweight</h2>
 <pre class="r"><code>selected = 
   cleaned_data |&gt;
   select(year, district, percent_overweight, num_asian, num_black, num_hisp, num_am_ind, num_white)
@@ -1006,8 +900,8 @@ district_level_data =
     title = &quot;Distribution of Median Percent of Overweight&quot;)
 
 ggplotly(overweight_dist)</code></pre>
-<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-19bff523f4479000224f" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-19bff523f4479000224f">{"x":{"data":[{"orientation":"v","width":[1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896591,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896484,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[8.9793103448275868,10.262068965517242,11.544827586206896,12.827586206896552,14.110344827586207,15.393103448275863,16.675862068965518,17.958620689655174,19.241379310344829,20.524137931034485,21.80689655172414,23.089655172413796,24.372413793103451,25.655172413793107,26.937931034482762,28.220689655172418,29.503448275862073,30.786206896551729,32.068965517241381,33.351724137931043,34.634482758620692,35.917241379310354,37.200000000000003,38.482758620689658,39.765517241379314,41.048275862068962,42.331034482758625,43.613793103448273,44.896551724137936,46.179310344827584],"y":[8,13,30,83,154,228,276,228,107,79,30,17,12,4,3,4,2,2,1,1,1,0,0,0,0,0,0,0,0,1],"text":["count:   8<br />med_overweight:  8.97931","count:  13<br />med_overweight: 10.26207","count:  30<br />med_overweight: 11.54483","count:  83<br />med_overweight: 12.82759","count: 154<br />med_overweight: 14.11034","count: 228<br />med_overweight: 15.39310","count: 276<br />med_overweight: 16.67586","count: 228<br />med_overweight: 17.95862","count: 107<br />med_overweight: 19.24138","count:  79<br />med_overweight: 20.52414","count:  30<br />med_overweight: 21.80690","count:  17<br />med_overweight: 23.08966","count:  12<br />med_overweight: 24.37241","count:   4<br />med_overweight: 25.65517","count:   3<br />med_overweight: 26.93793","count:   4<br />med_overweight: 28.22069","count:   2<br />med_overweight: 29.50345","count:   2<br />med_overweight: 30.78621","count:   1<br />med_overweight: 32.06897","count:   1<br />med_overweight: 33.35172","count:   1<br />med_overweight: 34.63448","count:   0<br />med_overweight: 35.91724","count:   0<br />med_overweight: 37.20000","count:   0<br />med_overweight: 38.48276","count:   0<br />med_overweight: 39.76552","count:   0<br />med_overweight: 41.04828","count:   0<br />med_overweight: 42.33103","count:   0<br />med_overweight: 43.61379","count:   0<br />med_overweight: 44.89655","count:   1<br />med_overweight: 46.17931"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(89,89,89,0.8)","line":{"width":1.8897637795275593,"color":"rgba(255,255,255,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Median Percent of Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[6.4137931034482758,48.744827586206895],"tickmode":"array","ticktext":["10","20","30","40"],"tickvals":[10,20,29.999999999999993,40],"categoryorder":"array","categoryarray":["10","20","30","40"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Median Percent of Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-13.800000000000001,289.80000000000001],"tickmode":"array","ticktext":["0","100","200"],"tickvals":[0,100,200],"categoryorder":"array","categoryarray":["0","100","200"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"1035b4c565aaf":{"x":{},"type":"bar"}},"cur_data":"1035b4c565aaf","visdat":{"1035b4c565aaf":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-753ada178da4a6c686c7" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-753ada178da4a6c686c7">{"x":{"data":[{"orientation":"v","width":[1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896555,1.2827586206896591,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896484,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626,1.2827586206896626],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[8.9793103448275868,10.262068965517242,11.544827586206896,12.827586206896552,14.110344827586207,15.393103448275863,16.675862068965518,17.958620689655174,19.241379310344829,20.524137931034485,21.80689655172414,23.089655172413796,24.372413793103451,25.655172413793107,26.937931034482762,28.220689655172418,29.503448275862073,30.786206896551729,32.068965517241381,33.351724137931043,34.634482758620692,35.917241379310354,37.200000000000003,38.482758620689658,39.765517241379314,41.048275862068962,42.331034482758625,43.613793103448273,44.896551724137936,46.179310344827584],"y":[8,13,30,83,154,228,276,228,107,79,30,17,12,4,3,4,2,2,1,1,1,0,0,0,0,0,0,0,0,1],"text":["count:   8<br />med_overweight:  8.97931","count:  13<br />med_overweight: 10.26207","count:  30<br />med_overweight: 11.54483","count:  83<br />med_overweight: 12.82759","count: 154<br />med_overweight: 14.11034","count: 228<br />med_overweight: 15.39310","count: 276<br />med_overweight: 16.67586","count: 228<br />med_overweight: 17.95862","count: 107<br />med_overweight: 19.24138","count:  79<br />med_overweight: 20.52414","count:  30<br />med_overweight: 21.80690","count:  17<br />med_overweight: 23.08966","count:  12<br />med_overweight: 24.37241","count:   4<br />med_overweight: 25.65517","count:   3<br />med_overweight: 26.93793","count:   4<br />med_overweight: 28.22069","count:   2<br />med_overweight: 29.50345","count:   2<br />med_overweight: 30.78621","count:   1<br />med_overweight: 32.06897","count:   1<br />med_overweight: 33.35172","count:   1<br />med_overweight: 34.63448","count:   0<br />med_overweight: 35.91724","count:   0<br />med_overweight: 37.20000","count:   0<br />med_overweight: 38.48276","count:   0<br />med_overweight: 39.76552","count:   0<br />med_overweight: 41.04828","count:   0<br />med_overweight: 42.33103","count:   0<br />med_overweight: 43.61379","count:   0<br />med_overweight: 44.89655","count:   1<br />med_overweight: 46.17931"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(89,89,89,0.8)","line":{"width":1.8897637795275593,"color":"rgba(255,255,255,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":43.762557077625573,"r":7.3059360730593621,"b":40.182648401826498,"l":43.105022831050235},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Median Percent of Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[6.4137931034482758,48.744827586206895],"tickmode":"array","ticktext":["10","20","30","40"],"tickvals":[10,20,29.999999999999993,40],"categoryorder":"array","categoryarray":["10","20","30","40"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"Median Percent of Overweight","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-13.800000000000001,289.80000000000001],"tickmode":"array","ticktext":["0","100","200"],"tickvals":[0,100,200],"categoryorder":"array","categoryarray":["0","100","200"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"1092114ec53c1":{"x":{},"type":"bar"}},"cur_data":"1092114ec53c1","visdat":{"1092114ec53c1":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>The outcome distribution is roughly normal, so no transformation is
 needed.</p>
 <p>Then, we will look at a correlation matrix to determine which
@@ -1036,143 +930,63 @@ display = mlr |&gt; broom::tidy() |&gt; knitr::kable()
 display</code></pre>
 <table>
 <thead>
-<tr>
-<th style="text-align:left;">
-term
-</th>
-<th style="text-align:right;">
-estimate
-</th>
-<th style="text-align:right;">
-std.error
-</th>
-<th style="text-align:right;">
-statistic
-</th>
-<th style="text-align:right;">
-p.value
-</th>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-(Intercept)
-</td>
-<td style="text-align:right;">
-204.6285368
-</td>
-<td style="text-align:right;">
-119.2937283
-</td>
-<td style="text-align:right;">
-1.715334
-</td>
-<td style="text-align:right;">
-0.0865267
-</td>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">204.6285368</td>
+<td align="right">119.2937283</td>
+<td align="right">1.715334</td>
+<td align="right">0.0865267</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-year
-</td>
-<td style="text-align:right;">
--0.0928606
-</td>
-<td style="text-align:right;">
-0.0591545
-</td>
-<td style="text-align:right;">
--1.569797
-</td>
-<td style="text-align:right;">
-0.1167100
-</td>
+<tr class="even">
+<td align="left">year</td>
+<td align="right">-0.0928606</td>
+<td align="right">0.0591545</td>
+<td align="right">-1.569797</td>
+<td align="right">0.1167100</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-total_asian
-</td>
-<td style="text-align:right;">
--0.0014845
-</td>
-<td style="text-align:right;">
-0.0003005
-</td>
-<td style="text-align:right;">
--4.940426
-</td>
-<td style="text-align:right;">
-0.0000009
-</td>
+<tr class="odd">
+<td align="left">total_asian</td>
+<td align="right">-0.0014845</td>
+<td align="right">0.0003005</td>
+<td align="right">-4.940426</td>
+<td align="right">0.0000009</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-total_black
-</td>
-<td style="text-align:right;">
-0.0001223
-</td>
-<td style="text-align:right;">
-0.0000984
-</td>
-<td style="text-align:right;">
-1.242595
-</td>
-<td style="text-align:right;">
-0.2142454
-</td>
+<tr class="even">
+<td align="left">total_black</td>
+<td align="right">0.0001223</td>
+<td align="right">0.0000984</td>
+<td align="right">1.242595</td>
+<td align="right">0.2142454</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-total_hisp
-</td>
-<td style="text-align:right;">
-0.0002993
-</td>
-<td style="text-align:right;">
-0.0000816
-</td>
-<td style="text-align:right;">
-3.667092
-</td>
-<td style="text-align:right;">
-0.0002554
-</td>
+<tr class="odd">
+<td align="left">total_hisp</td>
+<td align="right">0.0002993</td>
+<td align="right">0.0000816</td>
+<td align="right">3.667092</td>
+<td align="right">0.0002554</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-total_am_ind
-</td>
-<td style="text-align:right;">
-0.0037642
-</td>
-<td style="text-align:right;">
-0.0014737
-</td>
-<td style="text-align:right;">
-2.554306
-</td>
-<td style="text-align:right;">
-0.0107552
-</td>
+<tr class="even">
+<td align="left">total_am_ind</td>
+<td align="right">0.0037642</td>
+<td align="right">0.0014737</td>
+<td align="right">2.554306</td>
+<td align="right">0.0107552</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-total_white
-</td>
-<td style="text-align:right;">
--0.0003124
-</td>
-<td style="text-align:right;">
-0.0000638
-</td>
-<td style="text-align:right;">
--4.894690
-</td>
-<td style="text-align:right;">
-0.0000011
-</td>
+<tr class="odd">
+<td align="left">total_white</td>
+<td align="right">-0.0003124</td>
+<td align="right">0.0000638</td>
+<td align="right">-4.894690</td>
+<td align="right">0.0000011</td>
 </tr>
 </tbody>
 </table>
@@ -1221,8 +1035,8 @@ significance of these demographic variables on the median percentage of
 overweight students might be limited.</p>
 </div>
 <div id="mlr---other-weight-status-vs-percent-of-overweight"
-class="section level3">
-<h3>MLR - Other Weight Status vs Percent of Overweight</h3>
+class="section level2">
+<h2>MLR - Other Weight Status vs Percent of Overweight</h2>
 <pre class="r"><code>train_data = 
   train_data |&gt; 
   select(year, percent_overweight, percent_obese, percent_overweight_or_obese, percent_healthy_weight)</code></pre>
@@ -1232,109 +1046,49 @@ display_weight = mlr_weight |&gt; broom::tidy() |&gt; knitr::kable(digits=3)
 display_weight</code></pre>
 <table>
 <thead>
-<tr>
-<th style="text-align:left;">
-term
-</th>
-<th style="text-align:right;">
-estimate
-</th>
-<th style="text-align:right;">
-std.error
-</th>
-<th style="text-align:right;">
-statistic
-</th>
-<th style="text-align:right;">
-p.value
-</th>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-(Intercept)
-</td>
-<td style="text-align:right;">
--2.390
-</td>
-<td style="text-align:right;">
-1.176
-</td>
-<td style="text-align:right;">
--2.033
-</td>
-<td style="text-align:right;">
-0.042
-</td>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">-2.390</td>
+<td align="right">1.176</td>
+<td align="right">-2.033</td>
+<td align="right">0.042</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-year
-</td>
-<td style="text-align:right;">
-0.001
-</td>
-<td style="text-align:right;">
-0.001
-</td>
-<td style="text-align:right;">
-2.009
-</td>
-<td style="text-align:right;">
-0.045
-</td>
+<tr class="even">
+<td align="left">year</td>
+<td align="right">0.001</td>
+<td align="right">0.001</td>
+<td align="right">2.009</td>
+<td align="right">0.045</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-percent_obese
-</td>
-<td style="text-align:right;">
--1.000
-</td>
-<td style="text-align:right;">
-0.000
-</td>
-<td style="text-align:right;">
--4068.880
-</td>
-<td style="text-align:right;">
-0.000
-</td>
+<tr class="odd">
+<td align="left">percent_obese</td>
+<td align="right">-1.000</td>
+<td align="right">0.000</td>
+<td align="right">-4068.880</td>
+<td align="right">0.000</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-percent_overweight_or_obese
-</td>
-<td style="text-align:right;">
-1.000
-</td>
-<td style="text-align:right;">
-0.000
-</td>
-<td style="text-align:right;">
-2710.705
-</td>
-<td style="text-align:right;">
-0.000
-</td>
+<tr class="even">
+<td align="left">percent_overweight_or_obese</td>
+<td align="right">1.000</td>
+<td align="right">0.000</td>
+<td align="right">2710.705</td>
+<td align="right">0.000</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-percent_healthy_weight
-</td>
-<td style="text-align:right;">
-0.039
-</td>
-<td style="text-align:right;">
-0.035
-</td>
-<td style="text-align:right;">
-1.121
-</td>
-<td style="text-align:right;">
-0.262
-</td>
+<tr class="odd">
+<td align="left">percent_healthy_weight</td>
+<td align="right">0.039</td>
+<td align="right">0.035</td>
+<td align="right">1.121</td>
+<td align="right">0.262</td>
 </tr>
 </tbody>
 </table>
@@ -1344,8 +1098,8 @@ students. However, this is not very significant as the p-value (0.262)
 for the coefficient is greater than 0.05 at an 95% confidence level.</p>
 </div>
 <div id="mlr---lunch-type-vs-percent-of-overweight"
-class="section level3">
-<h3>MLR - Lunch Type vs Percent of Overweight</h3>
+class="section level2">
+<h2>MLR - Lunch Type vs Percent of Overweight</h2>
 <p>This prediction is only available for a few years’ data because some
 years do not contain the data record for free lunch and reduced
 lunch.</p>
@@ -1365,93 +1119,50 @@ display = mlr |&gt; broom::tidy() |&gt; knitr::kable()
 
 display</code></pre>
 <table>
+<colgroup>
+<col width="34%" />
+<col width="17%" />
+<col width="17%" />
+<col width="15%" />
+<col width="14%" />
+</colgroup>
 <thead>
-<tr>
-<th style="text-align:left;">
-term
-</th>
-<th style="text-align:right;">
-estimate
-</th>
-<th style="text-align:right;">
-std.error
-</th>
-<th style="text-align:right;">
-statistic
-</th>
-<th style="text-align:right;">
-p.value
-</th>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td style="text-align:left;">
-(Intercept)
-</td>
-<td style="text-align:right;">
-294.4593529
-</td>
-<td style="text-align:right;">
-268.2056744
-</td>
-<td style="text-align:right;">
-1.0978864
-</td>
-<td style="text-align:right;">
-0.2725683
-</td>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">294.4593529</td>
+<td align="right">268.2056744</td>
+<td align="right">1.0978864</td>
+<td align="right">0.2725683</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-year
-</td>
-<td style="text-align:right;">
--0.1377206
-</td>
-<td style="text-align:right;">
-0.1330457
-</td>
-<td style="text-align:right;">
--1.0351379
-</td>
-<td style="text-align:right;">
-0.3009021
-</td>
+<tr class="even">
+<td align="left">year</td>
+<td align="right">-0.1377206</td>
+<td align="right">0.1330457</td>
+<td align="right">-1.0351379</td>
+<td align="right">0.3009021</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-total_num_free_lunch
-</td>
-<td style="text-align:right;">
-0.0000718
-</td>
-<td style="text-align:right;">
-0.0000697
-</td>
-<td style="text-align:right;">
-1.0289415
-</td>
-<td style="text-align:right;">
-0.3038030
-</td>
+<tr class="odd">
+<td align="left">total_num_free_lunch</td>
+<td align="right">0.0000718</td>
+<td align="right">0.0000697</td>
+<td align="right">1.0289415</td>
+<td align="right">0.3038030</td>
 </tr>
-<tr>
-<td style="text-align:left;">
-total_num_reduced_lunch
-</td>
-<td style="text-align:right;">
-0.0001812
-</td>
-<td style="text-align:right;">
-0.0009498
-</td>
-<td style="text-align:right;">
-0.1907815
-</td>
-<td style="text-align:right;">
-0.8487428
-</td>
+<tr class="even">
+<td align="left">total_num_reduced_lunch</td>
+<td align="right">0.0001812</td>
+<td align="right">0.0009498</td>
+<td align="right">0.1907815</td>
+<td align="right">0.8487428</td>
 </tr>
 </tbody>
 </table>

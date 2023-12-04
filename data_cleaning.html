@@ -11,7 +11,7 @@
 
 
 
-<title>Data Sources &amp; Cleaning</title>
+<title>data_cleaning.knit</title>
 
 <script src="site_libs/header-attrs-2.24/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -338,7 +338,7 @@ div.tocify {
   <a href="visualization.html">Visualization</a>
 </li>
 <li>
-  <a href="regression.html">Regression &amp; T-Test</a>
+  <a href="regression.html">Test &amp; Regression</a>
 </li>
 <li>
   <a href="about.html">About</a>
@@ -366,13 +366,39 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Data Sources &amp; Cleaning</h1>
 
 </div>
 
 
-<div id="data-sourcess" class="section level2">
-<h2>Data Sourcess</h2>
+<style>
+
+.centered-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 30px;
+}
+
+h2 {
+  font-weight: bold;
+  font-size: 22px;
+}
+
+h3 {
+  font-weight: bold;
+  font-size: 14px;
+}
+</style>
+<div class="centered-title">
+Data Cleaning
+</div>
+<div id="data-source" class="section level1">
+<h1>Data Source</h1>
 <ul>
 <li><p><strong><a
 href="https://health.data.ny.gov/Health/Student-Weight-Status-Category-Reporting-Results-B/es3k-2aus">Student
@@ -388,10 +414,10 @@ Enrolled Demographics Data</a></strong>: The source is Cornell
 University’s data library. The data provides</p></li>
 </ul>
 </div>
-<div id="data-cleaning" class="section level2">
-<h2>Data Cleaning</h2>
-<div id="student-weight-data" class="section level3">
-<h3>Student Weight Data</h3>
+<div id="data-cleaning" class="section level1">
+<h1>Data Cleaning</h1>
+<div id="student-weight-data" class="section level2">
+<h2>Student Weight Data</h2>
 <p>What we did:</p>
 <ul>
 <li>xxxxx</li>
@@ -756,8 +782,8 @@ FEMALE
 </table>
 </div>
 </div>
-<div id="demographics-data" class="section level3">
-<h3>Demographics Data</h3>
+<div id="demographics-data" class="section level2">
+<h2>Demographics Data</h2>
 <p>What we did:</p>
 <ul>
 <li>xxxxx</li>
@@ -1187,8 +1213,8 @@ NA
 </div>
 </div>
 <div id="join-demographics-with-student-weight-for-years-2015-2019"
-class="section level3">
-<h3>Join Demographics with Student Weight for Years 2015-2019</h3>
+class="section level2">
+<h2>Join Demographics with Student Weight for Years 2015-2019</h2>
 <pre class="r"><code>join_demo = function(year) {
   Student_Weight_year = 
   Student_Weight |&gt; 
@@ -1947,8 +1973,8 @@ MIDDLE/HIGH
 </table>
 </div>
 </div>
-<div id="export-to-.csv-for-use" class="section level3">
-<h3>Export to .csv for Use</h3>
+<div id="export-to-.csv-for-use" class="section level2">
+<h2>Export to .csv for Use</h2>
 <pre class="r"><code>write.csv(cleaned_data, file = &quot;cleaned_data.csv&quot;, row.names = FALSE)</code></pre>
 <p>Here is the dataset we will use for further analysis: <a
 href="cleaned_data.csv">Cleaned Student Weight and Demographics</a></p>
