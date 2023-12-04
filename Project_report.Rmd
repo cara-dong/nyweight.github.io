@@ -6,6 +6,14 @@ output:
 ---
 
 <style>
+
+.centered-title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
 h1 {
   font-weight: bold;
   font-size: 30px;
@@ -22,7 +30,7 @@ h3 {
 }
 </style>
 
-<h1 style="text-align: center; font-weight: bold; font-size: 36px; margin-bottom: 40px;">Project Report</h1>
+<div class="centered-title">Project Report</div>
 
 # Motivation 
 
