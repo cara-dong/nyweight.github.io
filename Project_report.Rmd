@@ -240,7 +240,7 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_disrete = scale_fill_viridis_d
 ```
 
-## 1. County-level overweight percentage changes over years
+## 1. State-level overweight percentage changes over years
 We want to look at the county-level overweight percentage changes over years to check if there is a change as time goes by, so we employed visualizations to examine the trends in average overweight percentages among New York State students from 2015 to 2019. We do that by calculating the county-level average overweight percent and plot results as a spaghetti plot. Legends are dropped to help visualization. 
 ```{r message = FALSE, echo = FALSE}
 # add up each county's percentage for each year
