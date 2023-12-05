@@ -3,6 +3,7 @@ output:
   html_document:
     toc: true
     toc_float: true
+    code_folding: "hide"
 ---
 
 <style>
@@ -62,7 +63,7 @@ scale_fill_disrete = scale_fill_viridis_d
 
 # Overweight Percentage Changes Over Year
 Firstly, we want to look at the county-level overweight percentage changes over years. We do that by calculating the county-level average overweight percent and plot results as a spaghetti plot. Legends are dropped to help visualization. 
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE}
 # add up each county's percentage for each year
 county_year_data = 
   cleaned_data |>
@@ -81,7 +82,7 @@ ggplot(county_year_data, aes(x = year, y = ave_overweight_percent, group = count
 ```
 
 The current visualization appears messy, making it challenging to see a clear trend. To enhance the clarity of the trend, a new plot depicting the average overweight percentage across counties over time has been created. 
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE}
 # add up each county's percentage for each year
 county_year_data = 
   cleaned_data |>
@@ -100,7 +101,7 @@ Upon examining two plots, the percentage of students classified as overweight in
 
 # County-level percent overweight/obese/healthy
 Then, we want to compare each counties' overweight, obesity, and healthy percentage. We did this comparison by plotting average percentage overweight/obese/healthy for each county as histograms. 
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE}
 # calculate the average percentage of overweight/obsed/healthy for all years
 county_ave_data = 
   cleaned_data |>
@@ -156,7 +157,7 @@ Analyzing the plots and tables reveals that Oswego ranks among the top 5 countie
 
 ## Elementary & Middle school overweight across county
 Now, we want to dive deeper to each variable. We want to compare elementary school and middle/high school overweight percentages for each county. 
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE}
 element_middle_data = 
   cleaned_data |>
   group_by (county, grade_level) |>
@@ -164,9 +165,7 @@ element_middle_data =
   summarize(ave_overweight_percent = mean(percent_overweight), 
             ave_obese_percent = mean(percent_obese), 
             ave_healthy_percent = mean(percent_healthy_weight)*100) 
-```
 
-```{r message = FALSE, echo = FALSE}
 # display and compare elementary and middle/high overweight data  
 ggplot(element_middle_data, aes(x = county, y = ave_overweight_percent, fill = grade_level)) +
   geom_bar(stat = "identity", position = "dodge") +
@@ -180,16 +179,14 @@ ggplot(element_middle_data, aes(x = county, y = ave_overweight_percent, fill = g
 
 Observing this plot reveals that, in the majority of counties, elementary school students exhibit a lower percentage of overweight compared to their middle school counterparts. As a suggestion, it is recommended to first adjust the school lunch menu to incorporate healthier options, possibly including more fiber. Additionally, middle school students should ensure sufficient exercise by dedicating more time or classes to physical education.
 
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE}
 grade_level_data = 
   cleaned_data |>
   group_by (grade_level, year) |>
   summarize(ave_overweight_percent = mean(percent_overweight), 
             ave_obese_percent = mean(percent_obese), 
             ave_healthy_percent = mean(percent_healthy_weight)*100)
-```
 
-```{r message = FALSE, echo = FALSE}
 
 ggplot(grade_level_data, aes(x = year, y = ave_overweight_percent, color = grade_level)) +
   geom_point() +
@@ -203,16 +200,14 @@ ggplot(grade_level_data, aes(x = year, y = ave_overweight_percent, color = grade
 
 # Sex and Overweight
 What about sex? Does different sex affect students' overweight percentage? 
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE}
 sex_data = 
   cleaned_data |>
   group_by (sex, year) |>
   summarize(ave_overweight_percent = mean(percent_overweight), 
             ave_obese_percent = mean(percent_obese), 
             ave_healthy_percent = mean(percent_healthy_weight)*100) 
-```
 
-```{r message = FALSE, echo = FALSE}
 # geom line to compare 
 ggplot(sex_data, aes(x = year, y = ave_overweight_percent, color = sex)) +
   geom_point() +
@@ -228,7 +223,7 @@ The plot indicates that the likelihood of female students having a higher percen
 
 # Racial Group and Overweight
 Upon reviewing the cleaned data, there is a hypothesis that various racial groups may exhibit distinct probabilities of experiencing overweight conditions. Therefore, our analysis will commence by examining the distribution of different racial groups among students for each year.
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE}
 # the distribution of racial group, first group by district zip code
 race_dis_data = cleaned_data |>
   group_by (year, district) |>
@@ -248,9 +243,7 @@ race_year_data = race_dis_data |>
 
 race_year_data = pivot_longer(race_year_data, cols = -year, names_to = "race", values_to = "number" )
 
-```
 
-```{r message = FALSE, echo = FALSE}
 race_2015 = race_year_data |>
   filter(year == "2015")
 
@@ -290,7 +283,7 @@ plot_2019
 
 The pie charts reveal that approximately 60% of the student population is white, while around 20% identifies as Hispanic. There are smaller proportions of Asian, American Indian, and Black students. Following this, we generate plots to visualize the county-level average distribution of racial groups and the corresponding average percentage of overweight individuals.
 
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE}
 county_dis_data = cleaned_data |>
   group_by(year, county, district) |>
   summarize (percent_overweight = mean(percent_overweight), 
@@ -327,7 +320,6 @@ county_data = county_data |>
          percent_black = num_black/total_students*100)
 ```
 
-
 ```{r eval = FALSE, message = FALSE, echo = FALSE}
 ggplot(county_data, aes(x = county)) +
   geom_bar(aes(y = percent_asian, fill = "Asian"), stat = "identity", position = "stack") +
@@ -349,7 +341,7 @@ ggplot(county_data, aes(x = county)) +
 
 ```
 
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE}
 # the plotly version of the previous plot
 plot_ly(county_data) |>
   add_trace(type = "bar", x = ~county, y = ~percent_asian, name = "Asian", color = "pink") |>
@@ -369,7 +361,7 @@ plot_ly(county_data) |>
 ```
 From the aforementioned plot, it is noteworthy that certain counties with a higher proportion of White students exhibit a greater percentage of overweight individuals compared to others. For instance, in Essex County, where the student population comprises a substantial 97.3% White individuals, the average overweight percentage is also the highest at 22.6%. To further investigate this issue, scatter plots are subsequently generated to visualize the distribution of percent overweight versus each racial group.
 
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE}
 library(patchwork)
 # county level different races number vs. percent overweight scatterplots
 plot1 = ggplot(county_data, aes(x = percent_asian, y = percent_overweight)) +
