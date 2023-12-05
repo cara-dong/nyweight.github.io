@@ -5,6 +5,7 @@ output:
     toc_float: False
 
 ---
+
 <style>
 
 .centered-title {
@@ -42,4 +43,11 @@ output:
       Email: [lz2949@cumc.columbia.edu](mailto:lz2949@cumc.columbia.edu)
     </td>
   </tr>
+  <tr>
+    <td colspan="4" style="padding: 15px;">
+      <img src="about.png" alt="Columbia University Medical Center" style="width: auto; height: auto; max-width: 100%;"/>
+    </td>
+  </tr>
 </table>
+
+
