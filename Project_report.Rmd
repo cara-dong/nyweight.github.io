@@ -848,9 +848,15 @@ display_weight = mlr_weight |> broom::tidy() |> knitr::kable(digits=3)
 display_weight
 ```
 
-Holding all other variables constant, with one percent increase in healthy weight students, there is a 0.039 percent increase in overweight students. However, this is not very significant as the p-value (0.262) for the coefficient is greater than 0.05 at an 95% confidence level.
+The model we fit is Percent of Overweight = - 2.390 + year * 0.001 - percent_obese * 1 + percent_overweight_or_obese * 1 + percent_healthy_weight * 0.039.
 
-The analysis of the relationship between different weight statuses and the percentage of overweight students showed a very small and statistically insignificant effect of the percentage of healthy weight students on the percentage of overweight students. This points to the complexity of factors influencing overweight prevalence.
+Holding all other variables constant, with one percent increase in healthy weight students, there is a 0.039 percent increase in overweight students. However, this is not very significant as the p-value (0.262) for the coefficient is greater than 0.05 at an 95% confidence level. 
+
+Holding all other variables constant, with one percent increase in obese students, there is a 1 percent decrease in overweight students and it is significant. 
+
+Holding all other variables constant, with one percent increase in overweight or obese students, there is a 1 percent increase in overweight students and it is significant.
+
+The analysis of the relationship between different weight statuses and the percentage of overweight students showed a very small and statistically insignificant effect of the percentage of healthy weight students on the percentage of overweight students, but some statistically significant effect of the percentage of obese students. This points to the complexity of factors influencing overweight prevalence.
 
 ### 6. MLR - Lunch Type vs Percent of Overweight
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
