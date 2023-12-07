@@ -96,7 +96,7 @@ combined_plot_layout = combined_plot +
 combined_plot_layout
 ```
 
-From the histogram, the number of overweight students in four groups are all right-skewed, so we need to perform a log transformation before testing. Here are the distributions after transformation.
+From the histogram, we see that the number of overweight students in four groups are all right-skewed, so we need to perform a log transformation before testing. Here are the distributions after transformation.
 ```{r message = FALSE, warning=FALSE}
 t_test_data = cleaned_data |>
   mutate(log_number_overweight = log(number_overweight + 1))
@@ -210,10 +210,10 @@ The t-test results suggest that there is no significant difference in the mean l
 
 Then, we conduct a two-sample t-test to compare the average number of overweight middle/high school students across two different sex groups: male and female.
 ```{r message = FALSE}
-elementary = t_test_data[t_test_data$grade_level == 'MIDDLE/HIGH', ]
+middle_high = t_test_data[t_test_data$grade_level == 'MIDDLE/HIGH', ]
 
-male = elementary[elementary$sex == 'MALE', 'log_number_overweight']
-female = elementary[elementary$sex == 'FEMALE', 'log_number_overweight']
+male = middle_high[middle_high$sex == 'MALE', 'log_number_overweight']
+female = middle_high[middle_high$sex == 'FEMALE', 'log_number_overweight']
 
 t_test_result = t.test(male, female, var.equal = TRUE)
 

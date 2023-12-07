@@ -61,6 +61,14 @@ Our project will develop a web platform designed for the exploration of intrinsi
 ```{r message=FALSE, echo=FALSE}
 library(tidyverse)
 library(readr)
+library(tidyverse)
+library(plotly)
+library(broom)
+library(boot)
+library(modelr)
+library(ggpubr)
+library(rstatix)
+library(patchwork)
 
 Student_Weight = read_csv("data/Student Weight.csv")
 
@@ -241,7 +249,7 @@ scale_fill_disrete = scale_fill_viridis_d
 ```
 
 ## 1. State-level overweight percentage changes over years
-We want to look at the county-level overweight percentage changes over years to check if there is a change as time goes by, so we employed visualizations to examine the trends in average overweight percentages among New York State students from 2015 to 2019. We do that by calculating the county-level average overweight percent and plot results as a spaghetti plot. Legends are dropped to help visualization. 
+We want to look at the state-level overweight percentage changes over years to check if there is a change as time goes by, so we employed visualizations to examine the trends in average overweight percentages among New York State students from 2015 to 2019. We do that by calculating the state-level average overweight percent and plot results as a spaghetti plot. Legends are dropped to help visualization. 
 ```{r message = FALSE, echo = FALSE}
 # add up each county's percentage for each year
 county_year_data = 
@@ -525,64 +533,369 @@ In the five scatterplots presented above, a noticeable trend emerges where an in
 
 ## ---Two-Sample T-Tests
 
+We first ensured that the assumptions for two-sample t-tests are satisfied.
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+normality_check1 = cleaned_data |>
+  filter(sex=="FEMALE") |>
+  ggplot(aes(x = number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Number Overweight" ,
+    y = "Count",
+    title = "Female Number Overweight")
+
+normality_check2 = cleaned_data |>
+  filter(sex=="MALE") |>
+  ggplot(aes(x = number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Number Overweight" ,
+    y = "Count",
+    title = "Male Number Overweight")
+
+normality_check3 = cleaned_data |>
+  filter(grade_level=="ELEMENTARY") |>
+  ggplot(aes(x = number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Number Overweight" ,
+    y = "Count",
+    title = "Elementary Number Overweight")
+
+normality_check4 = cleaned_data |>
+  filter(grade_level=="MIDDLE/HIGH") |>
+  ggplot(aes(x = number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Number Overweight" ,
+    y = "Count",
+    title = "Middle/High Number Overweight")
+
+combined_plot = normality_check1 + normality_check2 + normality_check3 + normality_check4 
+
+combined_plot_layout = combined_plot + 
+  plot_layout(ncol = 2, nrow = 2)
+
+combined_plot_layout
+```
+
+From the histograms, we see that the number of overweight students in four groups are all right-skewed, so we need to perform a log transformation before testing. Here are the distributions after transformation.
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+t_test_data = cleaned_data |>
+  mutate(log_number_overweight = log(number_overweight + 1))
+
+normality_check1 = t_test_data |>
+  filter(sex=="FEMALE") |>
+  ggplot(aes(x = log_number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Log Number Overweight" ,
+    y = "Count",
+    title = "Log Female Number Overweight")
+
+normality_check2 = t_test_data |>
+  filter(sex=="MALE") |>
+  ggplot(aes(x = log_number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Log Number Overweight" ,
+    y = "Count",
+    title = "Log Male Number Overweight")
+
+normality_check3 = t_test_data |>
+  filter(grade_level=="ELEMENTARY") |>
+  ggplot(aes(x = log_number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Log Number Overweight" ,
+    y = "Count",
+    title = "Log Elementary Number Overweight")
+
+normality_check4 = t_test_data |>
+  filter(grade_level=="MIDDLE/HIGH") |>
+  ggplot(aes(x = log_number_overweight), theme(plot.margin = unit(c(1, 1, 1, 1), "lines"))) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Log Number Overweight" ,
+    y = "Count",
+    title = "Log Middle/High Number Overweight")
+
+combined_plot = normality_check1 + normality_check2 + normality_check3 + normality_check4 
+
+combined_plot_layout = combined_plot + 
+  plot_layout(ncol = 2, nrow = 2)
+
+combined_plot_layout
+```
+
+Now, the distributions look roughly normal.
+
+Next, we check for equality of variance.
+
+Test for Equality of Variances by Sex
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+t_test_data |> 
+  levene_test(log_number_overweight ~ sex) |>
+  knitr::kable(title = "Test for Equality of Variances by Sex")
+```
+
+
+Test for Equality of Variances by Grade Level
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+t_test_data |> 
+  levene_test(log_number_overweight ~ grade_level) |> 
+  knitr::kable(title="Test for Equality of Variances by Grade Level")
+```
+
+Since the p-values for both are not significant, we will use independent t-test with equal variance.
+
 ### 1. Female Students Across Grade Levels
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+female_data = t_test_data[t_test_data$sex == 'FEMALE', ]
+
+elementary_data = female_data[female_data$grade_level == 'ELEMENTARY', 'log_number_overweight']
+middle_high_data = female_data[female_data$grade_level == 'MIDDLE/HIGH', 'log_number_overweight']
+
+t_test_result = t.test(elementary_data, middle_high_data, var.equal = TRUE)
+
+print(t_test_result)
+```
 
 The two-sample t-test revealed a statistically significant difference in the mean log number of overweight female students between elementary and middle/high schools. Elementary schools exhibited a higher mean, suggesting a greater prevalence of overweight conditions among younger female students.
 
 ### 2. Male Students Across Grade Levels
+```{r message = FALSE, warning=FALSE, echo=FALSE}
+male_data = t_test_data[t_test_data$sex == 'MALE', ]
+
+elementary_data = male_data[male_data$grade_level == 'ELEMENTARY', 'log_number_overweight']
+middle_high_data = male_data[male_data$grade_level == 'MIDDLE/HIGH', 'log_number_overweight']
+
+t_test_result = t.test(elementary_data, middle_high_data, var.equal = TRUE)
+
+print(t_test_result)
+```
 
 A similar pattern was observed in male students. The t-test showed a significant difference between elementary and middle/high school male students, with higher mean log numbers of overweight students in elementary schools.
 
 ### 3. Elementary Students Across Sex Groups
+```{r message = FALSE, warning=FALSE, echo=FALSE}
+elementary = t_test_data[t_test_data$grade_level == 'ELEMENTARY', ]
 
+male = elementary[elementary$sex == 'MALE', 'log_number_overweight']
+female = elementary[elementary$sex == 'FEMALE', 'log_number_overweight']
+
+t_test_result = t.test(male, female, var.equal = TRUE)
+
+print(t_test_result)
+```
 In elementary schools, the t-test indicated no significant difference in the mean log number of overweight students between male and female groups, suggesting similar overweight prevalence across genders at this educational level.
 
 ### 4. Middle/High School Students Across Sex Groups
+```{r message = FALSE, warning=FALSE, echo=FALSE}
+middle_high = t_test_data[t_test_data$grade_level == 'MIDDLE/HIGH', ]
 
+male = middle_high[middle_high$sex == 'MALE', 'log_number_overweight']
+female = middle_high[middle_high$sex == 'FEMALE', 'log_number_overweight']
+
+t_test_result = t.test(male, female, var.equal = TRUE)
+
+print(t_test_result)
+```
 For middle/high school students, the t-test also found no significant difference in overweight prevalence between male and female students, highlighting comparable conditions across genders in older student groups.
 
 
 ## ---Regression Analyses
 
-### 1. SLR - Sex vs Percentage of Overweight
+First, we checked the distribution of the one of the two outcomes we are concerned about.
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+train_data  = 
+  cleaned_data |>
+  select(year, sex, grade_level, 
+         number_overweight, percent_overweight,
+         number_obese, percent_obese, 
+         number_overweight_or_obese, percent_overweight_or_obese,
+         number_healthy_weight, percent_healthy_weight) |>
+  mutate(sex = ifelse(sex=="FEMALE", 0, 1), 
+         grade_level = ifelse(grade_level=="ELEMENTARY", 0, 1)) |>
+  drop_na()
 
-This model demonstrated a significant influence of sex on the percentage of overweight students. Male students were found to have a lower percentage of overweight cases than female students, as indicated by the model's negative coefficient for sex, which corresponds to the visualization we conduct in the earlier section.
+school_level_dist = train_data |>
+  ggplot(aes(x = percent_overweight)) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Percent Overweight" ,
+    y = "Count",
+    title = "Distribution of Percent Overweight at Finer School Level")
+
+ggplotly(school_level_dist)
+```
+
+The distribution is roughly normal, so no transformation is needed.
+
+Next, we will plot the distribution for the median percent of overweight students at district level to accommodate the granularity of student demographic information.
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+selected = 
+  cleaned_data |>
+  select(year, district, percent_overweight, num_asian, num_black, num_hisp, num_am_ind, num_white)
+
+district_level_data = 
+  selected |>
+  group_by(year, district) |>
+  summarise(med_overweight = median(percent_overweight)) |>
+  drop_na()
+
+group_demo = 
+  selected |>
+  group_by(year, district) |>
+  summarise(total_asian = max(num_asian), 
+            total_black = max(num_black),
+            total_hisp = max(num_hisp), 
+            total_am_ind = max(num_am_ind), 
+            total_white = max(num_white)) |>
+  drop_na()
+
+result_df = 
+  district_level_data |> 
+  left_join(group_demo, by = c("year", "district")) |>
+  ungroup() |>
+  select(-district)
+
+overweight_dist = result_df |>
+  ggplot(aes(x = med_overweight)) + 
+  geom_histogram(alpha = 0.8, color = "white") + 
+  labs(
+    x = "Median Percent of Overweight" ,
+    y = "Count",
+    title = "Distribution of Median Percent of Overweight")
+
+ggplotly(overweight_dist)
+```
+
+The distribution is roughly normal, so no transformation is needed.
+
+### 1. SLR - Sex vs Percentage of Overweight
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+sex_slr = lm(percent_overweight ~ sex, data = train_data) 
+sex_slr_df = sex_slr |> broom::tidy()
+
+knitr::kable(sex_slr_df)
+```
+
+The SLR model we fit is percent_overweight at school-level = 17.546446 - 1.177219 * sex.
+
+The coefficient estimate of -1.177219 with a p-value of almost 0 indicates that the effect of sex on the percentage of overweight students is statistically significant.
+
+Since female is encoded as the reference group 0, we can say that male students group in NY schools had lower percentage of overweight students compared to female students group. This corresponds to the line plot visualization displayed in the previous section, where the line for male students is always below that for female students.
 
 ### 2. SLR - Grade Level vs Percent of Overweight
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+grade_level_slr = lm(percent_overweight ~ grade_level, data = train_data)
+grade_level_slr_df = grade_level_slr |> broom::tidy()
 
-The regression analysis assessing the impact of grade level on overweight percentages revealed that middle/high school students had a higher percentage of overweight students compared to elementary students. This finding suggests that older students are more prone to overweight conditions.
+knitr::kable(grade_level_slr_df)
+```
+
+The SLR model we fit is percent_overweight at school-level = 16.126602 - 1.716477	 * grade_level.
+
+The coefficient estimate of 1.716477 with a p-value of almost 0 indicates that the effect of grade_level on the percentage of overweight students is statistically significant.
+
+Since elementary school is encoded as the reference group 0, we can say that middle/high school students in NY had higher percentage of overweight students compared to elementary school students. This also corresponds to the line plot visualization displayed in the previous section, where the line for elementary students is always below that for middle/high school students. This finding suggests that older students are more prone to overweight conditions.
 
 ### 3. MLR - Grade Level & Sex vs Percent of Overweight
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+mlr = lm(percent_overweight ~ grade_level + sex, data = train_data) 
+
+mlr_df = mlr |> broom::tidy()
+
+knitr::kable(mlr_df)
+```
+
+The MLR model we fit is percent_overweight at school-level = 16.717571 - -1.179560	 * grade_level + 1.718086 * grade_level.
+
+The coefficient estimates with p-values of almost 0 indicates that the effect of both sex and grade_level on the percentage of overweight students are statistically significant.
 
 Combining sex and grade level in an MLR model, both factors were shown to significantly influence the percentage of overweight students. This model provided a more comprehensive understanding than the individual SLR analyses.
 
 ### 4. MLR - Student Demographic Info vs Percent of Overweight
 
-This model analyzed the relationship between student demographics and overweight percentages at the district level. It highlighted a significant but small association between racial composition and overweight percentages, with certain racial groups more affected than others.
+After checking that there is no highly correlated pairs in the predictors, we fit a model that analyzed the relationship between student demographics and overweight percentages at the district level.
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+mlr = lm(med_overweight ~ ., data = result_df)
+display = mlr |> broom::tidy() |> knitr::kable()
+
+display
+```
+
+The model we fit is:
+Median Percent of Overweight at District Level = 209.229 - 0.0928606 * year - 0.0014845 * total_asian + 0.0001223 * total_black + 0.0002993 * total_hisp + 0.0037642 * total_am_ind - 0.0003124 * total_white. 
+
+Except for the p-value for total_black and year, the coefficients for all other variables are significant. Among them, the total number of American Indian in that school district has the largest absolute value of coefficient. So, holding all other variables constant, with one person increase in the ethnic group of American Indians, there is a 0.0037642 percent increase in the median percent of overweight students at district level.
+
+The regression analysis indicates that demographic factors, specifically the racial composition of students, have a statistically significant association with the median percentage of overweight students at the district level, as evidenced by the p-values for certain racial groups. 
+
+However, the magnitude of these associations, as reflected by the estimated coefficients, is relatively small. It is important to note that while these effects are statistically significant for some racial groups, the small size of the coefficients suggests that the practical significance of these demographic variables on the median percentage of overweight students might be limited.
 
 ### 5. MLR - Other Weight Status vs Percent of Overweight
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+train_data = 
+  train_data |> 
+  select(year, percent_overweight, percent_obese, percent_overweight_or_obese, percent_healthy_weight)
+
+mlr_weight = lm(percent_overweight ~ ., data = train_data)
+display_weight = mlr_weight |> broom::tidy() |> knitr::kable(digits=3)
+
+display_weight
+```
+
+Holding all other variables constant, with one percent increase in healthy weight students, there is a 0.039 percent increase in overweight students. However, this is not very significant as the p-value (0.262) for the coefficient is greater than 0.05 at an 95% confidence level.
 
 The analysis of the relationship between different weight statuses and the percentage of overweight students showed a very small and statistically insignificant effect of the percentage of healthy weight students on the percentage of overweight students. This points to the complexity of factors influencing overweight prevalence.
 
 ### 6. MLR - Lunch Type vs Percent of Overweight
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+lunch = 
+  cleaned_data |> 
+  filter(year %in% c(2015, 2016, 2017)) |>
+  group_by(year, district) |>
+  summarise(total_num_free_lunch = max(num_free_lunch), 
+            total_num_reduced_lunch = max(num_reduced_lunch))
 
-The model examining the association between types of lunch and overweight percentages suggested a potential relationship. However, the lack of statistically significant findings indicates the need for further investigation into how nutritional factors contribute to student weight status.
+lunch_df = 
+  district_level_data |> 
+  left_join(lunch, by = c("year", "district")) |>
+  ungroup() |>
+  select(-district)
+
+mlr = lm(med_overweight ~ ., data = lunch_df)
+display = mlr |> broom::tidy() |> knitr::kable()
+
+display
+```
+
+The model examined the association between types of lunch and overweight percentages suggested a potential relationship.
+
+The model we fit is: Median Percent of Overweight at District Level = 294.4593529 - 0.1377206	* year + 0.0000718 * total_num_free_lunch + 0.0001812	* total_num_reduced_lunch. 
+
+We might be able to say that having more free lunch and reduced lunch both are associated with increase in the median percent of overweight students at school-district level.
+
+However, none of the predictors included in the model show a statistically significant relationship with the median percentage of overweight students at the school-district level, as all p-values are above the conventional threshold for significance (0.05). These findings indicates the need for further investigation into how nutritional factors contribute to student weight status.
 
 # Discussion
 
 The comprehensive analysis of student health data in New York State has yielded several key insights into the factors influencing the prevalence of overweight and obesity among students. These insights are critical for shaping effective public health strategies and educational interventions.
 
-## 1. Impact of Demographic Factors
+## 1. Impact of Biological & Academic Factors
 
-Our findings highlight the significant role of demographic factors such as sex and grade level in influencing overweight and obesity rates among students. The distinct patterns observed across different grade levels and between male and female students underscore the need for targeted health initiatives that are sensitive to these demographic nuances.
+Our findings highlight the significant role of biological factors such as sex and academic factors such as grade level in influencing overweight and obesity rates among students. We found that female, middle school students are more susceptible to overweight issue, which aligns with what we expected to some extent. Adolescent students undergo a period of rapid growth, that is very much reflected in females, affecting the biological factors in their bodies even more. The distinct patterns observed across different grade levels and between male and female students underscore the need for targeted health initiatives that are sensitive to these nuances.
 
 ## 2. Role of Socio-Cultural Factors
 
-The association between racial composition and overweight percentages, although statistically significant, revealed small effect sizes. This suggests that while racial and socio-cultural factors play a role in student health outcomes, their practical impact might be limited. This calls for a deeper exploration into the complex interplay of socio-cultural dynamics and health behaviors.
+The association between racial composition and overweight percentages, although statistically significant, revealed small effect sizes. This suggests that while racial and socio-cultural factors play a role in student health outcomes, their practical impact might be limited. This is quite surprising to us because we initially assumed that demographic information would be one of the most impactful factors for student weight status other than diet. This calls for a deeper exploration into the complex interplay of socio-cultural dynamics and health behaviors.
 
 ## 3. Limitations and Future Research Directions
 
-It's important to note the limitations inherent in our study, particularly the observational nature of the data which restricts our ability to draw causal inferences. Future research, possibly incorporating longitudinal studies and experimental designs, could provide more definitive insights into the causal factors influencing student health.
+It is important to note the limitations inherent in our study, particularly the observational nature of the data which restricts our ability to draw causal inferences. Future research, possibly incorporating longitudinal studies and experimental designs, could provide more definitive insights into the causal factors influencing student health. Besides, if more data related to school lunches, family diets, and food price could become available to us, we would be able to incorporate more influential factors into the analysis and make a better prediction.
 
 ## 4. Implications for Policy and Practice
 
@@ -590,5 +903,4 @@ The study's findings have important implications for public health policies and 
 
 ## 5. Comprehensive Approach to Student Health
 
-Ultimately, our analysis points to the necessity of a multifaceted approach in addressing the overweight and obesity epidemic among students. This approach should combine public health interventions, educational policies, and community-based programs, all tailored to the unique needs and backgrounds of the student population.
-
+Ultimately, our analysis points to the necessity of a multifaceted approach in addressing the overweight and obesity epidemic among students. This approach should combine public health interventions, educational policies, and community-based programs, all tailored to the unique needs and backgrounds of the student population. Preventing the development student overweight status is a task that involves efforts from a variety of departments.
