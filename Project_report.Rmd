@@ -52,7 +52,7 @@ Our project will develop a web platform designed for the exploration of intrinsi
 
 * We focused our investigation on the most recent five academic years, spanning from 2014 to 2019. To maintain consistency, each academic `year`, which is represented by the later half of the previous year and the earlier half of the next year, is denoted by the next year in our cleaned dataset. For example, the academic year 2014-2015 is denoted as 2015.
 
-* We renamed `district` to `location_code` to make this dataset easier to join with the other on common-named column.
+* We renamed `district` to `location_code` to make this dataset easier to join with the other on the common-named column.
 
 * We changed the format of `year_reported` to `year` in numeric to prepare for easier plotting and regression model fitting.
 
@@ -443,7 +443,7 @@ plot_2019
 
 The pie charts reveal that approximately 60% of the student population is white, while around 20% identifies as Hispanic. There are smaller proportions of Asian, American Indian, and Black students. 
 
-Following this, we generate scatter plots to visualize the county-level average distribution of racial groups and the corresponding average percentage of overweight individuals to guide out variable selection in linear models.
+Following this, we generated scatter plots to visualize the county-level average distribution of racial groups and the corresponding average percentage of overweight individuals to guide out variable selection in linear models.
 
 ```{r message = FALSE, echo = FALSE}
 county_dis_data = cleaned_data |>
@@ -819,7 +819,7 @@ Combining sex and grade level in an MLR model, both factors were shown to signif
 
 ### 4. MLR - Student Demographic Info vs Percent of Overweight
 
-After checking that there is no highly correlated pairs in the predictors, we fit a model that analyzed the relationship between student demographics and overweight percentages at the district level.
+After checking that there is no highly correlated pairs in the predictors, we fitted a model that analyzed the relationship between student demographics and overweight percentages at the district level.
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 mlr = lm(med_overweight ~ ., data = result_df)
 display = mlr |> broom::tidy() |> knitr::kable()
