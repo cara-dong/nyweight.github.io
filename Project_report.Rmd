@@ -40,6 +40,13 @@ The motivation for our project is to conduct a comprehensive analysis to underst
 
 Our project will develop a web platform designed for the exploration of intrinsic connections between the weight status of New York state students and their demographic characteristics. A multifaceted correlation analysis will be conducted to comprehensively analyze each demographic variable, including causal inferences, regression analyses, and hypothesis testing. Subsequently, the outcomes will be presented in the form of interactive graphs and tabulated data for enhanced accessibility and clarity. Furthermore, a narrated screencast will provide an intuitive overview of the final product, offering an in-depth understanding of the research findings and their implications.
 
+# Related Work
+
+Our investigation in class regarding NYC Airbnb prices and some projects past students have done about NYC inspired us to pursue a journey in exploring the student weight status and other factors in NY state.
+
+# Initial Questions
+
+We were initially trying to resolve question the question "Does food price affect students' weight status?", but as we dived deeper into the project, our questions expand into the form of "What factors contribute to the percentage of overweight students in NY state?", "Are there any factors that are more influential?" and "Can we predict weight status from these factors?".
 
 # Data Source
 
@@ -910,3 +917,6 @@ The study's findings have important implications for public health policies and 
 ## 5. Comprehensive Approach to Student Health
 
 Ultimately, our analysis points to the necessity of a multifaceted approach in addressing the overweight and obesity epidemic among students. This approach should combine public health interventions, educational policies, and community-based programs, all tailored to the unique needs and backgrounds of the student population. Preventing the development student overweight status is a task that involves efforts from a variety of departments.
+
+
+Contributors: Manye Dong md4270@cumc.columbia.edu, Haotian Tang ht2630@cumc.columbia.edu, Jingyi Xu jx2562@cumc.columbia.edu, Longyi Zhao lz2949@cumc.columbia.edu
