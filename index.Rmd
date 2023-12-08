@@ -55,7 +55,7 @@ Our project aims to tackle the critical issue of obesity and overweight prevalen
     <li>Manye Dong md4270@cumc.columbia.edu
     <li>Haotian Tang ht2630@cumc.columbia.edu
     <li>Jingyi Xu jx2562@cumc.columbia.edu
-    <li>Longyi Zha lz2949@cumc.columbia.edu
+    <li>Longyi Zhao lz2949@cumc.columbia.edu
 </ul>
 
 
