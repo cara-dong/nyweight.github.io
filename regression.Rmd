@@ -224,7 +224,7 @@ The t-test results also suggest that there is no significant difference in the m
 
 
 # ---Regression
-## SLR - Sex vs Percentage of Overweight
+## SLR - Sex vs Percent of Overweight
 ```{r message=FALSE, warning=FALSE}
 train_data  = 
   cleaned_data |>
