@@ -275,6 +275,7 @@ sex_slr_df = sex_slr |> broom::tidy()
 knitr::kable(sex_slr_df)
 ```
 
+
 The SLR model we fit is percent_overweight at school-level = 17.546446 - 1.177219 * sex.
 
 The coefficient estimate of -1.177219 with a p-value of almost 0 indicates that the effect of sex on the percentage of overweight students is statistically significant.
@@ -282,7 +283,8 @@ The coefficient estimate of -1.177219 with a p-value of almost 0 indicates that 
 Since female is encoded as the reference group 0, we can say that male students group in NY schools had lower percentage of overweight students compared to female students group. This corresponds to the line plot visualization displayed in the previous section, where the line for male students is always below that for female students.
 
 
-### SLR - Grade Level vs Percent of Overweight
+## SLR - Grade Level vs Percent of Overweight
+
 Check for normality of residuals.
 ```{r message=FALSE, warning=FALSE}
 model2 = lm(percent_overweight ~ grade_level, data = train_data)
@@ -294,6 +296,7 @@ Check homosdasticity.
 plot(fitted(model2), resid(model2))
 abline(h = 0, col = "red")
 ```
+
 The variance of the residuals is roughly constant across all levels of the predictor and the residuals are also normally distributed. So assumptions for linear regression are checked. We can proceed to conduct the prediction.
 
 Fit the model.
@@ -304,13 +307,14 @@ grade_level_slr_df = grade_level_slr |> broom::tidy()
 knitr::kable(grade_level_slr_df)
 ```
 
+
 The SLR model we fit is percent_overweight at school-level = 16.126602 - 1.716477	 * grade_level.
 
 The coefficient estimate of 1.716477 with a p-value of almost 0 indicates that the effect of grade_level on the percentage of overweight students is statistically significant.
 
 Since elementary school is encoded as the reference group 0, we can say that middle/high school students in NY had higher percentage of overweight students compared to elementary school students. This also corresponds to the line plot visualization displayed in the previous section, where the line for elementary students is always below that for middle/high school students.
 
-### MLR - Grade Level & Sex vs Percent of Overweight
+## MLR - Grade Level & Sex vs Percent of Overweight
 ```{r message=FALSE, warning=FALSE}
 mlr = lm(percent_overweight ~ grade_level + sex, data = train_data) 
 
@@ -318,6 +322,7 @@ mlr_df = mlr |> broom::tidy()
 
 knitr::kable(mlr_df)
 ```
+
 
 The MLR model we fit is percent_overweight at school-level = 16.717571 - -1.179560	 * grade_level + 1.718086 * grade_level.
 
@@ -424,6 +429,7 @@ ggplot(df_with_residuals, aes(x = fitted_values, y = residuals)) +
   theme_minimal()
 ```
 
+
 There is no clear pattern shown in the plot, so it is pretty desirable. Overall, the residual plot suggests that the model has decent prediction performance. However, the potential increase in variance among the higher fitted values and the presence of outliers could be a concern.
 
 The model we fit is:
@@ -449,6 +455,7 @@ display_weight = mlr_weight |> broom::tidy() |> knitr::kable(digits=3)
 
 display_weight
 ```
+
 
 The model we fit is Percent of Overweight = - 2.390 + year * 0.001 - percent_obese * 1 + percent_overweight_or_obese * 1 + percent_healthy_weight * 0.039.
 
@@ -485,6 +492,7 @@ display = mlr |> broom::tidy() |> knitr::kable()
 
 display
 ```
+
 
 The model we fit is: Median Percent of Overweight at District Level = 294.4593529 - 0.1377206	* year + 0.0000718 * total_num_free_lunch + 0.0001812	* total_num_reduced_lunch. 
 
