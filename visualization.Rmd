@@ -198,8 +198,8 @@ ggplot(grade_level_data, aes(x = year, y = ave_overweight_percent, color = grade
   theme_minimal()
 ```
 
-# Sex and Overweight
-What about sex? Does different sex affect students' overweight percentage? 
+# Sex Group and Overweight
+What about gender? Does different gender affect students' overweight percentage? 
 ```{r message = FALSE}
 sex_data = 
   cleaned_data |>
@@ -212,7 +212,7 @@ sex_data =
 ggplot(sex_data, aes(x = year, y = ave_overweight_percent, color = sex)) +
   geom_point() +
   geom_line() +
-  labs(title = "Average Overweight Percentage Over Years by Sex",
+  labs(title = "Average Overweight Percentage Over Years by Gender",
        x = "Year",
        y = "Average Overweight Percentage",
        color = "Sex") +
